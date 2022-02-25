@@ -9,7 +9,7 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 - [ ] Explore the dataset on Mozilla common voices
 - [ ] Understand how phoible works
 - [ ] Get the features from a pre-trained model on HuggingFace on the retrieved dataset
-- [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on te train set and test set
+- [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on te train set and test set -> **Already done in HF**
 
 ### Modeling part
 
