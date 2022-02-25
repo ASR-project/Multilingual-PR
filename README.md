@@ -56,3 +56,7 @@ And push it to wandb as an artifact
 ### Evaluation
 
 - [ ] Evaluate the model on custom test set built at the step 1
+
+# Running unit tests
+
+Refer to the directory ```tests``` and you can write your own testing function. The function name has to start with ```test_```
