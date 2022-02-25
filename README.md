@@ -43,15 +43,21 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 And push it to wandb as an artifact
 
 
-- [ ] Explore the dataset on Mozilla common voices
+- [ ] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
 - [ ] Understand how phoible works
 - [ ] Get the features from a pre-trained model (Wav2Vec, HuBert and WavLM) on HuggingFace on the retrieved dataset
-- [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on te train set and test set -> **Already done in HF**
+    - Wav2Vec : https://huggingface.co/facebook/wav2vec2-base
+    - HuBert
+    - WavLM : https://huggingface.co/microsoft/wavlm-base
+- [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on the train set and test set -> **Already done in HF**
 
 ### Modeling part
 
 - [ ] Implement CTC algorithm using PyTorch
-- [ ] Train the model on the built dataset
+- [ ] Metric : implement the Phoneme Error Rate
+- [ ] Train the model on the built dataset and using pretrained features of different SSL method
+- [ ] Train on 10 minutes, 1 hour and 10 hours of data
+- [ ] Benchmark for different languages
 
 ### Evaluation
 
