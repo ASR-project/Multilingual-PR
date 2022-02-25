@@ -10,6 +10,7 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 - the language
 - the model type
 - the split 
+ 
 And push it to wandb as an artifact
 
 
