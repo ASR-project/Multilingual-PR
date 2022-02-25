@@ -2,6 +2,38 @@
 
 Implementation of the project ```Multi-lingual Phoneme Recognition using self-supervised methods on foreign languages```
 
+## Project structure
+
+```
+├── assets                      # Put database here
+├── datamodules
+|   |
+|   ├── celebadatamodule.py     # datamodules PyTorch lightning for CelebA dataset
+|         
+├── datasets
+|   ├── celeba.py                # Fix issue for CelebA dataset PyTorch
+|   ├── inference_dataset.py     # custom dataset PyTorch for inference
+|          
+├── lightningmodules
+|   ├── classification.py        # lightning module for image classification (multi-label)
+| 
+├── utils                        # utils functions
+|   ├── boundary_creator.py
+|   ├── callbacks.py
+|   ├── constant.py
+|   ├── utils_functions.py
+|
+├── weights                     # put models weights here
+|
+├── analyse_score_latent_space.ipynb  # notebook to analyse scores predicted
+|
+├── hparams.py                   # configuration file
+|
+├── main.py                      # main script to launch for training of inference 
+|
+└── README.md
+```
+
 ## TO DO 
 
 ### Data processing part
