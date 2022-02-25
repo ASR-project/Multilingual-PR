@@ -6,6 +6,13 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 
 ### Data processing part
 
+**Goal:** Create a script that takes as input
+- the language
+- the model type
+- the split 
+And push it to wandb as an artifact
+
+
 - [ ] Explore the dataset on Mozilla common voices
 - [ ] Understand how phoible works
 - [ ] Get the features from a pre-trained model on HuggingFace on the retrieved dataset
