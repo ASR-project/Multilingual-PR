@@ -4,6 +4,33 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 
 ## Project structure
 
+```
+├── assets                      # Put database here
+├── datamodules
+|   |
+|   ├── commonvoice_datamodule.py     # datamodules PyTorch lightning for CommonVoice dataset
+|         
+├── datasets
+|   ├── commonvoice.py                # CommonVoice dataset HF
+|          
+├── lightningmodules
+|   ├── classification.py        # lightning module for image classification (multi-label)
+| 
+├── utils                        # utils functions
+|   ├── callbacks.py
+|   ├── utils_functions.py
+|
+├── weights                     # put models weights here
+|
+├── analyse_score_latent_space.ipynb  # notebook to analyse scores predicted
+|
+├── hparams.py                   # configuration file
+|
+├── main.py                      # main script to launch for training of inference 
+|
+└── README.md
+```
+
 ## TO DO 
 
 ### Data processing part
@@ -18,7 +45,7 @@ And push it to wandb as an artifact
 
 - [ ] Explore the dataset on Mozilla common voices
 - [ ] Understand how phoible works
-- [ ] Get the features from a pre-trained model (Wav2Vec, HuBert and WavLM) on HuggingFace on the retrieved dataset
+- [ ] Get the features from a pre-trained model on HuggingFace on the retrieved dataset
 - [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on te train set and test set -> **Already done in HF**
 
 ### Modeling part
