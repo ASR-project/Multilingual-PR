@@ -33,6 +33,17 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 
 ## TO DO 
 
+### Links useful
+https://huggingface.co/datasets/common_voice
+https://huggingface.co/mozilla-foundation
+
+https://huggingface.co/datasets/superb
+SUPERB: https://arxiv.org/abs/2110.13900
+https://superbbenchmark.org/
+
+WavLM: https://arxiv.org/abs/2105.01051
+github WavLM: https://github.com/microsoft/unilm
+
 ### Data processing part
 
 **Goal:** Create a script that takes as input
