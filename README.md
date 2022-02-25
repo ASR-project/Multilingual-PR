@@ -18,4 +18,4 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 
 ### Evaluation
 
-- [ ] Evaluate the model on test custom test set built at the step 1
+- [ ] Evaluate the model on custom test set built at the step 1
