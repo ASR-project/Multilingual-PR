@@ -20,23 +20,23 @@ class Hparams:
     wandb_project   : str          = f"test-asr"
     root_dir        : str          = os.getcwd()  # root_dir
     seed_everything : Optional[int]= None   # seed for the whole run
-    tune_lr         : bool         = True  # tune the model on first run
-    gpu             : int          = 1      # number or gpu
+    tune_lr         : bool         = False  # tune the model on first run
+    gpu             : int          = 0      # number or gpu
     max_epochs      : int          = 30    # maximum number of epochs
     weights_path    : str          = "weights"
-    dev_run         : bool         = False
+    dev_run         : bool         = True
     train           : bool         = True
     best_model      : str          = "" # then galant
-    
 
 @dataclass
 class NetworkParams:
     network_name       : Optional[str] = "MLP"     # dataset, use <Dataset>Eval for FT
-    weight_checkpoints : str           = ""
+    weight_checkpoint  : str           = ""
     artifact           : str           = ""
-    dropout         : float = 0.75
-    normalization   : str   = 'BatchNorm1d'
-    activation      : str   = 'GELU'
+    dropout            : float         = 0.75
+    normalization      : str           = 'BatchNorm1d'
+    activation         : str           = 'GELU'
+    input_size         : int           = 1000
 
 @dataclass
 class OptimizerParams: 
@@ -55,9 +55,10 @@ class DatasetParams:
     """Dataset Parameters
     ! The batch_size and number of crops should be defined here
     """
-    dataset_name            : Optional[str]           = ""     # dataset, use <Dataset>Eval for FT
+    dataset_name            : str                     = "common_voice"     # dataset, use <Dataset>Eval for FT
+    subset                  : str                     = "ab"
     num_workers             : int                     = 8         # number of workers for dataloadersint
-    batch_size              : int                     = 32 
+    batch_size              : int                     = 1 
 
 @dataclass
 class Parameters:

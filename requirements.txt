@@ -1,2 +1,8 @@
 wandb
 pytest
+transformers
+datasets
+soundfile
+simple-parsing
+pytorch
+pytorch-lightning
