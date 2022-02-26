@@ -19,8 +19,14 @@ def main():
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,
-                allow_val_change=True,
-                job_type="train"
+                allow_val_change = True,
+                job_type = "train",
+                tags = [
+                    parameters.network_param.network_name,
+                    parameters.data_param.dataset_name,
+                    parameters.data_param.subset,
+                    parameters.optim_param.optimizer
+                    ]
             )
         
         wandb_run = WandbLogger(
