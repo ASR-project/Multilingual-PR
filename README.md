@@ -33,7 +33,7 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 
 ## TO DO 
 
-### Links useful
+### Useful Links
 https://huggingface.co/datasets/common_voice
 https://huggingface.co/mozilla-foundation
 
@@ -82,4 +82,6 @@ And push it to wandb as an artifact
 
 # Running unit tests
 
+- [ ] Add an automatic push to the main branch if the tests are successful. Otherwise don't. This will allow us to merge with main as soon as it is up and running.
+- [ ] Add dataset and model tests, which take care of asserts on the datasizes etc. 
 Refer to the directory ```tests``` and you can write your own testing function. The function name has to start with ```test_```
