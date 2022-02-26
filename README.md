@@ -60,7 +60,7 @@ And push it to wandb as an artifact
 - [ ] Understand how phoible works
 - [ ] Wandb display using Hugging Face ? :
     - [ ] Phoneme Error Rate (train and validation)
-    - [ ] Loss values (train and validation)
+    - [ ] Loss values (train and validation)
     - [ ] some validation audio files with phoneme in labels and predictions ?
 - [ ] Get the features from a pre-trained model (Wav2Vec, HuBert and WavLM) on HuggingFace on the retrieved dataset
     - Wav2Vec : https://huggingface.co/facebook/wav2vec2-base
