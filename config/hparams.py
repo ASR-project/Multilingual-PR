@@ -56,7 +56,7 @@ class DatasetParams:
     ! The batch_size and number of crops should be defined here
     """
     dataset_name            : str                     = "common_voice"     # dataset, use <Dataset>Eval for FT
-    subset                  : str                     = "ab"
+    subset                  : str                     = "fr"
     num_workers             : int                     = 8         # number of workers for dataloadersint
     batch_size              : int                     = 1 
 
