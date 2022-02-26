@@ -60,7 +60,7 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "br"
+    subset                  : str                     = "br"              # chosen language 
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
     
