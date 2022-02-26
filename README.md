@@ -56,7 +56,7 @@ github WavLM: https://github.com/microsoft/unilm
 And push it to wandb as an artifact
 
 
-- [ ] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
+- [X] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
 - [ ] Understand how phoible works
 - [ ] Wandb display using Hugging Face ? :
     - [ ] Phoneme Error Rate (train and validation)

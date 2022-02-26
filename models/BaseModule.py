@@ -18,6 +18,7 @@ class BaseModule(LightningModule):
         self.optim_param = optim_param
         self.lr = optim_param.lr
 
+        # TODO setup pretrained Hugging face pretrained model and implement CTC algo
         # model
         self.model = get_net(network_param.network_name, network_param)
         if network_param.weight_checkpoint != "":
