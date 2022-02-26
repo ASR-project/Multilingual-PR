@@ -16,14 +16,18 @@ class BaseDataModule(LightningDataModule):
     def setup(self, stage=None):
         # Build dataset
         if stage in (None, "fit"):
-            self.train_dataset = load_dataset(self.config.dataset_name, self.config.subset, split='train')
-            self.val_dataset = load_dataset(self.config.dataset_name, self.config.subset, split='validation')
-        
+            self.train_dataset = load_dataset(self.config.dataset_name, self.config.subset, split='train',
+                                              use_auth_token=self.config.use_auth_token, download_mode=self.config.download_mode, cache_dir=self.config.cache_dir)
+            self.val_dataset = load_dataset(self.config.dataset_name, self.config.subset, split='validation',
+                                            use_auth_token=self.config.use_auth_token, download_mode=self.config.download_mode, cache_dir=self.config.cache_dir)
+
         if stage == "test":
-            self.test_dataset = load_dataset(self.config.dataset_name, self.config.subset, split='test')
-        
+            self.test_dataset = load_dataset(self.config.dataset_name, self.config.subset, split='test',
+                                             use_auth_token=self.config.use_auth_token, download_mode=self.config.download_mode, cache_dir=self.config.cache_dir)
+
         if stage == "predict":
-            self.dataset = load_dataset(self.config.dataset_name, self.config.subset, split='other')
+            self.dataset = load_dataset(self.config.dataset_name, self.config.subset, split='other',
+                                        use_auth_token=self.config.use_auth_token, download_mode=self.config.download_mode, cache_dir=self.config.cache_dir)
 
     def train_dataloader(self):
         train_loader = DataLoader(

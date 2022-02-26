@@ -55,8 +55,11 @@ class DatasetParams:
     """Dataset Parameters
     ! The batch_size and number of crops should be defined here
     """
-    dataset_name            : str                     = "common_voice"     # dataset, use <Dataset>Eval for FT
-    subset                  : str                     = "fr"
+    dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
+    use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
+    subset                  : str                     = "br"
+    download_mode           : str                     = "reuse_dataset_if_exists"
+    cache_dir               : str                     = osp.join(os.getcwd(), "assets")
     num_workers             : int                     = 8         # number of workers for dataloadersint
     batch_size              : int                     = 1 
 
