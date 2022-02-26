@@ -76,9 +76,9 @@ class BaseModule(LightningModule):
 
     def _get_loss(self, batch):
         """convenience function since train/valid/test steps are similar"""
-        x, y = batch
-        output = self(x)
-
-        loss = self.loss(output, y)
+        x = batch
+        # TODO implement correctly
+        output = self(x['audio']['array'])
+        loss = self.loss(output, x['sentence'])
 
         return loss
