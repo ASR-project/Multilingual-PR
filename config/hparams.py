@@ -41,7 +41,7 @@ class NetworkParams:
 @dataclass
 class FeatExtractParams:
     network_name                  : str           = "Wav2vec"     # HuBERT, Wav2vec
-    path_features                 : str           = "assets"     # HuBERT, Wav2vec
+    path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
     feature_size                  : int           = 1
     sampling_rate                 : int           = 16000
     padding_value                 : float         = 0.0
