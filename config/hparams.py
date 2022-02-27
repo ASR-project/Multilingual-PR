@@ -17,7 +17,7 @@ class Hparams:
 
     wandb_entity    : str          = "asr-project"         # name of the project
     debug           : bool         = False            # test code before running, if testing, no checkpoints are written
-    wandb_project   : str          = f"test-asr"
+    wandb_project   : str          = "test-asr"
     root_dir        : str          = os.getcwd()  # root_dir
     seed_everything : Optional[int]= None   # seed for the whole run
     tune_lr         : bool         = False  # tune the model on first run
@@ -37,6 +37,16 @@ class NetworkParams:
     normalization      : str           = 'BatchNorm1d'
     activation         : str           = 'GELU'
     input_size         : int           = 1000
+
+@dataclass
+class FeatExtractParams:
+    network_name                  : str           = "Wav2vec"     # HuBERT, Wav2vec
+    path_features                 : str           = "assets"     # HuBERT, Wav2vec
+    feature_size                  : int           = 1
+    sampling_rate                 : int           = 16000
+    padding_value                 : float         = 0.0
+    do_normalize                  : bool          = True
+    return_attention_mask         : bool          = True
 
 @dataclass
 class OptimizerParams: 
@@ -75,6 +85,7 @@ class Parameters:
     data_param    : DatasetParams   = DatasetParams()
     network_param : NetworkParams   = NetworkParams()
     optim_param   : OptimizerParams = OptimizerParams()
+    feat_param    : FeatExtractParams = FeatExtractParams()
     
     def __post_init__(self):
         """Post-initialization code"""
