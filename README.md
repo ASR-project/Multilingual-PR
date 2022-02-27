@@ -58,14 +58,15 @@ And push it to wandb as an artifact
 
 - [X] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
 - [ ] Understand how phoible works
+- [ ] use load_metric HF for metrics : load_metric("wer") load_metric("per")
 - [ ] Wandb display using Hugging Face ? :
     - [ ] Phoneme Error Rate (train and validation)
     - [ ] Loss values (train and validation)
     - [ ] some validation audio files with phoneme in labels and predictions ?
 - [ ] Get the features from a pre-trained model (Wav2Vec, HuBert and WavLM) on HuggingFace on the retrieved dataset
-    - Wav2Vec : https://huggingface.co/facebook/wav2vec2-base
-    - HuBert : https://huggingface.co/docs/transformers/model_doc/hubert 
-    - WavLM : https://huggingface.co/microsoft/wavlm-base
+    - Wav2Vec : https://huggingface.co/facebook/wav2vec2-base https://huggingface.co/docs/transformers/v4.16.2/en/model_doc/wav2vec2#overview
+    - HuBert : https://huggingface.co/docs/transformers/model_doc/hubert https://huggingface.co/docs/transformers/v4.16.2/en/model_doc/hubert#overview
+    - WavLM : https://huggingface.co/microsoft/wavlm-base https://huggingface.co/docs/transformers/v4.16.2/en/model_doc/wavlm#overview
 - [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on the train set and test set -> **Already done in HF**
 
 ### Modeling part
