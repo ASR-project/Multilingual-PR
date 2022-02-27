@@ -27,6 +27,7 @@ class Hparams:
     dev_run         : bool         = True
     train           : bool         = True
     best_model      : str          = "" # then galant
+    compute_features    : int      = True
 
 @dataclass
 class NetworkParams:
@@ -40,13 +41,15 @@ class NetworkParams:
 
 @dataclass
 class FeatExtractParams:
-    network_name                  : str           = "Wav2vec"     # HuBERT, Wav2vec
+    network_name                  : str           = "Wav2vec"     # HuBERT, Wav2vec, WavLM
     path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
     feature_size                  : int           = 1
     sampling_rate                 : int           = 16000
     padding_value                 : float         = 0.0
     do_normalize                  : bool          = True
     return_attention_mask         : bool          = True
+    
+    split                         : str           = "train"
 
 @dataclass
 class OptimizerParams: 

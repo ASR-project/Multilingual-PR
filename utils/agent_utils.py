@@ -36,6 +36,17 @@ def get_datamodule(data_param):
     """
     return BaseDataModule(data_param)
 
+def get_features_extractor(features_extractor_name, params):
+    """
+    get features extractor
+    """
+    try:
+        mod = importlib.import_module(f"models.FeatureExtractors")
+        net = getattr(mod, features_extractor_name)
+        return net(params)
+    except NotImplementedError:
+        raise NotImplementedError(f'Not implemented only Wav2vec')
+
 def parse_params(parameters: Parameters) -> dict:
     wdb_config = {}
     for k,v in vars(parameters).items():

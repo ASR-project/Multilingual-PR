@@ -5,7 +5,7 @@ class BaseFeatureExtractor(object):
     def __init__(self, params):
         self.params = params
 
-    def extract_features(self, input):
+    def extract_features(self, dataset):
         raise NotImplementedError(f'Should be implemented in derived class!')
     
     def push_artifact(self, features):

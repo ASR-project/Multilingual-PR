@@ -38,7 +38,8 @@ def main():
         )
         
         agent = BaseTrainer(parameters, wandb_run)
-        agent.run()
+        if not parameters.hparams.compute_features:
+            agent.run()
     else: 
         wandb.init(
                 # vars(parameters),  # FIXME use the full parameters

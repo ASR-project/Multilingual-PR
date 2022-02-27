@@ -3,7 +3,6 @@ from torch.utils.data import DataLoader
 
 from datasets import load_dataset
 
-
 class BaseDataModule(LightningDataModule):
     def __init__(self, dataset_param):
         super().__init__()
