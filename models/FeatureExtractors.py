@@ -26,10 +26,18 @@ class Wav2vec(BaseFeatureExtractor):
 
         # Get the path to the features and save them
         # name of the features file
-        name_features = '-'.join([self.__class__.__name__.lower(),
-                                 self.params.data_param.subset])
+        name_features = '-'.join([
+            self.__class__.__name__.lower(),
+            self.params.data_param.subset,
+            self.params.feat_param.split,
+            
+        ])
+
         path_features = os.path.join(
-            self.params.feat_param.path_features, name_features+'.npy')
+            self.params.feat_param.path_features, 
+            name_features+'.npy'
+        )
+        
         np.save(
             open(path_features, 'wb'),
             features

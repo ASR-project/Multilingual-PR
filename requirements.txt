@@ -6,3 +6,4 @@ soundfile
 simple-parsing
 torch
 pytorch-lightning
+torchaudio

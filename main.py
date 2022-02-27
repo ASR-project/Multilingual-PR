@@ -1,3 +1,7 @@
+import faulthandler
+
+faulthandler.enable()
+
 from pytorch_lightning.loggers import WandbLogger
 
 # Standard libraries

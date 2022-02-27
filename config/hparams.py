@@ -47,9 +47,8 @@ class FeatExtractParams:
     sampling_rate                 : int           = 16000
     padding_value                 : float         = 0.0
     do_normalize                  : bool          = True
-    return_attention_mask         : bool          = True
-    
-    split                         : str           = "train"
+    return_attention_mask         : bool          = True 
+    split                         : str           = "validation"
 
 @dataclass
 class OptimizerParams: 
