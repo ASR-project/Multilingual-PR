@@ -64,7 +64,7 @@ And push it to wandb as an artifact
     - [ ] some validation audio files with phoneme in labels and predictions ?
 - [ ] Get the features from a pre-trained model (Wav2Vec, HuBert and WavLM) on HuggingFace on the retrieved dataset
     - Wav2Vec : https://huggingface.co/facebook/wav2vec2-base
-    - HuBert
+    - HuBert : https://huggingface.co/docs/transformers/model_doc/hubert 
     - WavLM : https://huggingface.co/microsoft/wavlm-base
 - [ ] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on the train set and test set -> **Already done in HF**
 
