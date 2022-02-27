@@ -3,6 +3,8 @@ from typing import Any, Dict, Optional
 
 import torch
 import wandb
+import pytorch_lightning as pl
+
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.utilities import rank_zero_info
 from pytorch_lightning.utilities.types import _METRIC, _PATH, STEP_OUTPUT
