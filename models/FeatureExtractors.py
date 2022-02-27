@@ -21,14 +21,14 @@ class Wav2vec(BaseFeatureExtractor):
                                                      do_normalize=self.params.feat_param.do_normalize, 
                                                      return_attention_mask=self.params.feat_param.return_attention_mask)
 
-        # TO DO: for loop to extract features
+        # TODO: for loop to extract features
         features = np.array([])
 
         # Get the path to the features and save them
         # name of the features file
         name_features = '-'.join([self.__class__.__name__.lower(),
                                  self.params.data_param.subset])
-        self.path_features = os.path.join(
+        path_features = os.path.join(
             self.params.feat_param.path_features, name_features+'.npy')
         np.save(
             open(path_features, 'wb'),
@@ -36,12 +36,12 @@ class Wav2vec(BaseFeatureExtractor):
         )
         return path_features
 
-    def push_artifact(self):
+    def push_artifact(self, path_features):
         artifact_name = self.__class__.__name__.lower()
         artifact = wandb.Artifact(
             name=artifact_name,
             type='dataset',
-            metadata=dict(self.params.feat_param)
+            # metadata=dict(self.params.feat_param) #FIXME
         )
-        artifact.add_file(self.path_features)
+        artifact.add_file(path_features)
         wandb.log_artifact(artifact, aliases=["latest"])

@@ -27,8 +27,8 @@ class BaseTrainer:
                                     use_auth_token=config.data_param.use_auth_token, 
                                     download_mode=config.data_param.download_mode, 
                                     cache_dir=config.data_param.cache_dir)
-            features_extractor.extract_features(dataset)
-            features_extractor.push_artifact()
+            path_features = features_extractor.extract_features(dataset)
+            features_extractor.push_artifact(path_features)
         else:
             logger.info('Loading artifact...')
             self.load_artifact(config.network_param, config.data_param)
