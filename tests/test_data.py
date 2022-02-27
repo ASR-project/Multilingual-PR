@@ -16,7 +16,7 @@ def test_features():
 
     # run a dummy feature extraction
     dummy_input = np.array([])
-    path_features = feat_ext_class.extract_features(input=dummy_input)
+    path_features = feat_ext_class.extract_features(dummy_input)
     assert os.path.exists(path_features)
 
     loaded_features = np.load(open(path_features, 'rb'))
