@@ -4,5 +4,5 @@ transformers
 datasets
 soundfile
 simple-parsing
-pytorch
+torch
 pytorch-lightning
