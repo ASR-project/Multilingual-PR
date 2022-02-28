@@ -1,12 +1,12 @@
-from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader
 import json
 
 import torch
+from datasets import Value, load_dataset
+from pytorch_lightning import LightningDataModule
 from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import DataLoader
+from utils.dataset_utils import coll_fn
 
-from datasets import load_dataset
-# from utils.dataset_utils import coll_fn
 
 class BaseDataModule(LightningDataModule):
     def __init__(self, dataset_param):
@@ -39,7 +39,10 @@ class BaseDataModule(LightningDataModule):
             phoneme_labels = json.load(open(self.config.phoneme_labels_file, 'r'))
             self.train_labels = phoneme_labels['train']
             self.val_labels = phoneme_labels['validation']
-
+            
+            # new_features = self.train_dataset.features.copy()
+            # new_features['phoneme'] = Value(dtype='string', id=None)
+            # self.train_dataset.cast(new_features)
 
         if stage == "test":
             self.test_dataset = load_dataset(self.config.dataset_name, 
@@ -58,21 +61,13 @@ class BaseDataModule(LightningDataModule):
                                         cache_dir=self.config.cache_dir
                                         )
 
-    def collate_fn(self, batch, nsplit):
-        list_tensors = [torch.from_numpy(b['audio']['array']) for b in batch]
-        list_labels = []
-        batch_audio = pad_sequence(list_tensors, padding_value=-100, batch_first=True)
-        #batch_audio = F.pad(([torch.from_numpy(b['audio']['array']) for b in batch]), pad=-100)
-        # TODO padding for labels
-        return batch_audio
-
     def train_dataloader(self):
         train_loader = DataLoader(
             self.train_dataset,
             shuffle=True,
             batch_size=self.config.batch_size,
             num_workers=self.config.num_workers,
-            collate_fn=self.coll_fn
+            collate_fn=coll_fn
         )
         return train_loader
 
@@ -82,7 +77,7 @@ class BaseDataModule(LightningDataModule):
             shuffle=False,
             batch_size=self.config.batch_size,
             num_workers=self.config.num_workers,
-            collate_fn=self.coll_fn
+            collate_fn=coll_fn
         )
         return val_loader
 
