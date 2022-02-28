@@ -56,6 +56,7 @@ And push it to wandb as an artifact
 
 - [X] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
 - [X] Script to transform sentence to phoneme (phonemizer : https://github.com/bootphon/phonemizer) : sentence_to_phoneme.py (language available : https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md)
+- [ ] Tokenize labels to apply CTC
 - [ ] use load_metric HF for metrics : load_metric("wer") load_metric("per")
 - [ ] Wandb display using Hugging Face ? :
     - [ ] Phoneme Error Rate (train and validation)

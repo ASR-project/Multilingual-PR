@@ -3,6 +3,9 @@ import torch.nn.functional as F
 import torch
 
 class CTC_model(nn.Module):
+    """
+    https://codingvision.net/pytorch-crnn-seq2seq-digits-recognition-ctc
+    """
     def __init__(self, params) -> None:
         super().__init__()
         num_features = 512
