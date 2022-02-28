@@ -3,7 +3,7 @@ import torch.nn as nn
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from utils.agent_utils import get_net
-
+from models.CTC_model import CTC_model
 
 class BaseModule(LightningModule):
     def __init__(self, network_param, optim_param):
@@ -20,12 +20,21 @@ class BaseModule(LightningModule):
 
         # TODO setup pretrained Hugging face pretrained model and implement CTC algo
         # model
-        self.model = get_net(network_param.network_name, network_param)
-        if network_param.weight_checkpoint != "":
-            self.model.load_state_dict(torch.load(
-                network_param.weight_checkpoint)["state_dict"])
+        # self.model = get_net(network_param.network_name, network_param)
+        # if network_param.weight_checkpoint != "":
+        #     self.model.load_state_dict(torch.load(
+        #         network_param.weight_checkpoint)["state_dict"])
+        features_extractor = get_net(network_param.network_name, network_param)
+        CTC = CTC_model(network_param)
+
+        self.model = nn.Sequential(
+            features_extractor,
+            CTC
+        )
 
     def forward(self, x):
+        # features = self.features_extractor(x)
+        # output = self.CTC(features)
         output = self.model(x)
         return output
 
@@ -79,7 +88,10 @@ class BaseModule(LightningModule):
         """convenience function since train/valid/test steps are similar"""
         x = batch
         # TODO implement correctly
-        output = self(x['audio']['array'])
+        output = self(x)
+        
+        output_logits = output.logits
+
         loss = self.loss(output, x['sentence'])
 
         return loss

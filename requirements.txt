@@ -7,3 +7,4 @@ simple-parsing
 torch
 pytorch-lightning
 torchaudio
+phonemizer

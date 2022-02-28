@@ -27,11 +27,24 @@ class Hparams:
     dev_run         : bool         = True
     train           : bool         = True
     best_model      : str          = "" # then galant
-    compute_features    : int      = True
+    compute_features    : int      = False
+
+# @dataclass
+# class CTCParams:
+
+@dataclass
+class FeatExtractParams:
+    network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
+    path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
+    feature_size                  : int           = 1
+    sampling_rate                 : int           = 16000
+    padding_value                 : float         = 0.0
+    do_normalize                  : bool          = True
+    return_attention_mask         : bool          = True 
 
 @dataclass
 class NetworkParams:
-    network_name       : Optional[str] = "MLP"     # dataset, use <Dataset>Eval for FT
+    network_name       : Optional[str] = "wav2vec2"     # dataset, use <Dataset>Eval for FT
     weight_checkpoint  : str           = ""
     artifact           : str           = ""
     dropout            : float         = 0.75
@@ -39,16 +52,16 @@ class NetworkParams:
     activation         : str           = 'GELU'
     input_size         : int           = 1000
 
-@dataclass
-class FeatExtractParams:
-    network_name                  : str           = "Wav2vec"     # HuBERT, Wav2vec, WavLM
-    path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
-    feature_size                  : int           = 1
-    sampling_rate                 : int           = 16000
-    padding_value                 : float         = 0.0
-    do_normalize                  : bool          = True
-    return_attention_mask         : bool          = True 
-    split                         : str           = "validation"
+# @dataclass
+# class FeatExtractParams:
+#     network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
+#     path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
+#     feature_size                  : int           = 1
+#     sampling_rate                 : int           = 16000
+#     padding_value                 : float         = 0.0
+#     do_normalize                  : bool          = True
+#     return_attention_mask         : bool          = True 
+#     split                         : str           = "validation"
 
 @dataclass
 class OptimizerParams: 
@@ -72,13 +85,14 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "br"              # chosen language 
+    subset                  : str                     = "vi"              # chosen language 
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
-    
+    phoneme_artifact        : str                     = "asr-project/asr/common_voice-vi.json:v1"
+
     # Dataloader parameters
     num_workers             : int                     = 8         # number of workers for dataloadersint
-    batch_size              : int                     = 1 
+    batch_size              : int                     = 2 
 
 @dataclass
 class Parameters:

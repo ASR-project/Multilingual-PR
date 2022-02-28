@@ -19,7 +19,7 @@ class BaseTrainer:
 
         logger = init_logger("BaseTrainer", "INFO")
 
-        if self.config.compute_features:
+        if self.config.compute_features: # TODO to remove?
             features_extractor = get_features_extractor(config.feat_param.network_name, config)
             dataset = load_dataset(config.data_param.dataset_name, 
                                     config.data_param.subset,
@@ -94,7 +94,7 @@ class BaseTrainer:
         #         csv_out.writerow(row)
 
     def load_artifact(self, network_param, data_param):
-        return
+        data_param.phoneme_labels_file = get_artifact(data_param.phoneme_artifact, type="dataset")
         # network_param.weight_checkpoint = get_artifact(
         #     network_param.artifact, type="model")
         # data_param.abstract_embeddings_file = get_artifact(
