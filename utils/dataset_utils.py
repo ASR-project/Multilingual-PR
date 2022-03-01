@@ -18,7 +18,7 @@ def coll_fn(batch):
 
     return batch_dict
 
-def create_vocabulary(data_param):
+def create_vocabulary(data_param, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):
     
     logger = init_logger("create_vocabulary", "INFO")
 
@@ -52,13 +52,13 @@ def create_vocabulary(data_param):
 
     vocab_dict = {v: k for k, v in enumerate(vocab_list)}
 
-    vocab_dict["|"] = vocab_dict[" "]
+    vocab_dict[word_delimiter_token] = vocab_dict[" "]
     del vocab_dict[" "]
 
-    vocab_dict["[UNK]"] = len(vocab_dict)
-    vocab_dict["[PAD]"] = len(vocab_dict)
+    vocab_dict[unk_token] = len(vocab_dict)
+    vocab_dict[pad_token] = len(vocab_dict)
 
-    logger.info(f'Length vocabulary : {vocab_dict}')
+    logger.info(f'Length vocabulary : {len(vocab_dict)}')
 
     if not os.path.exists(vocab_path):
         os.makedirs(vocab_path)

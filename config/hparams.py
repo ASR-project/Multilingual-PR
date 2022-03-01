@@ -88,7 +88,7 @@ class DatasetParams:
 
     # Dataloader parameters
     num_workers             : int                     = 8         # number of workers for dataloadersint
-    batch_size              : int                     = 2 
+    batch_size              : int                     = 1 
 
 @dataclass
 class Parameters:

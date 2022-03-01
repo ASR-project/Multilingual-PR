@@ -22,7 +22,14 @@ class BaseTrainer:
         self.load_artifact(config.network_param, config.data_param)
         
         logger.info('Create vocabulary ...')
-        config.feat_param.vocab_file = create_vocabulary(config.data_param)
+        config.feat_param.vocab_file = create_vocabulary(
+                                        config.data_param,
+                                        config.feat_param.eos_token,
+                                        config.feat_param.bos_token,
+                                        config.feat_param.unk_token,
+                                        config.feat_param.pad_token,
+                                        config.feat_param.word_delimiter_token
+                                        )
         
         logger.info(f'Vocabulary file : {config.feat_param.vocab_file}')
 

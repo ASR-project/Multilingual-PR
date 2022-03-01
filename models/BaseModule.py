@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from transformers import Wav2Vec2PhonemeCTCTokenizer
@@ -46,8 +47,7 @@ class BaseModule(LightningModule):
             feat_param.network_name, feat_param)
         logger.info(f"Features extractor : {feat_param.network_name}")
 
-        # CTC = CTC_model(network_param)
-        CTC = nn.Identity()
+        CTC = CTC_model(network_param)
 
         if feat_param.weight_checkpoint != "":
             features_extractor.load_state_dict(torch.load(
@@ -125,10 +125,11 @@ class BaseModule(LightningModule):
         """convenience function since train/valid/test steps are similar"""
         x = batch
 
-        # TODO implement correctly
         output = self(x['array'])
 
+        # FIXME 
         # process outputs
+        log_probs = F.log_softmax(output, dim=2)
         input_lengths = torch.LongTensor([len(targ) for targ in targets])
 
         # process targets
@@ -136,6 +137,6 @@ class BaseModule(LightningModule):
         # self.phonemes_tokenizer._tokenize(x['sentence'][0])
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
 
-        loss = self.loss(output_logits, targets, input_lengths, target_lengths)
+        loss = self.loss(log_probs, targets, input_lengths, target_lengths)
 
         return loss
