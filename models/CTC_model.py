@@ -1,6 +1,7 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch
+
 
 class CTC_model(nn.Module):
     """

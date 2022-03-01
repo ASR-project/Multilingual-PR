@@ -2,30 +2,43 @@ import torch
 import torch.nn as nn
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from utils.agent_utils import get_net
+from utils.agent_utils import get_features_extractors
+from utils.logger import init_logger
+
 from models.CTC_model import CTC_model
 
+
 class BaseModule(LightningModule):
-    def __init__(self, network_param, optim_param):
-        """method used to define our model parameters
+    def __init__(self, network_param, feat_param, optim_param):
+        """
+            method used to define our model parameters
         """
         super(BaseModule, self).__init__()
 
-        # loss function
+        logger = init_logger("BaseModule", "INFO")
+
+        # Loss function
         self.loss = nn.CTCLoss()
 
-        # optimizer
+        # Optimizer
         self.optim_param = optim_param
         self.lr = optim_param.lr
 
-        # TODO setup pretrained Hugging face pretrained model and implement CTC algo
-        # model
-        # self.model = get_net(network_param.network_name, network_param)
-        # if network_param.weight_checkpoint != "":
-        #     self.model.load_state_dict(torch.load(
-        #         network_param.weight_checkpoint)["state_dict"])
-        features_extractor = get_net(network_param.network_name, network_param)
+        logger.info(f"Optimizer : {optim_param.optimizer}, lr : {optim_param.lr}")
+
+        # Network
+        features_extractor = get_features_extractors(feat_param.network_name, feat_param)
+        logger.info(f"Features extractor : {feat_param.network_name}")
+
         CTC = CTC_model(network_param)
+
+        if feat_param.weight_checkpoint != "":
+            features_extractor.load_state_dict(torch.load(
+                feat_param.weight_checkpoint)["state_dict"])
+
+        if network_param.weight_checkpoint != "":
+            features_extractor.load_state_dict(torch.load(
+                network_param.weight_checkpoint)["state_dict"])
 
         self.model = nn.Sequential(
             features_extractor,
@@ -33,14 +46,12 @@ class BaseModule(LightningModule):
         )
 
     def forward(self, x):
-        # features = self.features_extractor(x)
-        # output = self.CTC(features)
         output = self.model(x)
         return output
 
     def training_step(self, batch, batch_idx):
         """needs to return a loss from a single batch"""
-        loss = self._get_loss(batch)
+        loss = self._get_loss(batch, split="train")
 
         # Log loss
         self.log("train/loss", loss)
@@ -49,7 +60,16 @@ class BaseModule(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss = self._get_loss(batch)
+        loss = self._get_loss(batch, split="validation")
+
+        # Log loss
+        self.log("val/loss", loss)
+
+        return loss
+
+    def test_step(self, batch, batch_idx):
+        """used for logging metrics"""
+        loss = self._get_loss(batch, split="test")
 
         # Log loss
         self.log("val/loss", loss)
@@ -84,14 +104,15 @@ class BaseModule(LightningModule):
 
         return optimizer
 
-    def _get_loss(self, batch):
+    def _get_loss(self, batch, split):
         """convenience function since train/valid/test steps are similar"""
         x = batch
+        
         # TODO implement correctly
-        output = self(x)
+        output = self(x['array'])
         
         output_logits = output.logits
 
-        loss = self.loss(output, x['sentence'])
+        loss = self.loss(output_logits, targets, input_lengths, target_lengths)
 
         return loss

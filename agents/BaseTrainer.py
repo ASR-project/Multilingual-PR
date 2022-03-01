@@ -1,12 +1,10 @@
 import pytorch_lightning as pl
 import torch
 import wandb
-from datasets import load_dataset
 from models.BaseModule import BaseModule
 from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar,
                                          StochasticWeightAveraging)
-from utils.agent_utils import (get_artifact, get_datamodule,
-                               get_features_extractor)
+from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint
 from utils.logger import init_logger
 
@@ -19,30 +17,19 @@ class BaseTrainer:
 
         logger = init_logger("BaseTrainer", "INFO")
 
-        if self.config.compute_features: # TODO to remove?
-            features_extractor = get_features_extractor(config.feat_param.network_name, config)
-            dataset = load_dataset(config.data_param.dataset_name, 
-                                    config.data_param.subset,
-                                    split=config.feat_param.split,
-                                    use_auth_token=config.data_param.use_auth_token, 
-                                    download_mode=config.data_param.download_mode, 
-                                    cache_dir=config.data_param.cache_dir)
-            path_features = features_extractor.extract_features(dataset)
-            features_extractor.push_artifact(path_features)
-        else:
-            logger.info('Loading artifact...')
-            self.load_artifact(config.network_param, config.data_param)
+        logger.info('Loading artifact...')
+        self.load_artifact(config.network_param, config.data_param)
 
-            logger.info('Loading Data module...')
-            self.datamodule = get_datamodule(
-                config.data_param
-            )
-            # config.network_param.input_size = self.datamodule.dataset.get_input_dim()
-            logger.info('Loading Model module...')
-            self.pl_model = BaseModule(
-                config.network_param, config.optim_param)
+        logger.info('Loading Data module...')
+        self.datamodule = get_datamodule(
+            config.data_param
+        )
 
-            self.wb_run.watch(self.pl_model.model)
+        logger.info('Loading Model module...')
+        self.pl_model = BaseModule(
+            config.network_param, config.feat_param, config.optim_param)
+
+        self.wb_run.watch(self.pl_model.model)
 
     def run(self):
         if self.config.tune_lr:

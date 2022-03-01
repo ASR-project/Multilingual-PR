@@ -27,24 +27,10 @@ class Hparams:
     dev_run         : bool         = True
     train           : bool         = True
     best_model      : str          = "" # then galant
-    compute_features    : int      = False
-
-# @dataclass
-# class CTCParams:
-
-@dataclass
-class FeatExtractParams:
-    network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
-    path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
-    feature_size                  : int           = 1
-    sampling_rate                 : int           = 16000
-    padding_value                 : float         = 0.0
-    do_normalize                  : bool          = True
-    return_attention_mask         : bool          = True 
 
 @dataclass
 class NetworkParams:
-    network_name       : Optional[str] = "wav2vec2"     # dataset, use <Dataset>Eval for FT
+    network_name       : str           = "CTC_model"
     weight_checkpoint  : str           = ""
     artifact           : str           = ""
     dropout            : float         = 0.75
@@ -52,16 +38,15 @@ class NetworkParams:
     activation         : str           = 'GELU'
     input_size         : int           = 1000
 
-# @dataclass
-# class FeatExtractParams:
-#     network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
-#     path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
-#     feature_size                  : int           = 1
-#     sampling_rate                 : int           = 16000
-#     padding_value                 : float         = 0.0
-#     do_normalize                  : bool          = True
-#     return_attention_mask         : bool          = True 
-#     split                         : str           = "validation"
+@dataclass
+class FeatExtractParams:
+    network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
+    path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
+    feature_size                  : int           = 1
+    padding_value                 : float         = 0.0
+    do_normalize                  : bool          = True
+    return_attention_mask         : bool          = True 
+    weight_checkpoint             : str           = ""
 
 @dataclass
 class OptimizerParams: 
