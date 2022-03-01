@@ -87,7 +87,7 @@ class DatasetParams:
     phoneme_artifact        : str                     = "asr-project/asr/common_voice-vi.json:v1"
 
     # to create vocabulary of phonemes
-    ISO6393                 : str                     = "bre"
+    ISO6393                 : str                     = "bre"    # look at the phoible.csv file
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     
     # Dataloader parameters
