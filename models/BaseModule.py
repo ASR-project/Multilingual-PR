@@ -126,7 +126,7 @@ class BaseModule(LightningModule):
         """convenience function since train/valid/test steps are similar"""
         x = batch
 
-        # output = self(x['array'])
+        output = self(x['array'])
 
         # FIXME
         # process outputs
@@ -144,6 +144,6 @@ class BaseModule(LightningModule):
 
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
 
-        loss = self.loss(log_probs, targets, input_lengths, target_lengths)
+        loss = self.loss(output, targets, input_lengths, target_lengths)
 
         return loss

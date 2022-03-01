@@ -29,7 +29,8 @@ def main():
                     parameters.network_param.network_name,
                     parameters.data_param.dataset_name,
                     parameters.data_param.subset,
-                    parameters.optim_param.optimizer
+                    parameters.optim_param.optimizer,
+                    parameters.feat_param.network_name,
                     ]
             )
         

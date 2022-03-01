@@ -32,11 +32,11 @@ class Hparams:
 class NetworkParams:
     network_name       : str           = "CTC_model"
     weight_checkpoint  : str           = ""
-    artifact           : str           = ""
-    dropout            : float         = 0.75
-    normalization      : str           = 'BatchNorm1d'
-    activation         : str           = 'GELU'
-    input_size         : int           = 1000
+    # artifact           : str           = ""
+    # dropout            : float         = 0.75
+    # normalization      : str           = 'BatchNorm1d'
+    # activation         : str           = 'GELU'
+    # input_size         : int           = 1000
 
 @dataclass
 class FeatExtractParams:
@@ -92,7 +92,7 @@ class DatasetParams:
     
     # Dataloader parameters
     num_workers             : int                     = 8         # number of workers for dataloadersint
-    batch_size              : int                     = 1 
+    batch_size              : int                     = 2 
 
 @dataclass
 class Parameters:
