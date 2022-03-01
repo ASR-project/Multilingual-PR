@@ -140,7 +140,7 @@ class BaseModule(LightningModule):
         print(x['sentence'][0])
         print(self.phonemes_tokenizer._decode(targets[0]))
         print(self.phonemes_tokenizer.phonemize(x['sentence'][0])) 
-        # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien) 
+        # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien car pas il y a pas tout dans phoible) 
 
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
 
