@@ -4,10 +4,8 @@ import os
 import os.path as osp
 import json
 
-import re
-from datasets import load_dataset
+import pandas as pd
 from utils.logger import init_logger
-
 
 def coll_fn(batch):
     batch_dict={}
@@ -18,52 +16,34 @@ def coll_fn(batch):
 
     return batch_dict
 
-def create_vocabulary(data_param, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):
-    
+def create_vocabulary(ISO6393, path_csv, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):
+
     logger = init_logger("create_vocabulary", "INFO")
 
-    vocab_path = osp.join(os.getcwd(), "assets", "vocab")
-    file_dict = os.path.join(vocab_path, f"vocab-{data_param.dataset_name}-{data_param.subset}.json")
+    df = pd.read_csv(osp.join(path_csv, "phoible.csv"))
 
-    if os.path.isfile(file_dict):
-        logger.info(f'{file_dict} already exists')
-        return file_dict
+    df_phoneme_target_lang = df[df['ISO6393']==ISO6393]['Phoneme']
+    df_phoneme_target_lang.drop_duplicates(keep="first", inplace=True)
+    df_phoneme_target_lang.reset_index(drop=True, inplace=True)
 
-    chars_to_ignore_regex = '[\,\?\.\!\-\;\:\"]'
+    phoneme_vocab = dict(df_phoneme_target_lang)
+    phoneme_vocab = {v:k for k,v in phoneme_vocab.items()}
 
-    def remove_special_characters(batch):
-        batch["sentence"] = re.sub(chars_to_ignore_regex, '', batch["sentence"]).lower()
-        return batch
+    phoneme_vocab[eos_token] = len(phoneme_vocab)
+    phoneme_vocab[bos_token] = len(phoneme_vocab)
+    phoneme_vocab[unk_token] = len(phoneme_vocab)
+    phoneme_vocab[pad_token] = len(phoneme_vocab)
+    phoneme_vocab[word_delimiter_token] = len(phoneme_vocab)
 
-    def extract_all_chars(batch):
-        all_text = " ".join(batch["sentence"])
-        vocab = list(set(all_text))
-        return {"vocab": [vocab], "all_text": [all_text]}
+    logger.info(f'Length vocabulary : {len(phoneme_vocab)}')
 
-    dataset = load_dataset(data_param.dataset_name, data_param.subset,
-                            use_auth_token=data_param.use_auth_token, 
-                            download_mode=data_param.download_mode, 
-                            cache_dir=data_param.cache_dir)
-
-    dataset = dataset.map(remove_special_characters)
-    vocabs = dataset.map(extract_all_chars, batched=True, batch_size=-1, keep_in_memory=True, remove_columns=dataset.column_names["train"])
-
-    vocab_list = list(set(vocabs["train"]["vocab"][0]) | set(vocabs["test"]["vocab"][0]))
-
-    vocab_dict = {v: k for k, v in enumerate(vocab_list)}
-
-    vocab_dict[word_delimiter_token] = vocab_dict[" "]
-    del vocab_dict[" "]
-
-    vocab_dict[unk_token] = len(vocab_dict)
-    vocab_dict[pad_token] = len(vocab_dict)
-
-    logger.info(f'Length vocabulary : {len(vocab_dict)}')
+    vocab_path = osp.join(os.getcwd(), "assets", "vocab_phoneme")
+    file_dict = os.path.join(vocab_path, f"vocab-phoneme-{ISO6393}.json")
 
     if not os.path.exists(vocab_path):
         os.makedirs(vocab_path)
 
     with open(file_dict, "w") as vocab_file:
-        json.dump(vocab_dict, vocab_file)
+        json.dump(phoneme_vocab, vocab_file)
     
-    return file_dict
+    return file_dict, len(phoneme_vocab)

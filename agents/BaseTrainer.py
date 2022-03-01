@@ -10,6 +10,7 @@ from utils.logger import init_logger
 
 from utils.dataset_utils import create_vocabulary
 
+
 class BaseTrainer:
     def __init__(self, config, run=None) -> None:
         self.config = config.hparams
@@ -20,17 +21,20 @@ class BaseTrainer:
 
         logger.info('Loading artifact...')
         self.load_artifact(config.network_param, config.data_param)
-        
-        logger.info('Create vocabulary ...')
-        config.feat_param.vocab_file = create_vocabulary(
-                                        config.data_param,
-                                        config.feat_param.eos_token,
-                                        config.feat_param.bos_token,
-                                        config.feat_param.unk_token,
-                                        config.feat_param.pad_token,
-                                        config.feat_param.word_delimiter_token
-                                        )
-        
+
+        logger.info(
+            f'Create vocabulary ISO6393 : {config.data_param.ISO6393} ...')
+
+        config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
+            config.data_param.ISO6393,
+            config.data_param.phoible_csv_path,
+            eos_token=config.feat_param.eos_token,
+            bos_token=config.feat_param.bos_token,
+            unk_token=config.feat_param.unk_token,
+            pad_token=config.feat_param.pad_token,
+            word_delimiter_token=config.feat_param.word_delimiter_token,
+        )
+
         logger.info(f'Vocabulary file : {config.feat_param.vocab_file}')
 
         logger.info('Loading Data module...')
@@ -94,7 +98,8 @@ class BaseTrainer:
         #         csv_out.writerow(row)
 
     def load_artifact(self, network_param, data_param):
-        data_param.phoneme_labels_file = get_artifact(data_param.phoneme_artifact, type="dataset")
+        data_param.phoneme_labels_file = get_artifact(
+            data_param.phoneme_artifact, type="dataset")
         # network_param.weight_checkpoint = get_artifact(
         #     network_param.artifact, type="model")
         # data_param.abstract_embeddings_file = get_artifact(

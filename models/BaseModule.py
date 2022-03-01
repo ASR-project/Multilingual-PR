@@ -20,7 +20,8 @@ class BaseModule(LightningModule):
         logger = init_logger("BaseModule", "INFO")
 
         # Loss function
-        self.loss = nn.CTCLoss(blank=0, reduction="mean") # FIXME blank is variable depends on the dataset
+        # FIXME blank is variable depends on the dataset
+        self.loss = nn.CTCLoss(blank=0, reduction="mean")
 
         # Optimizer
         self.optim_param = optim_param
@@ -32,15 +33,15 @@ class BaseModule(LightningModule):
         # Tokenizer
         # https://github.com/huggingface/transformers/blob/v4.16.2/src/transformers/models/wav2vec2_phoneme/tokenization_wav2vec2_phoneme.py
         self.phonemes_tokenizer = Wav2Vec2PhonemeCTCTokenizer(vocab_file=feat_param.vocab_file,
-                                                     eos_token=feat_param.eos_token,
-                                                     bos_token=feat_param.bos_token,
-                                                     unk_token=feat_param.unk_token,
-                                                     pad_token=feat_param.pad_token,
-                                                     word_delimiter_token=feat_param.word_delimiter_token,
-                                                     do_phonemize=True,
-                                                     phonemizer_lang=feat_param.phonemizer_lang,
-                                                     phonemizer_backend=feat_param.phonemizer_backend
-                                                     )
+                                                              eos_token=feat_param.eos_token,
+                                                              bos_token=feat_param.bos_token,
+                                                              unk_token=feat_param.unk_token,
+                                                              pad_token=feat_param.pad_token,
+                                                              word_delimiter_token=feat_param.word_delimiter_token,
+                                                              do_phonemize=True,
+                                                              phonemizer_lang=feat_param.phonemizer_lang,
+                                                              phonemizer_backend=feat_param.phonemizer_backend
+                                                              )
 
         # Network
         features_extractor = get_features_extractors(
@@ -125,16 +126,22 @@ class BaseModule(LightningModule):
         """convenience function since train/valid/test steps are similar"""
         x = batch
 
-        output = self(x['array'])
+        # output = self(x['array'])
 
-        # FIXME 
+        # FIXME
         # process outputs
-        log_probs = F.log_softmax(output, dim=2)
-        input_lengths = torch.LongTensor([len(targ) for targ in targets])
+        # log_probs = F.log_softmax(output, dim=2)
+        # input_lengths = torch.LongTensor([len(targ) for targ in targets])
 
         # process targets
-        targets = self.phonemes_tokenizer(x['sentence']).input_ids # FIXME not phonemized
-        # self.phonemes_tokenizer._tokenize(x['sentence'][0])
+        targets = self.phonemes_tokenizer(x['sentence']).input_ids
+        
+        print(targets[0])
+        print(x['sentence'][0])
+        print(self.phonemes_tokenizer._decode(targets[0]))
+        print(self.phonemes_tokenizer.phonemize(x['sentence'][0])) 
+        # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien) 
+
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
 
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)

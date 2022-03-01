@@ -10,7 +10,7 @@ class CTC_model(nn.Module):
     def __init__(self, params) -> None:
         super().__init__()
         num_features = 512
-        num_classes = 100 # to check
+        num_classes = params.len_vocab
         
         num_layers = 2
         hidden_size = 256
@@ -31,11 +31,11 @@ class CTC_model(nn.Module):
         )
 
         self.fc = nn.Linear(gru_hidden_size * 2, num_classes)
-        
+
     def forward(self, x):
         batch_size = x.shape[0]
             
-        out = self.conv1(x) 
+        out = self.conv1(x.unsqueeze(1)) 
         out = F.leaky_relu(out)
         out = self.in1(out)
 

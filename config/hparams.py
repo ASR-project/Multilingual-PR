@@ -51,8 +51,8 @@ class FeatExtractParams:
     return_attention_mask         : bool          = False 
     
     # Phoneme Tokenizer
-    eos_token                     : str           = "[s]"
-    bos_token                     : str           = "[/s]"
+    eos_token                     : str           = "<s>"
+    bos_token                     : str           = "</s>"
     unk_token                     : str           = "[UNK]"
     pad_token                     : str           = "[PAD]"
     word_delimiter_token          : str           = "|"
@@ -81,11 +81,15 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "vi"              # chosen language 
+    subset                  : str                     = "br"              # chosen language 
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
     phoneme_artifact        : str                     = "asr-project/asr/common_voice-vi.json:v1"
 
+    # to create vocabulary of phonemes
+    ISO6393                 : str                     = "bre"
+    phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
+    
     # Dataloader parameters
     num_workers             : int                     = 8         # number of workers for dataloadersint
     batch_size              : int                     = 1 
