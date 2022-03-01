@@ -157,3 +157,4 @@ cython_debug/
 wandb/
 *.ckpt
 assets/
+*.json
