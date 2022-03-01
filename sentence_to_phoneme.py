@@ -65,25 +65,3 @@ if __name__ == '__main__':
     parser.add_argument("--language_name", required=True, type = str, help = "name of the language that you want to convert")
     args = parser.parse_args()
     main(args.language_name)
-
-
-# FIXME
-# from utils.agent_utils import get_progress_bar
-# with get_progress_bar() as progress1:
-#     i = 0
-#     task1 = progress1.add_task(f"[cyan]Split ", total=len(dataset.keys()), info="-")
-#     for subset_name in dataset.keys():
-#         subset = dataset[subset_name]
-#         with get_progress_bar() as progress2:
-#             j = 0
-#             task2 = progress2.add_task(f"[cyan]Samples ", total=len(subset), info="-")
-#             for sample in subset:
-#                 sentence = sample['sentence']
-#                 phoneme_sentence = phonemize(sentence, language=language_name)
-#                 dict_res[subset_name][sample['path']] = phoneme_sentence 
-
-#                 j+=1
-#                 progress2.update(task1, advance=1, info=f"{j}/{len(subset)}")
-#                 break
-#         i+=1
-#         progress1.update(task1, advance=1, info=f"{i}/{len(dataset.keys())}")

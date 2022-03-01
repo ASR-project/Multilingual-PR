@@ -35,7 +35,7 @@ class CTC_model(nn.Module):
     def forward(self, x):
         batch_size = x.shape[0]
             
-        out = self.conv1(x.unsqueeze(1)) 
+        out = self.conv1(x) 
         out = F.leaky_relu(out)
         out = self.in1(out)
 

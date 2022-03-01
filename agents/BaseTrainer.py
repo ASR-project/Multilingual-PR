@@ -8,6 +8,7 @@ from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint
 from utils.logger import init_logger
 
+from utils.dataset_utils import create_vocabulary
 
 class BaseTrainer:
     def __init__(self, config, run=None) -> None:
@@ -19,6 +20,11 @@ class BaseTrainer:
 
         logger.info('Loading artifact...')
         self.load_artifact(config.network_param, config.data_param)
+        
+        logger.info('Create vocabulary ...')
+        config.feat_param.vocab_file = create_vocabulary(config.data_param)
+        
+        logger.info(f'Vocabulary file : {config.feat_param.vocab_file}')
 
         logger.info('Loading Data module...')
         self.datamodule = get_datamodule(

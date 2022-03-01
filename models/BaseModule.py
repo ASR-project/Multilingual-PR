@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+from transformers import Wav2Vec2PhonemeCTCTokenizer
 from utils.agent_utils import get_features_extractors
 from utils.logger import init_logger
 
@@ -18,19 +19,35 @@ class BaseModule(LightningModule):
         logger = init_logger("BaseModule", "INFO")
 
         # Loss function
-        self.loss = nn.CTCLoss()
+        self.loss = nn.CTCLoss(blank=0, reduction="mean") # FIXME blank is variable depends on the dataset
 
         # Optimizer
         self.optim_param = optim_param
         self.lr = optim_param.lr
 
-        logger.info(f"Optimizer : {optim_param.optimizer}, lr : {optim_param.lr}")
+        logger.info(
+            f"Optimizer : {optim_param.optimizer}, lr : {optim_param.lr}")
+
+        # Tokenizer
+        # https://github.com/huggingface/transformers/blob/v4.16.2/src/transformers/models/wav2vec2_phoneme/tokenization_wav2vec2_phoneme.py
+        self.phonemes_tokenizer = Wav2Vec2PhonemeCTCTokenizer(vocab_file=feat_param.vocab_file,
+                                                     eos_token=feat_param.eos_token,
+                                                     bos_token=feat_param.bos_token,
+                                                     unk_token=feat_param.unk_token,
+                                                     pad_token=feat_param.pad_token,
+                                                     word_delimiter_token=feat_param.word_delimiter_token,
+                                                     do_phonemize=True,
+                                                     phonemizer_lang=feat_param.phonemizer_lang,
+                                                     phonemizer_backend=feat_param.phonemizer_backend
+                                                     )
 
         # Network
-        features_extractor = get_features_extractors(feat_param.network_name, feat_param)
+        features_extractor = get_features_extractors(
+            feat_param.network_name, feat_param)
         logger.info(f"Features extractor : {feat_param.network_name}")
 
-        CTC = CTC_model(network_param)
+        # CTC = CTC_model(network_param)
+        CTC = nn.Identity()
 
         if feat_param.weight_checkpoint != "":
             features_extractor.load_state_dict(torch.load(
@@ -51,7 +68,7 @@ class BaseModule(LightningModule):
 
     def training_step(self, batch, batch_idx):
         """needs to return a loss from a single batch"""
-        loss = self._get_loss(batch, split="train")
+        loss = self._get_loss(batch)
 
         # Log loss
         self.log("train/loss", loss)
@@ -60,7 +77,7 @@ class BaseModule(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss = self._get_loss(batch, split="validation")
+        loss = self._get_loss(batch)
 
         # Log loss
         self.log("val/loss", loss)
@@ -69,7 +86,7 @@ class BaseModule(LightningModule):
 
     def test_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss = self._get_loss(batch, split="test")
+        loss = self._get_loss(batch)
 
         # Log loss
         self.log("val/loss", loss)
@@ -104,14 +121,20 @@ class BaseModule(LightningModule):
 
         return optimizer
 
-    def _get_loss(self, batch, split):
+    def _get_loss(self, batch):
         """convenience function since train/valid/test steps are similar"""
         x = batch
-        
+
         # TODO implement correctly
         output = self(x['array'])
-        
-        output_logits = output.logits
+
+        # process outputs
+        input_lengths = torch.LongTensor([len(targ) for targ in targets])
+
+        # process targets
+        targets = self.phonemes_tokenizer(x['sentence']).input_ids # FIXME not phonemized
+        # self.phonemes_tokenizer._tokenize(x['sentence'][0])
+        target_lengths = torch.LongTensor([len(targ) for targ in targets])
 
         loss = self.loss(output_logits, targets, input_lengths, target_lengths)
 

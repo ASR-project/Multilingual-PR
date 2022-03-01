@@ -41,12 +41,23 @@ class NetworkParams:
 @dataclass
 class FeatExtractParams:
     network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
-    path_features                 : str           = osp.join(os.getcwd(), "assets")    # HuBERT, Wav2vec
+    weight_checkpoint             : str           = ""
+    
+    # Feature Extractor
     feature_size                  : int           = 1
+    sampling_rate                 : int           = 16000
     padding_value                 : float         = 0.0
     do_normalize                  : bool          = True
-    return_attention_mask         : bool          = True 
-    weight_checkpoint             : str           = ""
+    return_attention_mask         : bool          = False 
+    
+    # Phoneme Tokenizer
+    eos_token                     : str           = "[s]"
+    bos_token                     : str           = "[/s]"
+    unk_token                     : str           = "[UNK]"
+    pad_token                     : str           = "[PAD]"
+    word_delimiter_token          : str           = "|"
+    phonemizer_lang               : str           = "vi"
+    phonemizer_backend            : str           = "espeak"
 
 @dataclass
 class OptimizerParams: 

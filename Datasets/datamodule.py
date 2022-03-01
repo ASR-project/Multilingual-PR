@@ -1,8 +1,5 @@
-import json
-
 from datasets import load_dataset
 from pytorch_lightning import LightningDataModule
-from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from utils.dataset_utils import coll_fn
 from utils.logger import init_logger
@@ -38,15 +35,6 @@ class BaseDataModule(LightningDataModule):
                                             download_mode=self.config.download_mode,
                                             cache_dir=self.config.cache_dir
                                             )
-
-            phoneme_labels = json.load(
-                open(self.config.phoneme_labels_file, 'r'))
-            self.train_labels = phoneme_labels['train']
-            self.val_labels = phoneme_labels['validation']
-
-            # new_features = self.train_dataset.features.copy()
-            # new_features['phoneme'] = Value(dtype='string', id=None)
-            # self.train_dataset.cast(new_features)
 
         if stage == "test":
             self.test_dataset = load_dataset(self.config.dataset_name,
