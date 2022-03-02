@@ -17,11 +17,14 @@ class BaseFeaturesExtractor(nn.Module):
     def forward(self, x):
         # input_values = self.processor(x, sampling_rate=self.params.sampling_rate, return_tensors="pt").input_values.squeeze(0)
         # features = self.processor.feature_extractor(input_values, return_tensors="pt").input_values.squeeze(0)
-        features = self.feature_extractor(x)
+        # features2 = self.feature_extractor2(x, return_tensors="pt").input_values
+        # print(features2.shape)
+        # FIXME extractor features correctly
+        features = self.feature_extractor(x) 
         print(features.shape)
-        features2 = self.feature_extractor2(x, return_tensors="pt").input_values
-        print(features2.shape)
-        return features
+        features_projected = self.feature_projection(features)
+        features_encoded = self.encoder(features_projected)
+        return features_encoded
 
 class Wav2Vec2(BaseFeaturesExtractor):
     """
@@ -31,14 +34,18 @@ class Wav2Vec2(BaseFeaturesExtractor):
     def __init__(self, params):
         super().__init__(params)
 
-        self.feature_extractor2 = Wav2Vec2FeatureExtractor(feature_size=params.feature_size,
-                                                    sampling_rate=params.sampling_rate, 
-                                                    padding_value=params.padding_value, 
-                                                    do_normalize=params.do_normalize,
-                                                    return_attention_mask=params.return_attention_mask)
+        # self.feature_extractor2 = Wav2Vec2FeatureExtractor(feature_size=params.feature_size,
+        #                                             sampling_rate=params.sampling_rate, 
+        #                                             padding_value=params.padding_value, 
+        #                                             do_normalize=params.do_normalize,
+        #                                             return_attention_mask=params.return_attention_mask)
 
         # self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor)
-        self.feature_extractor = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h").wav2vec2.feature_extractor
+        wav2vec2 = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h").wav2vec2
+        self.feature_extractor = wav2vec2.feature_extractor
+        self.feature_projection = wav2vec2.feature_projection
+        # self.encoder = wav2vec2.encoder
+
         # self.model.lm_head = nn.Linear(in_features=768, out_features=tokenizer.vocab_size)
 
 class WavLM(BaseFeaturesExtractor):
