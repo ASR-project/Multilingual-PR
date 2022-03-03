@@ -10,7 +10,9 @@ from phonemizer.phonemize import phonemize
 # https://github.com/bootphon/phonemizer
 
 from datasets import load_dataset
-
+"""
+OUTDATED FILE TO REMOVE ?  no need to use it anymore, all is done on the fly with the phonemetokenizer by HF
+"""
 def main(language_name):
     dataset_name = "common_voice"       # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice
     use_auth_token = False              # True if use mozilla-foundation datasets
