@@ -15,18 +15,24 @@ import torch.optim
 class Hparams:
     """Hyperparameters of for the run"""
 
+    # wandb
     wandb_entity    : str          = "asr-project"         # name of the project
     debug           : bool         = False            # test code before running, if testing, no checkpoints are written
     wandb_project   : str          = "test-asr"
     root_dir        : str          = os.getcwd()  # root_dir
-    seed_everything : Optional[int]= None   # seed for the whole run
-    tune_lr         : bool         = False  # tune the model on first run
-    gpu             : int          = 0      # number or gpu
-    max_epochs      : int          = 30    # maximum number of epochs
-    weights_path    : str          = "weights"
-    dev_run         : bool         = True
-    train           : bool         = True
-    best_model      : str          = "" # then galant
+
+    # basic params
+    seed_everything: Optional[int] = None  # seed for the whole run
+    gpu: int = 1  # number or gpu
+    max_epochs: int = 30  # maximum number of epochs
+    weights_path: str = osp.join(os.getcwd(), "weights")
+
+    # modes
+    tune_lr: bool = False  # tune the model on first run
+    dev_run: bool = False
+    train: bool = True
+
+    best_model: str = ""
 
 @dataclass
 class NetworkParams:
@@ -81,17 +87,16 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "br"              # chosen language 
+    subset                  : str                     = "br"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
-    phoneme_artifact        : str                     = "asr-project/asr/common_voice-vi.json:v1"
 
     # to create vocabulary of phonemes
     ISO6393                 : str                     = "bre"    # look at the phoible.csv file
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     
     # Dataloader parameters
-    num_workers             : int                     = 8         # number of workers for dataloadersint
+    num_workers             : int                     = 8         # number of workers for dataloaders
     batch_size              : int                     = 2 
 
 @dataclass

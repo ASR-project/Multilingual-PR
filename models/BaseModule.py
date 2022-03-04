@@ -20,7 +20,7 @@ class BaseModule(LightningModule):
         logger = init_logger("BaseModule", "INFO")
 
         # Loss function
-        # FIXME blank is variable depends on the dataset
+        # FIXME blank is variable depends on the dataset indice of the blank token
         self.loss = nn.CTCLoss(blank=0, reduction="mean")
 
         # Optimizer
@@ -135,12 +135,12 @@ class BaseModule(LightningModule):
 
         # process targets
         targets = self.phonemes_tokenizer(x['sentence']).input_ids
-        
+
         print(targets[0])
         print(x['sentence'][0])
         print(self.phonemes_tokenizer._decode(targets[0]))
         print(self.phonemes_tokenizer.phonemize(x['sentence'][0])) 
-        # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien car pas il y a pas tout dans phoible) 
+        # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien car pas il y a pas tout les phonemes dans phoible je crois) 
 
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
 
