@@ -4,7 +4,8 @@ transformers
 datasets
 soundfile
 simple-parsing
-torch
+torch==1.10.0
 pytorch-lightning
 torchaudio
 phonemizer
+rich
