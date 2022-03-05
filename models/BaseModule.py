@@ -131,11 +131,12 @@ class BaseModule(LightningModule):
         # FIXME
         # process outputs
         # log_probs = F.log_softmax(output, dim=2)
-        input_lengths = torch.LongTensor([len(targ) for targ in targets])
+        
 
         # process targets
         targets = self.phonemes_tokenizer(x['sentence']).input_ids
-
+        input_lengths = torch.LongTensor([len(targ) for targ in targets])
+        
         print(targets[0])
         print(x['sentence'][0])
         print(self.phonemes_tokenizer._decode(targets[0]))
