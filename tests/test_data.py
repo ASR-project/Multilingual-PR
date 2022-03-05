@@ -11,7 +11,7 @@ def test_features():
 
     # load the right class
     network_name = params.feat_param.network_name
-    mod = importlib.import_module(f"models.FeatureExtractors")
+    mod = importlib.import_module(f"models.FeaturesExtractors")
     feat_ext_class = getattr(mod, network_name)(params)
 
     # run a dummy feature extraction
