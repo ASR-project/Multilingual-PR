@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM nvidia/cuda:11.0-base
+FROM nvcr.io/nvidia/pytorch:22.02-py3
 WORKDIR /artzucker/multilingual-pr
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
