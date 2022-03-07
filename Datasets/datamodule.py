@@ -3,7 +3,8 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader
 from utils.dataset_utils import coll_fn
 from utils.logger import init_logger
-
+import torch
+from librosa.effects import trim 
 
 class BaseDataModule(LightningDataModule):
     def __init__(self, dataset_param):
@@ -27,8 +28,9 @@ class BaseDataModule(LightningDataModule):
                                               download_mode=self.config.download_mode,
                                               cache_dir=self.config.cache_dir
                                               )
+            self.train_dataset = self.train_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
             self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
-            self.train_datasettrim(torch.from_numpy(b['audio']['array']), top_db = 20)[0]
+            self.train_dataset = self.train_dataset.map(lambda x: trim(torch.from_numpy(x['audio']['array']), top_db = 20))
             self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]["array"]) < self.config.max_input_length_in_sec * self.train_dataset.features['audio'].sampling_rate)
             self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
 
@@ -39,7 +41,9 @@ class BaseDataModule(LightningDataModule):
                                             download_mode=self.config.download_mode,
                                             cache_dir=self.config.cache_dir
                                             )
+            self.val_dataset = self.val_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
             self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
+            self.val_dataset = self.val_dataset.map(lambda x: trim(torch.from_numpy(x['audio']['array']), top_db = 20))
             self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]["array"]) < self.config.max_input_length_in_sec * self.val_dataset.features['audio'].sampling_rate)
             self.logger.info(f"Length val dataset after filter {len(self.val_dataset)}")
 
