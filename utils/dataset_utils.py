@@ -15,6 +15,14 @@ def coll_fn(batch):
     
     return batch_dict
 
+# def coll_fn(batch):
+#     batch_dict={}
+#     batch_dict['array'] = pad_sequence([torch.Tensor(b['audio']['array']) for b in batch], padding_value=0, batch_first=True)
+#     batch_dict['path'] = [b['path'] for b in batch]
+#     batch_dict['sentence'] = [b['sentence'] for b in batch]
+    
+#     return batch_dict
+
 def create_vocabulary(ISO6393, path_csv, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):
 
     logger = init_logger("create_vocabulary", "INFO")

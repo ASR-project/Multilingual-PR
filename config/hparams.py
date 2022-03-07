@@ -40,6 +40,8 @@ class Hparams:
     log_freq_audio : int = 1
     log_nb_audio   : int = 2
 
+    val_check_interval: float = 0.25 # 1.0 (at the end of the epoch)
+
 @dataclass
 class NetworkParams:
     network_name       : str           = "CTC_model"
@@ -72,12 +74,12 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "it"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "ja"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    ISO6393                 : str                     = "ita"    # look at the phoible.csv file
+    ISO6393                 : str                     = "jpn"    # look at the phoible.csv file https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     
     # Dataloader parameters
