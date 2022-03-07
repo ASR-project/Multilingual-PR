@@ -163,7 +163,7 @@ class LogAudioPrediction(Callback):
         """Called when the validation batch ends."""
 
         if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
-            self.log_audio(pl_module, "val", batch, self.log_nb_audio, outputs)
+            self.log_audio(pl_module, "val", batch, self.log_nb_audio, outputs, pl_module.datamodule.sampling_rate)
 
     def on_train_batch_end(
         self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
@@ -171,9 +171,9 @@ class LogAudioPrediction(Callback):
         """Called when the training batch ends."""
 
         if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
-            self.log_audio(pl_module, "train", batch, self.log_nb_audio, outputs)
+            self.log_audio(pl_module, "train", batch, self.log_nb_audio, outputs, pl_module.datamodule.sampling_rate)
 
-    def log_audio(self, pl_module, name, batch, n, outputs):
+    def log_audio(self, pl_module, name, batch, n, outputs, sampling_rate):
         x = batch
         audios = x['array'][:n].detach().cpu()
 
@@ -181,7 +181,7 @@ class LogAudioPrediction(Callback):
         for i in range(len(audios)):
             samples.append([
                 wandb.Audio(
-                    audios[i], sample_rate=x['sampling_rate'][i]
+                    audios[i], sample_rate=sampling_rate
                 ),
                 x['sentence'][i], outputs['targets'][i], outputs['preds'][i]]
             )
