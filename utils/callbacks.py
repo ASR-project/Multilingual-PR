@@ -4,6 +4,7 @@ from typing import Any, Dict, Optional
 import torch
 import wandb
 import pytorch_lightning as pl
+import numpy as np
 
 from pytorch_lightning.callbacks import ModelCheckpoint, Callback
 from pytorch_lightning.utilities import rank_zero_info
@@ -131,11 +132,7 @@ class LogMetricsCallback(Callback):
     ):
         """Called when the train batch ends."""
 
-        x = batch
-        preds = pl_module.phonemes_tokenizer.batch_decode(torch.argmax(outputs["logits"], dim=-1))        
-        targets = [pl_module.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
-        
-        self.metrics_module_train.update_metrics(preds, targets)
+        self.metrics_module_train.update_metrics(outputs['preds'], outputs['targets'])
 
     def on_train_epoch_end(self, trainer, pl_module):
         """Called when the train epoch ends."""
@@ -147,13 +144,49 @@ class LogMetricsCallback(Callback):
     ):
         """Called when the validation batch ends."""
 
-        x = batch
-        preds = pl_module.phonemes_tokenizer.batch_decode(torch.argmax(outputs["logits"], dim=-1))
-        targets = [pl_module.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
-        
-        self.metrics_module_validation.update_metrics(preds, targets)
+        self.metrics_module_validation.update_metrics(outputs['preds'], outputs['targets'])
 
     def on_validation_epoch_end(self, trainer, pl_module):
         """Called when the validation epoch ends."""
 
         self.metrics_module_validation.log_metrics("val/", pl_module)
+
+class LogAudioPrediction(Callback):
+    def __init__(self, log_freq_audio, log_nb_audio) -> None:
+        super().__init__()
+        self.log_freq_audio = log_freq_audio
+        self.log_nb_audio = log_nb_audio
+
+    def on_validation_batch_end(
+        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
+    ):
+        """Called when the validation batch ends."""
+
+        if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
+            self.log_audio(pl_module, "val", batch, self.log_nb_audio, outputs)
+
+    def on_train_batch_end(
+        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
+    ):
+        """Called when the training batch ends."""
+
+        if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
+            self.log_audio(pl_module, "train", batch, self.log_nb_audio, outputs)
+
+    def log_audio(self, pl_module, name, batch, n, outputs):
+        x = batch
+        audios = x['array'][:n].detach().cpu()
+
+        samples = []
+        for i in range(len(audios)):
+            samples.append([
+                wandb.Audio(
+                    audios[i], sample_rate=x['sampling_rate'][i]
+                ),
+                x['sentence'][i], outputs['targets'][i], outputs['preds'][i]]
+            )
+        
+        columns= ["Audio sample", "sentence", "target", "prediction"]
+        table = wandb.Table(data=samples,columns=columns)
+
+        wandb.run.log({f"{name}/predictions":table})

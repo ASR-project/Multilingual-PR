@@ -2,10 +2,9 @@ import pytorch_lightning as pl
 import torch
 import wandb
 from models.BaseModule import BaseModule
-from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar,
-                                         StochasticWeightAveraging)
+from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar)
 from utils.agent_utils import get_artifact, get_datamodule
-from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback
+from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
 from utils.logger import init_logger
 
 from utils.dataset_utils import create_vocabulary
@@ -73,7 +72,8 @@ class BaseTrainer:
             max_epochs=self.config.max_epochs,  # number of epochs
             log_every_n_steps=1,
             fast_dev_run=self.config.dev_run,
-            amp_backend="apex"
+            amp_backend="apex",
+            
         )
         trainer.logger = self.wb_run
         trainer.fit(self.pl_model, datamodule=self.datamodule)
@@ -111,7 +111,7 @@ class BaseTrainer:
         #     data_param.keywords_artifact, type="dataset")
 
     def get_callbacks(self):
-        callbacks = [RichProgressBar(), LearningRateMonitor(), LogMetricsCallback()]
+        callbacks = [RichProgressBar(), LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
         monitor = "val/loss"
         mode = "min"
         wandb.define_metric(monitor, summary=mode)

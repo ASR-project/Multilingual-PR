@@ -7,13 +7,15 @@ import json
 import pandas as pd
 from utils.logger import init_logger
 
+from librosa.effects import trim
+
 def coll_fn(batch):
     batch_dict={}
-    list_tensors = [torch.from_numpy(b['audio']['array']) for b in batch] 
-    batch_dict['array'] = pad_sequence(list_tensors, padding_value=-100, batch_first=True)
+    list_tensors = [trim(torch.from_numpy(b['audio']['array']), top_db = 20)[0] for b in batch] 
+    batch_dict['array'] = pad_sequence(list_tensors, padding_value=0, batch_first=True)
     batch_dict['path'] = [b['path'] for b in batch]
     batch_dict['sentence'] = [b['sentence'] for b in batch]
-    batch_dict['input_lengths'] = [len(b['audio']['array']) for b in batch]
+    batch_dict['sampling_rate'] = [b['audio']['sampling_rate'] for b in batch]
     
     return batch_dict
 

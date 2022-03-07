@@ -74,30 +74,30 @@ class BaseModule(LightningModule):
 
     def training_step(self, batch, batch_idx):
         """needs to return a loss from a single batch"""
-        loss, logits = self._get_loss(batch)
+        loss, logits, preds, targets = self._get_outputs(batch)
 
         # Log loss
         self.log("train/loss", loss)
-
-        return {"loss": loss, "logits": logits.detach()}
+        
+        return {"loss": loss, "logits": logits.detach(), "preds": preds, "targets": targets}
 
     def validation_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss, logits = self._get_loss(batch)
+        loss, logits, preds, targets = self._get_outputs(batch)
 
         # Log loss
         self.log("val/loss", loss)
 
-        return {"loss": loss, "logits": logits}
+        return {"loss": loss, "logits": logits, "preds": preds, "targets": targets}
 
     def test_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss, logits = self._get_loss(batch)
+        loss, logits, preds, targets = self._get_outputs(batch)
 
         # Log loss
         self.log("val/loss", loss)
 
-        return {"loss": loss, "logits": logits}
+        return {"loss": loss, "logits": logits, "preds": preds, "targets": targets}
 
     def predict_step(self, batch, batch_idx):
 
@@ -127,7 +127,7 @@ class BaseModule(LightningModule):
 
         return optimizer
 
-    def _get_loss(self, batch):
+    def _get_outputs(self, batch):
         """convenience function since train/valid/test steps are similar"""
         x = batch
         # x['array'] gives the actual raw audio
@@ -153,4 +153,7 @@ class BaseModule(LightningModule):
 
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)
 
-        return loss, output
+        preds = self.phonemes_tokenizer.batch_decode(torch.argmax(output, dim=-1))        
+        targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
+        
+        return loss, output, preds, targets

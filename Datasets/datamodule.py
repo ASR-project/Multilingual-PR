@@ -10,8 +10,8 @@ class BaseDataModule(LightningDataModule):
         super().__init__()
 
         self.config = dataset_param
-        logger = init_logger("BaseDataModule", "INFO")
-        logger.info(
+        self.logger = init_logger("BaseDataModule", "INFO")
+        self.logger.info(
             f"Loading Dataset : {self.config.dataset_name}, language : {self.config.subset}")
 
     def prepare_data(self) -> None:
@@ -27,6 +27,9 @@ class BaseDataModule(LightningDataModule):
                                               download_mode=self.config.download_mode,
                                               cache_dir=self.config.cache_dir
                                               )
+            self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
+            self.train_dataset = self.train_dataset.filter(lambda x: x < self.config.max_input_length_in_sec * self.train_dataset.features['audio'].sampling_rate, input_columns=["audio"])
+            self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
 
             self.val_dataset = load_dataset(self.config.dataset_name,
                                             self.config.subset,
@@ -35,6 +38,9 @@ class BaseDataModule(LightningDataModule):
                                             download_mode=self.config.download_mode,
                                             cache_dir=self.config.cache_dir
                                             )
+            self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
+            self.val_dataset = self.val_dataset.filter(lambda x: x["array"] < self.config.max_input_length_in_sec * self.val_dataset.features['audio'].sampling_rate, input_columns=["audio"])
+            self.logger.info(f"Length val dataset after filter {len(self.val_dataset)}")
 
         if stage == "test":
             self.test_dataset = load_dataset(self.config.dataset_name,

@@ -1,4 +1,5 @@
 import os
+from pickle import FALSE
 import random
 from dataclasses import dataclass
 from os import path as osp
@@ -31,10 +32,13 @@ class Hparams:
 
     # modes
     tune_lr: bool  = False  # tune the model on first run
-    dev_run: bool  = True
+    dev_run: bool  = False
     train   : bool = True
 
     best_model: str = ""
+    
+    log_freq_audio : int = 1
+    log_nb_audio   : int = 2
 
 @dataclass
 class NetworkParams:
@@ -50,13 +54,6 @@ class NetworkParams:
 class FeatExtractParams:
     network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
     weight_checkpoint             : str           = ""
-    
-    # Feature Extractor
-    feature_size                  : int           = 1
-    sampling_rate                 : int           = 16000
-    padding_value                 : float         = 0.0
-    do_normalize                  : bool          = True
-    return_attention_mask         : bool          = False 
     
     # Phoneme Tokenizer
     eos_token                     : str           = "<s>"
@@ -100,6 +97,8 @@ class DatasetParams:
     # Dataloader parameters
     num_workers             : int                     = 8         # number of workers for dataloaders
     batch_size              : int                     = 2 
+    
+    max_input_length_in_sec : float = 3
 
 @dataclass
 class Parameters:
