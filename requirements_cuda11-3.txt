@@ -5,7 +5,8 @@ phonemizer==3.0.1
 pytorch_lightning==1.5.10
 rich==11.2.0
 simple_parsing==0.0.18
-torch==1.10.2+cu113   
+-f https://download.pytorch.org/whl/cu113/torch_stable.html  
+torch==1.10.2+cu113
 tqdm==4.62.3
 transformers==4.16.0
 wandb

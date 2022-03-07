@@ -5,7 +5,7 @@ from models.BaseModule import BaseModule
 from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar,
                                          StochasticWeightAveraging)
 from utils.agent_utils import get_artifact, get_datamodule
-from utils.callbacks import AutoSaveModelCheckpoint
+from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback
 from utils.logger import init_logger
 
 from utils.dataset_utils import create_vocabulary
@@ -111,8 +111,7 @@ class BaseTrainer:
         #     data_param.keywords_artifact, type="dataset")
 
     def get_callbacks(self):
-        callbacks = [RichProgressBar(), LearningRateMonitor(),
-                     StochasticWeightAveraging()]
+        callbacks = [RichProgressBar(), LearningRateMonitor(), LogMetricsCallback()]
         monitor = "val/loss"
         mode = "min"
         wandb.define_metric(monitor, summary=mode)

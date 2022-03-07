@@ -18,19 +18,21 @@ class Hparams:
     # wandb
     wandb_entity    : str          = "asr-project"         # name of the project
     debug           : bool         = False            # test code before running, if testing, no checkpoints are written
-    wandb_project   : str          = "test-asr"
+    test: bool = True
+    wandb_project: str = f"{'test-'*test}asr"
     root_dir        : str          = os.getcwd()  # root_dir
+
 
     # basic params
     seed_everything: Optional[int] = None  # seed for the whole run
-    gpu: int = 1  # number or gpu
-    max_epochs: int = 30  # maximum number of epochs
+    gpu         : int = 1  # number or gpu
+    max_epochs  : int = 30  # maximum number of epochs
     weights_path: str = osp.join(os.getcwd(), "weights")
 
     # modes
-    tune_lr: bool = False  # tune the model on first run
-    dev_run: bool = False
-    train: bool = True
+    tune_lr: bool  = False  # tune the model on first run
+    dev_run: bool  = True
+    train   : bool = True
 
     best_model: str = ""
 
@@ -102,17 +104,19 @@ class DatasetParams:
 @dataclass
 class Parameters:
     """base options."""
-    hparams       : Hparams         = Hparams()
-    data_param    : DatasetParams   = DatasetParams()
-    network_param : NetworkParams   = NetworkParams()
-    optim_param   : OptimizerParams = OptimizerParams()
+    hparams       : Hparams           = Hparams()
+    data_param    : DatasetParams     = DatasetParams()
+    network_param : NetworkParams     = NetworkParams()
+    optim_param   : OptimizerParams   = OptimizerParams()
     feat_param    : FeatExtractParams = FeatExtractParams()
     
     def __post_init__(self):
         """Post-initialization code"""
         if self.hparams.seed_everything is None:
             self.hparams.seed_everything = random.randint(1, 10000)
-            
+
+        self.hparams.wandb_project = f"{'test-'*self.hparams.test}asr"
+
         random.seed(self.hparams.seed_everything)
         torch.manual_seed(self.hparams.seed_everything)
         pl.seed_everything(self.hparams.seed_everything)

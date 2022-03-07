@@ -13,7 +13,8 @@ def coll_fn(batch):
     batch_dict['array'] = pad_sequence(list_tensors, padding_value=-100, batch_first=True)
     batch_dict['path'] = [b['path'] for b in batch]
     batch_dict['sentence'] = [b['sentence'] for b in batch]
-
+    batch_dict['input_lengths'] = [len(b['audio']['array']) for b in batch]
+    
     return batch_dict
 
 def create_vocabulary(ISO6393, path_csv, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):

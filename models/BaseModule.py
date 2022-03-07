@@ -8,6 +8,10 @@ from utils.agent_utils import get_features_extractors
 from utils.logger import init_logger
 
 from models.CTC_model import CTC_model
+from itertools import chain
+
+
+from torch.profiler import profile, record_function, ProfilerActivity
 
 
 class BaseModule(LightningModule):
@@ -18,10 +22,6 @@ class BaseModule(LightningModule):
         super(BaseModule, self).__init__()
 
         logger = init_logger("BaseModule", "INFO")
-
-        # Loss function
-        # FIXME blank is variable depends on the dataset indice of the blank token
-        self.loss = nn.CTCLoss(blank=0, reduction="mean")
 
         # Optimizer
         self.optim_param = optim_param
@@ -43,6 +43,11 @@ class BaseModule(LightningModule):
                                                               phonemizer_backend=feat_param.phonemizer_backend
                                                               )
 
+        feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
+
+        # Loss function
+        self.loss = nn.CTCLoss(blank=self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token], reduction="mean")
+
         # Network
         features_extractor = get_features_extractors(
             feat_param.network_name, feat_param)
@@ -60,7 +65,7 @@ class BaseModule(LightningModule):
 
         self.model = nn.Sequential(
             features_extractor,
-            CTC
+            # CTC
         )
 
     def forward(self, x):
@@ -69,30 +74,30 @@ class BaseModule(LightningModule):
 
     def training_step(self, batch, batch_idx):
         """needs to return a loss from a single batch"""
-        loss = self._get_loss(batch)
+        loss, logits = self._get_loss(batch)
 
         # Log loss
         self.log("train/loss", loss)
 
-        return loss
+        return {"loss": loss, "logits": logits.detach()}
 
     def validation_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss = self._get_loss(batch)
+        loss, logits = self._get_loss(batch)
 
         # Log loss
         self.log("val/loss", loss)
 
-        return loss
+        return {"loss": loss, "logits": logits}
 
     def test_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss = self._get_loss(batch)
+        loss, logits = self._get_loss(batch)
 
         # Log loss
         self.log("val/loss", loss)
 
-        return loss
+        return {"loss": loss, "logits": logits}
 
     def predict_step(self, batch, batch_idx):
 
@@ -125,26 +130,27 @@ class BaseModule(LightningModule):
     def _get_loss(self, batch):
         """convenience function since train/valid/test steps are similar"""
         x = batch
-
-        output = self(x['array'])
+        # x['array'] gives the actual raw audio
+        output = self(x['array'])  
 
         # FIXME
         # process outputs
-        # log_probs = F.log_softmax(output, dim=2)
-        
+        log_probs = F.log_softmax(output, dim=2)
+        input_lengths = torch.LongTensor([len(b) for b in log_probs])
+        log_probs = log_probs.permute(1,0,2)
 
         # process targets
+        # extract the indices from the dictionary 
         targets = self.phonemes_tokenizer(x['sentence']).input_ids
-        input_lengths = torch.LongTensor([len(targ) for targ in targets])
-        
-        print(targets[0])
-        print(x['sentence'][0])
-        print(self.phonemes_tokenizer._decode(targets[0]))
-        print(self.phonemes_tokenizer.phonemize(x['sentence'][0])) 
+        target_lengths = torch.LongTensor([len(targ) for targ in targets])
+        targets = torch.Tensor(list(chain.from_iterable(targets)))
+
+        # print(targets[0])
+        # print(x['sentence'][0])
+        # print(self.phonemes_tokenizer._decode(targets[0]))
+        # print(self.phonemes_tokenizer.phonemize(x['sentence'][0])) 
         # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien car pas il y a pas tout les phonemes dans phoible je crois) 
 
-        target_lengths = torch.LongTensor([len(targ) for targ in targets])
+        loss = self.loss(log_probs, targets, input_lengths, target_lengths)
 
-        loss = self.loss(output, targets, input_lengths, target_lengths)
-
-        return loss
+        return loss, output
