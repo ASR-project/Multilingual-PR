@@ -60,8 +60,8 @@ class FeatExtractParams:
     # Phoneme Tokenizer
     eos_token                     : str           = "</s>"
     bos_token                     : str           = "<s>"
-    unk_token                     : str           = "[UNK]"
-    pad_token                     : str           = "[PAD]"
+    unk_token                     : str           = "<unk>"
+    pad_token                     : str           = "<pad>"
     word_delimiter_token          : str           = "|"
     # phonemizer_lang               : str           = "it"        # to language change 
     phonemizer_backend            : str           = "espeak" # espeak https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md
