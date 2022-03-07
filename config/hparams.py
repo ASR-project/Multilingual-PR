@@ -58,8 +58,8 @@ class FeatExtractParams:
     weight_checkpoint             : str           = ""
     
     # Phoneme Tokenizer
-    eos_token                     : str           = "<s>"
-    bos_token                     : str           = "</s>"
+    eos_token                     : str           = "</s>"
+    bos_token                     : str           = "<s>"
     unk_token                     : str           = "[UNK]"
     pad_token                     : str           = "[PAD]"
     word_delimiter_token          : str           = "|"
