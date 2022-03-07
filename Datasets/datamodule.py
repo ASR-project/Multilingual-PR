@@ -28,7 +28,8 @@ class BaseDataModule(LightningDataModule):
                                               cache_dir=self.config.cache_dir
                                               )
             self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
-            self.train_dataset = self.train_dataset.filter(lambda x: x < self.config.max_input_length_in_sec * self.train_dataset.features['audio'].sampling_rate, input_columns=["audio"])
+            self.train_datasettrim(torch.from_numpy(b['audio']['array']), top_db = 20)[0]
+            self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]["array"]) < self.config.max_input_length_in_sec * self.train_dataset.features['audio'].sampling_rate)
             self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
 
             self.val_dataset = load_dataset(self.config.dataset_name,
@@ -39,7 +40,7 @@ class BaseDataModule(LightningDataModule):
                                             cache_dir=self.config.cache_dir
                                             )
             self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
-            self.val_dataset = self.val_dataset.filter(lambda x: x["array"] < self.config.max_input_length_in_sec * self.val_dataset.features['audio'].sampling_rate, input_columns=["audio"])
+            self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]["array"]) < self.config.max_input_length_in_sec * self.val_dataset.features['audio'].sampling_rate)
             self.logger.info(f"Length val dataset after filter {len(self.val_dataset)}")
 
         if stage == "test":

@@ -7,8 +7,6 @@ import json
 import pandas as pd
 from utils.logger import init_logger
 
-from librosa.effects import trim
-
 def coll_fn(batch):
     batch_dict={}
     list_tensors = [trim(torch.from_numpy(b['audio']['array']), top_db = 20)[0] for b in batch] 
