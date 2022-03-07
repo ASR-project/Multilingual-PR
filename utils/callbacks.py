@@ -163,7 +163,7 @@ class LogAudioPrediction(Callback):
         """Called when the validation batch ends."""
 
         if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
-            self.log_audio(pl_module, "val", batch, self.log_nb_audio, outputs, pl_module.datamodule.sampling_rate)
+            self.log_audio(pl_module, "val", batch, self.log_nb_audio, outputs, trainer.datamodule.sampling_rate)
 
     def on_train_batch_end(
         self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
@@ -171,7 +171,7 @@ class LogAudioPrediction(Callback):
         """Called when the training batch ends."""
 
         if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
-            self.log_audio(pl_module, "train", batch, self.log_nb_audio, outputs, pl_module.datamodule.sampling_rate)
+            self.log_audio(pl_module, "train", batch, self.log_nb_audio, outputs, trainer.datamodule.sampling_rate)
 
     def log_audio(self, pl_module, name, batch, n, outputs, sampling_rate):
         x = batch

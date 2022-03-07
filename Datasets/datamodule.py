@@ -31,10 +31,10 @@ class BaseDataModule(LightningDataModule):
 
             self.sampling_rate = self.train_dataset.features['audio'].sampling_rate
             self.train_dataset = self.train_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
-            self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(torch.from_numpy(x["audio"]["array"]), top_db = 20)[0]})
+            self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(x["audio"]["array"], top_db = 20)[0]})
             
             self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
-            self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate)
+            self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_workers)
             self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
 
             self.val_dataset = load_dataset(self.config.dataset_name,
@@ -45,10 +45,10 @@ class BaseDataModule(LightningDataModule):
                                             cache_dir=self.config.cache_dir
                                             )
             self.val_dataset = self.val_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
-            self.val_dataset = self.val_dataset.map(lambda x: {'audio':trim(torch.from_numpy(x["audio"]["array"]), top_db = 20)[0]})
+            self.val_dataset = self.val_dataset.map(lambda x: {'audio': trim(x["audio"]["array"], top_db = 20)[0]})
             
             self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
-            self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate)
+            self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_workers)
             self.logger.info(f"Length val dataset after filter {len(self.val_dataset)}")
 
         if stage == "test":
