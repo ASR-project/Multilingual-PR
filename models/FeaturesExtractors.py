@@ -45,12 +45,14 @@ class Wav2Vec2(BaseFeaturesExtractor):
         # wav2vec2 = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h").wav2vec2
         # self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
         
-        self.model = Wav2Vec2ForCTC.from_pretrained("jonatasgrosman/wav2vec2-large-xlsr-53-japanese")
+        # self.model = Wav2Vec2ForCTC.from_pretrained("jonatasgrosman/wav2vec2-large-xlsr-53-japanese")
+        
+        self.model = Wav2Vec2FeatureExtractor(feature_size = 1, sampling_rate= 16000,padding_value=0.0, do_normalize=True, return_attention_mask=True)
         # self.feature_extractor = wav2vec2.feature_extractor
         # self.feature_projection = wav2vec2.feature_projection
         # self.encoder = wav2vec2.encoder
-        in_features = self.model.lm_head.in_features
-        self.model.lm_head = nn.Linear(in_features=in_features, out_features=params.vocab_size)
+        # in_features = self.model.lm_head.in_features
+        # self.model.lm_head = nn.Linear(in_features=in_features, out_features=params.vocab_size)
 
 class WavLM(BaseFeaturesExtractor):
     """

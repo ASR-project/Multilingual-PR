@@ -3,7 +3,7 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader
 from utils.dataset_utils import coll_fn
 from utils.logger import init_logger
-import torch
+from datasets import Audio
 from librosa.effects import trim 
 
 class BaseDataModule(LightningDataModule):
@@ -16,12 +16,9 @@ class BaseDataModule(LightningDataModule):
             f"Loading Dataset : {self.config.dataset_name}, language : {self.config.subset}")
 
     def prepare_data(self) -> None:
-        return super().prepare_data()
-
-    def setup(self, stage=None):
-        # Build dataset
-        if stage in (None, "fit"):
-            self.train_dataset = load_dataset(self.config.dataset_name,
+        self.logger.info(
+            "Preparing the dataset")
+        self.train_dataset = load_dataset(self.config.dataset_name,
                                               self.config.subset,
                                               split='train',
                                               use_auth_token=self.config.use_auth_token,
@@ -29,24 +26,39 @@ class BaseDataModule(LightningDataModule):
                                               cache_dir=self.config.cache_dir
                                               )
 
-            self.sampling_rate = self.train_dataset.features['audio'].sampling_rate
-            self.train_dataset = self.train_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
-            self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(x["audio"]["array"], top_db = 20)[0]})
-            
-            self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
-            self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=8)
-            self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
-
-            self.val_dataset = load_dataset(self.config.dataset_name,
+        self.train_dataset = self.train_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
+        self.train_dataset = self.train_dataset.cast_column("audio",Audio(sampling_rate=16_000))
+        self.sampling_rate = self.train_dataset.features['audio'].sampling_rate
+        self.val_dataset = load_dataset(self.config.dataset_name,
                                             self.config.subset,
                                             split='validation',
                                             use_auth_token=self.config.use_auth_token,
                                             download_mode=self.config.download_mode,
                                             cache_dir=self.config.cache_dir
                                             )
+        self.val_dataset = self.val_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
+        self.val_dataset = self.val_dataset.cast_column("audio",Audio(sampling_rate=16_000))
+        return super().prepare_data()
 
-            self.val_dataset = self.val_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
-            self.val_dataset = self.val_dataset.map(lambda x: {'audio': trim(x["audio"]["array"], top_db = 20)[0]})
+    def setup(self, stage=None):
+        # Build dataset
+        if stage in (None, "fit"):
+
+            
+            # self.train_dataset = self.train_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
+            # self.train_dataset = self.train_dataset.cast_colum("audio",Audio(sampling_rate=16_000))
+            # self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(x["audio"], top_db = 20)[0]})
+            
+            self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
+            self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=8)
+            self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
+
+            
+
+            # self.val_dataset = self.val_dataset.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
+            # self.val_dataset = self.val_dataset.cast_colum("audio",Audio(sampling_rate=16_000))
+            
+            # self.val_dataset = self.val_dataset.map(lambda x: {'audio': trim(x["audio"], top_db = 20)[0]})
             
             self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
             self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=8)

@@ -8,11 +8,12 @@ import pandas as pd
 from utils.logger import init_logger
 
 def coll_fn(batch):
+    
     batch_dict={}
     batch_dict['array'] = pad_sequence([torch.Tensor(b['audio']) for b in batch], padding_value=0, batch_first=True)
     batch_dict['path'] = [b['path'] for b in batch]
     batch_dict['sentence'] = [b['sentence'] for b in batch]
-    
+    batch_dict['labels'] = [b['labels'] for b in batch]
     return batch_dict
 
 # def coll_fn(batch):

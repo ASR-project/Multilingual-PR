@@ -86,7 +86,7 @@ class DatasetParams:
     num_workers             : int                     = 16         # number of workers for dataloaders
     batch_size              : int                     = 2 
     
-    max_input_length_in_sec : float = 3
+    max_input_length_in_sec : float = 10
 
 @dataclass
 class OptimizerParams: 

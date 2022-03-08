@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from transformers import Wav2Vec2PhonemeCTCTokenizer
+from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor,Wav2Vec2ForCTC
 from utils.agent_utils import get_features_extractors
 from utils.logger import init_logger
 
@@ -49,25 +49,27 @@ class BaseModule(LightningModule):
         self.loss = nn.CTCLoss(blank=self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token], reduction="mean")
 
         # Network
-        features_extractor = get_features_extractors(
+        feature_extractor = get_features_extractors(
             feat_param.network_name, feat_param)
         logger.info(f"Features extractor : {feat_param.network_name}")
 
         CTC = CTC_model(network_param)
 
         if feat_param.weight_checkpoint != "":
-            features_extractor.load_state_dict(torch.load(
+            feature_extractor.load_state_dict(torch.load(
                 feat_param.weight_checkpoint)["state_dict"])
 
         if network_param.weight_checkpoint != "":
-            features_extractor.load_state_dict(torch.load(
+            feature_extractor.load_state_dict(torch.load(
                 network_param.weight_checkpoint)["state_dict"])
 
-        self.model = nn.Sequential(
-            features_extractor,
-            # CTC
-        )
-
+        self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
+        self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+        in_features = self.model.lm_head.in_features
+        self.model.lm_head = nn.Linear(in_features=in_features, out_features=feat_param.vocab_size)
+        
+        
+        
     def forward(self, x):
         output = self.model(x)
         return output
@@ -131,7 +133,7 @@ class BaseModule(LightningModule):
         """convenience function since train/valid/test steps are similar"""
         x = batch
         # x['array'] gives the actual raw audio
-        output = self(x['array'])  
+        output = self(x['array']).logits  
 
         # FIXME
         # process outputs
@@ -141,9 +143,10 @@ class BaseModule(LightningModule):
 
         # process targets
         # extract the indices from the dictionary 
-        targets = self.phonemes_tokenizer(x['sentence']).input_ids
+        # targets = self.processor(x['sentence']).input_ids
+        targets = x["labels"]
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
-        targets = torch.Tensor(list(chain.from_iterable(targets)))
+        targets = torch.Tensor(list(chain.from_iterable(targets))).int()
 
         # print(targets[0])
         # print(x['sentence'][0])
@@ -153,7 +156,7 @@ class BaseModule(LightningModule):
 
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)
 
-        preds = self.phonemes_tokenizer.batch_decode(torch.argmax(output, dim=-1))        
+        preds = self.processor.batch_decode(torch.argmax(output, dim=-1))        
         targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
         
         return loss, output, preds, targets
