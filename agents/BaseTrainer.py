@@ -7,7 +7,7 @@ from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
 from utils.logger import init_logger
 
-from utils.dataset_utils import create_vocabulary
+from utils.dataset_utils import create_vocabulary, create_vocabulary2
 import os 
 
 class BaseTrainer:
@@ -21,12 +21,25 @@ class BaseTrainer:
         logger.info('Loading artifact...')
         self.load_artifact(config.network_param, config.data_param)
 
-        logger.info(
-            f'Create vocabulary ISO6393 : {config.data_param.ISO6393} ...')
+        # logger.info(
+        #     f'Create vocabulary ISO6393 : {config.data_param.ISO6393} ...')
 
-        config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
-            config.data_param.ISO6393,
-            config.data_param.phoible_csv_path,
+        # config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
+        #     config.data_param.ISO6393,
+        #     config.data_param.phoible_csv_path,
+        #     eos_token=config.feat_param.eos_token,
+        #     bos_token=config.feat_param.bos_token,
+        #     unk_token=config.feat_param.unk_token,
+        #     pad_token=config.feat_param.pad_token,
+        #     word_delimiter_token=config.feat_param.word_delimiter_token,
+        # )
+
+        logger.info(
+            f'Create vocabulary language : {config.data_param.language} ...')
+
+        config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
+            config.data_param.language,
+            config.data_param.root_path_annotation,
             eos_token=config.feat_param.eos_token,
             bos_token=config.feat_param.bos_token,
             unk_token=config.feat_param.unk_token,
