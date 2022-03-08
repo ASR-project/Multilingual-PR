@@ -83,10 +83,10 @@ class DatasetParams:
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     
     # Dataloader parameters
-    num_workers             : int                     = 16         # number of workers for dataloaders
+    num_workers             : int                     = 20         # number of workers for dataloaders
     batch_size              : int                     = 2 
     
-    max_input_length_in_sec : float = 10
+    max_input_length_in_sec : float = 5
 
 @dataclass
 class OptimizerParams: 

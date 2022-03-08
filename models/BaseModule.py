@@ -46,25 +46,38 @@ class BaseModule(LightningModule):
         feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
 
         # Loss function
-        self.loss = nn.CTCLoss(blank=self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token], reduction="mean")
-
+        self.loss = nn.CTCLoss(blank=self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token])
+        del self.phonemes_tokenizer
         # Network
-        feature_extractor = get_features_extractors(
-            feat_param.network_name, feat_param)
-        logger.info(f"Features extractor : {feat_param.network_name}")
+        # feature_extractor = get_features_extractors(
+        #     feat_param.network_name, feat_param)
+        # logger.info(f"Features extractor : {feat_param.network_name}")
 
-        CTC = CTC_model(network_param)
+        # # CTC = CTC_model(network_param)
 
-        if feat_param.weight_checkpoint != "":
-            feature_extractor.load_state_dict(torch.load(
-                feat_param.weight_checkpoint)["state_dict"])
+        # if feat_param.weight_checkpoint != "":
+        #     feature_extractor.load_state_dict(torch.load(
+        #         feat_param.weight_checkpoint)["state_dict"])
 
-        if network_param.weight_checkpoint != "":
-            feature_extractor.load_state_dict(torch.load(
-                network_param.weight_checkpoint)["state_dict"])
+        # if network_param.weight_checkpoint != "":
+        #     feature_extractor.load_state_dict(torch.load(
+        #         network_param.weight_checkpoint)["state_dict"])
 
-        self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
-        self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+        # self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
+        
+        self.processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft",
+                                                              vocab_file=feat_param.vocab_file,
+                                                              eos_token=feat_param.eos_token,
+                                                              bos_token=feat_param.bos_token,
+                                                              unk_token=feat_param.unk_token,
+                                                              pad_token=feat_param.pad_token,
+                                                              word_delimiter_token=feat_param.word_delimiter_token,
+                                                              do_phonemize=True,
+                                                              phonemizer_lang=feat_param.phonemizer_lang,
+                                                              phonemizer_backend=feat_param.phonemizer_backend,
+                                                              return_attention_mask=False)
+        
+        self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft") # model that will actually be trained
         in_features = self.model.lm_head.in_features
         self.model.lm_head = nn.Linear(in_features=in_features, out_features=feat_param.vocab_size)
         
@@ -76,7 +89,7 @@ class BaseModule(LightningModule):
 
     def training_step(self, batch, batch_idx):
         """needs to return a loss from a single batch"""
-        loss, logits, preds, targets = self._get_outputs(batch)
+        loss, logits, preds, targets = self._get_outputs(batch, batch_idx)
 
         # Log loss
         self.log("train/loss", loss)
@@ -85,7 +98,7 @@ class BaseModule(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss, logits, preds, targets = self._get_outputs(batch)
+        loss, logits, preds, targets = self._get_outputs(batch,batch_idx)
 
         # Log loss
         self.log("val/loss", loss)
@@ -94,7 +107,7 @@ class BaseModule(LightningModule):
 
     def test_step(self, batch, batch_idx):
         """used for logging metrics"""
-        loss, logits, preds, targets = self._get_outputs(batch)
+        loss, logits, preds, targets = self._get_outputs(batch,batch_idx)
 
         # Log loss
         self.log("val/loss", loss)
@@ -129,7 +142,7 @@ class BaseModule(LightningModule):
 
         return optimizer
 
-    def _get_outputs(self, batch):
+    def _get_outputs(self, batch,batch_idx):
         """convenience function since train/valid/test steps are similar"""
         x = batch
         # x['array'] gives the actual raw audio
@@ -156,7 +169,14 @@ class BaseModule(LightningModule):
 
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)
 
-        preds = self.processor.batch_decode(torch.argmax(output, dim=-1))        
-        targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
+        phone_preds = None
+        phone_targets = None
         
-        return loss, output, preds, targets
+        if batch_idx < 2:  # should be smaller than the number of samples to log
+            phone_preds = self.processor.batch_decode(torch.argmax(output, dim=-1))   
+            
+            phone_targets = self.processor.batch_decode(x["labels"])   
+        
+        #targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
+        
+        return loss, output, phone_preds, phone_targets

@@ -82,7 +82,7 @@ class BaseTrainer:
             # @TODO the dataset is a bit dirty for now
             audio = batch["audio"]
 
-            # batched output is "un-batched"
+            # tokenize the raw audio
             batch["audio"] = self.pl_model.processor(audio["array"], sampling_rate=audio["sampling_rate"]).input_values[0]
             batch["input_length"] = len(batch["audio"])
             
@@ -92,8 +92,8 @@ class BaseTrainer:
         
         self.datamodule.prepare_data()
         
-        self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch,num_proc = 8)
-        self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch,num_proc = 8)
+        self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch,num_proc = 4)
+        self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch,num_proc = 4)
         
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
