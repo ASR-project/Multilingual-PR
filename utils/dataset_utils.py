@@ -56,3 +56,32 @@ def create_vocabulary(ISO6393, path_csv, eos_token, bos_token, unk_token, pad_to
         json.dump(phoneme_vocab, vocab_file)
     
     return file_dict, len(phoneme_vocab)
+
+
+def create_vocabulary2(language, path, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):
+
+    logger = init_logger("create_vocabulary", "INFO")
+
+    json_file = osp.join(path, language, "phonesMatches_reduced.json")
+
+    with open(json_file) as file:
+        phoneme_vocab = json.load(file)
+
+    phoneme_vocab[eos_token] = len(phoneme_vocab)
+    phoneme_vocab[bos_token] = len(phoneme_vocab)
+    phoneme_vocab[unk_token] = len(phoneme_vocab)
+    phoneme_vocab[pad_token] = len(phoneme_vocab)
+    phoneme_vocab[word_delimiter_token] = len(phoneme_vocab)
+
+    logger.info(f'Length vocabulary : {len(phoneme_vocab)}')
+
+    vocab_path = osp.join(os.getcwd(), "assets", "vocab_phoneme")
+    file_dict = os.path.join(vocab_path, f"vocab-phoneme-{language}.json")
+
+    if not os.path.exists(vocab_path):
+        os.makedirs(vocab_path)
+
+    with open(file_dict, "w") as vocab_file:
+        json.dump(phoneme_vocab, vocab_file)
+    
+    return file_dict, len(phoneme_vocab)
