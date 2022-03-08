@@ -93,7 +93,7 @@ class OptimizerParams:
     """Optimization parameters"""
 
     optimizer     : str   = "Adam"  # Optimizer default vit: AdamW, default resnet50: Adam
-    lr            : float = 0.003     # learning rate,               default = 5e-4
+    lr            : float = 5e-4     # learning rate,               default = 5e-4
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 

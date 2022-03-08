@@ -74,7 +74,7 @@ class BaseTrainer:
             fast_dev_run=self.config.dev_run,
             amp_backend="apex",
             val_check_interval=self.config.val_check_interval,
-            limit_val_batches = 2
+            # limit_val_batches = 2
         )
         trainer.logger = self.wb_run
         trainer.fit(self.pl_model, datamodule=self.datamodule)
