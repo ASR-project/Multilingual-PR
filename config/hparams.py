@@ -40,7 +40,7 @@ class Hparams:
     log_freq_audio : int = 1
     log_nb_audio   : int = 2
 
-    val_check_interval: float = 0.25 # 1.0 (at the end of the epoch)
+    val_check_interval: float = 1 # 1.0 (at the end of the epoch)
 
 @dataclass
 class NetworkParams:

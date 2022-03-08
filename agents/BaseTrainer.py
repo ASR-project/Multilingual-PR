@@ -8,7 +8,7 @@ from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudi
 from utils.logger import init_logger
 
 from utils.dataset_utils import create_vocabulary
-
+import os 
 
 class BaseTrainer:
     def __init__(self, config, run=None) -> None:
@@ -92,8 +92,9 @@ class BaseTrainer:
         
         self.datamodule.prepare_data()
         
-        self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch,num_proc = 4)
-        self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch,num_proc = 4)
+        if not os.path.exists(self.datamodule.train_save_data_path):
+            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch,num_proc = 4)
+            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch,num_proc = 4)
         
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 

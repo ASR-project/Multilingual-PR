@@ -46,7 +46,7 @@ class BaseModule(LightningModule):
         feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
 
         # Loss function
-        self.loss = nn.CTCLoss(blank=self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token])
+        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token])
         del self.phonemes_tokenizer
         # Network
         # feature_extractor = get_features_extractors(
@@ -72,7 +72,7 @@ class BaseModule(LightningModule):
                                                               unk_token=feat_param.unk_token,
                                                               pad_token=feat_param.pad_token,
                                                               word_delimiter_token=feat_param.word_delimiter_token,
-                                                              do_phonemize=True,
+                                                              do_phonemize=False,
                                                               phonemizer_lang=feat_param.phonemizer_lang,
                                                               phonemizer_backend=feat_param.phonemizer_backend,
                                                               return_attention_mask=False)
@@ -160,17 +160,8 @@ class BaseModule(LightningModule):
         targets = x["labels"]
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
         targets = torch.Tensor(list(chain.from_iterable(targets))).int()
-
-        # print(targets[0])
-        # print(x['sentence'][0])
-        # print(self.phonemes_tokenizer._decode(targets[0]))
-        # print(self.phonemes_tokenizer.phonemize(x['sentence'][0])) 
-        # FIXME sometimes the phoneme is unknown (surtout pour le vietnamien car pas il y a pas tout les phonemes dans phoible je crois) 
-
+        
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)
-
-        phone_preds = None
-        phone_targets = None
         
         # if batch_idx < 2:  # should be smaller than the number of samples to log
         phone_preds = self.processor.batch_decode(torch.argmax(output, dim=-1))   
