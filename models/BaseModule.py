@@ -40,42 +40,43 @@ class BaseModule(LightningModule):
                                                               word_delimiter_token=feat_param.word_delimiter_token,
                                                               do_phonemize=True,
                                                               phonemizer_lang=feat_param.phonemizer_lang,
-                                                              phonemizer_backend=feat_param.phonemizer_backend
+                                                              phonemizer_backend=feat_param.phonemizer_backend,
+                                                              return_attention_mask=False
                                                               )
 
         feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
 
         # Loss function
         self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token])
-        del self.phonemes_tokenizer
+        # del self.phonemes_tokenizer
         # Network
-        # feature_extractor = get_features_extractors(
-        #     feat_param.network_name, feat_param)
-        # logger.info(f"Features extractor : {feat_param.network_name}")
+        feature_extractor = get_features_extractors(
+            feat_param.network_name, feat_param)
+        logger.info(f"Features extractor : {feat_param.network_name}")
 
         # # CTC = CTC_model(network_param)
 
-        # if feat_param.weight_checkpoint != "":
-        #     feature_extractor.load_state_dict(torch.load(
-        #         feat_param.weight_checkpoint)["state_dict"])
+        if feat_param.weight_checkpoint != "":
+            feature_extractor.load_state_dict(torch.load(
+                feat_param.weight_checkpoint)["state_dict"])
 
-        # if network_param.weight_checkpoint != "":
-        #     feature_extractor.load_state_dict(torch.load(
-        #         network_param.weight_checkpoint)["state_dict"])
+        if network_param.weight_checkpoint != "":
+            feature_extractor.load_state_dict(torch.load(
+                network_param.weight_checkpoint)["state_dict"])
 
-        # self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
+        self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
         
-        self.processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft",
-                                                              vocab_file=feat_param.vocab_file,
-                                                              eos_token=feat_param.eos_token,
-                                                              bos_token=feat_param.bos_token,
-                                                              unk_token=feat_param.unk_token,
-                                                              pad_token=feat_param.pad_token,
-                                                              word_delimiter_token=feat_param.word_delimiter_token,
-                                                              do_phonemize=False,
-                                                              phonemizer_lang=feat_param.phonemizer_lang,
-                                                              phonemizer_backend=feat_param.phonemizer_backend,
-                                                              return_attention_mask=False)
+        # self.processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft",
+        #                                                       vocab_file=feat_param.vocab_file,
+        #                                                       eos_token=feat_param.eos_token,
+        #                                                       bos_token=feat_param.bos_token,
+        #                                                       unk_token=feat_param.unk_token,
+        #                                                       pad_token=feat_param.pad_token,
+        #                                                       word_delimiter_token=feat_param.word_delimiter_token,
+        #                                                       do_phonemize=True,
+        #                                                       phonemizer_lang=feat_param.phonemizer_lang,
+        #                                                       phonemizer_backend=feat_param.phonemizer_backend,
+        #                                                       return_attention_mask=False)
         
         self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft") # model that will actually be trained
         in_features = self.model.lm_head.in_features

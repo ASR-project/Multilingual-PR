@@ -47,7 +47,8 @@ class Wav2Vec2(BaseFeaturesExtractor):
         
         # self.model = Wav2Vec2ForCTC.from_pretrained("jonatasgrosman/wav2vec2-large-xlsr-53-japanese")
         
-        self.model = Wav2Vec2FeatureExtractor(feature_size = 1, sampling_rate= 16000,padding_value=0.0, do_normalize=True, return_attention_mask=True)
+        # self.model = Wav2Vec2FeatureExtractor(feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
+        self.model = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft", feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
         # self.feature_extractor = wav2vec2.feature_extractor
         # self.feature_projection = wav2vec2.feature_projection
         # self.encoder = wav2vec2.encoder

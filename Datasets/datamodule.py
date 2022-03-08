@@ -20,7 +20,7 @@ class BaseDataModule(LightningDataModule):
         self.logger.info(
             "Preparing the dataset in prepare_data")
         
-        self.train_save_data_path = f"assets/datasets/{self.config.dataset_name}"
+        self.train_save_data_path = f"assets/datasets/train_{self.config.dataset_name}"
         if os.path.exists(self.train_save_data_path) : 
             file = open(self.train_save_data_path,"rb")
             self.train_dataset = pickle.load(file)
@@ -40,7 +40,7 @@ class BaseDataModule(LightningDataModule):
         self.sampling_rate = 16000 #self.train_dataset.features['audio'].sampling_rate
         
         
-        self.val_save_data_path = f"assets/datasets/{self.config.dataset_name}"
+        self.val_save_data_path = f"assets/datasets/val_{self.config.dataset_name}"
         if os.path.exists(self.val_save_data_path) : 
             file = open(self.val_save_data_path,"rb")
             self.val_dataset = pickle.load(file)
