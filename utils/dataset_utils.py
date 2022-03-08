@@ -14,7 +14,6 @@ def coll_fn(batch):
     batch_dict['path'] = [b['path'] for b in batch]
     batch_dict['sentence'] = [b['sentence'] for b in batch]
     batch_dict['labels'] = [b['labels'] for b in batch]
-    batch_dict['labels'] = pad_sequence([torch.Tensor(b['labels']) for b in batch], padding_value=-100, batch_first=True)
     
     return batch_dict
 

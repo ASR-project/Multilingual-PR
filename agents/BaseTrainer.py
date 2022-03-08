@@ -6,6 +6,7 @@ from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar)
 from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
 from utils.logger import init_logger
+import re
 
 from utils.dataset_utils import create_vocabulary
 import os 
@@ -15,6 +16,7 @@ class BaseTrainer:
         self.config = config.hparams
         self.wb_run = run
         self.network_param = config.network_param
+        self.feat_param = config.feat_param
 
         logger = init_logger("BaseTrainer", "INFO")
 
@@ -86,15 +88,19 @@ class BaseTrainer:
             batch["audio"] = self.pl_model.processor(audio["array"], sampling_rate=audio["sampling_rate"]).input_values[0]
             batch["input_length"] = len(batch["audio"])
             
+            chars_to_remove_regex = '[\,\?\.\!\-\;\:\"\“\%\‘\”\�\'\。]'
             with self.pl_model.processor.as_target_processor():
-                batch["labels"] = self.pl_model.processor(batch["sentence"]).input_ids
+                # process_sentence = self.feat_param.bos_token + batch["sentence"].replace(' ', self.feat_param.word_delimiter_token) + self.feat_param.eos_token
+                # process_sentence = batch["sentence"].replace(' ', self.feat_param.word_delimiter_token)
+                process_sentence = re.sub(chars_to_remove_regex, '', batch["sentence"]).lower()
+                batch["labels"] = self.pl_model.processor(process_sentence).input_ids
             return batch
         
         self.datamodule.prepare_data()
         
         if not os.path.exists(self.datamodule.train_save_data_path):
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch,num_proc = 4)
-            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch,num_proc = 4)
+            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch, num_proc = 8)
+            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, num_proc = 8)
         
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
