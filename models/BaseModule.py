@@ -172,10 +172,10 @@ class BaseModule(LightningModule):
         phone_preds = None
         phone_targets = None
         
-        if batch_idx < 2:  # should be smaller than the number of samples to log
-            phone_preds = self.processor.batch_decode(torch.argmax(output, dim=-1))   
-            
-            phone_targets = self.processor.batch_decode(x["labels"])   
+        # if batch_idx < 2:  # should be smaller than the number of samples to log
+        phone_preds = self.processor.batch_decode(torch.argmax(output, dim=-1))   
+        
+        phone_targets = self.processor.batch_decode(x["labels"])   
         
         #targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
         
