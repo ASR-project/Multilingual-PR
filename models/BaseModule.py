@@ -41,7 +41,7 @@ class BaseModule(LightningModule):
                                                               do_phonemize=True,
                                                               phonemizer_lang=feat_param.phonemizer_lang,
                                                               phonemizer_backend=feat_param.phonemizer_backend,
-                                                              return_attention_mask=False
+                                                              return_attention_mask=False,
                                                               )
 
         feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
@@ -143,9 +143,13 @@ class BaseModule(LightningModule):
 
         return optimizer
 
-    def _get_outputs(self, batch,batch_idx):
+    def _get_outputs(self, batch, batch_idx):
         """convenience function since train/valid/test steps are similar"""
         x = batch
+        
+        with self.processor.as_target_processor():
+            x["labels"] = self.processor(x["sentence"]).input_ids
+
         # x['array'] gives the actual raw audio
         output = self(x['array']).logits  
 
@@ -166,9 +170,8 @@ class BaseModule(LightningModule):
         
         # if batch_idx < 2:  # should be smaller than the number of samples to log
         phone_preds = self.processor.batch_decode(torch.argmax(output, dim=-1))   
-        
-        phone_targets = self.processor.batch_decode(x["labels"])   
-        
+        phone_targets = self.processor.batch_decode(x["labels"]) 
+
         #targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
         
         return loss, output, phone_preds, phone_targets

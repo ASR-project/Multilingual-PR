@@ -7,6 +7,7 @@ from datasets import Audio
 from librosa.effects import trim 
 import pickle
 import os
+import numpy as np
 
 class BaseDataModule(LightningDataModule):
     def __init__(self, dataset_param):
@@ -38,7 +39,7 @@ class BaseDataModule(LightningDataModule):
             self.train_dataset = self.train_dataset.cast_column("audio", Audio(sampling_rate=16_000))
             
             
-        self.sampling_rate = 16000 #self.train_dataset.features['audio'].sampling_rate
+        self.sampling_rate = 16000 #self.train_dataset.features['audio'].sampling_rate FIXME
         
         
         self.val_save_data_path = f"assets/datasets/val_{self.config.dataset_name}-{self.config.subset}"
@@ -57,31 +58,42 @@ class BaseDataModule(LightningDataModule):
             self.val_dataset = self.val_dataset.cast_column("audio", Audio(sampling_rate=16_000))
             
             
-            
+        self.logger.info("Done prepare_data")
+
         return super().prepare_data()
+
+    def _save_dataset(self, split):
+        
+        if split == "train":
+            if not os.path.exists(self.train_save_data_path) : 
+                file = open(self.train_save_data_path, "wb")
+                pickle.dump(self.train_dataset, file)
+
+                self.logger.info(f"Saved to {self.train_save_data_path}")
+
+        elif "val" in split:
+            if not os.path.exists(self.val_save_data_path) : 
+                file = open(self.val_save_data_path, "wb")
+                pickle.dump(self.val_dataset, file)
+
+                self.logger.info(f"Saved to {self.val_save_data_path}")
+        else:
+            pass
 
     def setup(self, stage=None):
         # Build dataset
         if stage in (None, "fit"):
-            # self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(x["audio"], top_db = 15)[0]})
-            if not os.path.exists(self.train_save_data_path) : 
-                self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
-                # self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(x["audio"], top_db = 15)[0]})
-                self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=4)
-                self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
 
+            self.logger.info(f"Length train dataset before filter {len(self.train_dataset)}")
+            # self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(np.array(x["audio"]), top_db = 15)[0]}, num_proc=4)
+            self.train_dataset = self.train_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=4)
+            self.logger.info(f"Length train dataset after filter {len(self.train_dataset)}")
 
-                file = open(self.train_save_data_path,"wb")
-                pickle.dump(self.train_dataset,file)
-            
-            # self.val_dataset = self.val_dataset.map(lambda x: {'audio': trim(x["audio"], top_db = 15)[0]})
-            if not os.path.exists(self.val_save_data_path) : 
-                self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
-                # self.val_dataset = self.val_dataset.map(lambda x: {'audio': trim(x["audio"], top_db = 15)[0]})
-                self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=4)
-                self.logger.info(f"Length val dataset after filter {len(self.val_dataset)}")
-                file = open(self.val_save_data_path,"wb")
-                pickle.dump(self.val_dataset,file)
+            self.logger.info(f"Length val dataset before filter {len(self.val_dataset)}")
+            # self.train_dataset = self.train_dataset.map(lambda x: {'audio':trim(np.array(x["audio"]), top_db = 15)[0]}, num_proc=4)
+            self.val_dataset = self.val_dataset.filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=4)
+            self.logger.info(f"Length val dataset after filter {len(self.val_dataset)}")
+
 
         if stage == "test":
             self.test_dataset = load_dataset(self.config.dataset_name,

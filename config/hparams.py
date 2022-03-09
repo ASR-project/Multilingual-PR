@@ -86,7 +86,7 @@ class DatasetParams:
 
     # Dataloader parameters
     num_workers             : int                     = 20         # number of workers for dataloaders
-    batch_size              : int                     = 2 
+    batch_size              : int                     = 1 
     
     max_input_length_in_sec : float = 5
 

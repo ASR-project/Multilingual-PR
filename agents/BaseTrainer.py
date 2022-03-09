@@ -18,12 +18,12 @@ class BaseTrainer:
         self.network_param = config.network_param
         self.feat_param = config.feat_param
 
-        logger = init_logger("BaseTrainer", "INFO")
+        self.logger = init_logger("BaseTrainer", "INFO")
 
-        logger.info('Loading artifact...')
+        self.logger.info('Loading artifact...')
         self.load_artifact(config.network_param, config.data_param)
 
-        # logger.info(
+        # self.logger.info(
         #     f'Create vocabulary ISO6393 : {config.data_param.ISO6393} ...')
 
         # config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
@@ -36,7 +36,7 @@ class BaseTrainer:
         #     word_delimiter_token=config.feat_param.word_delimiter_token,
         # )
 
-        logger.info(
+        self.logger.info(
             f'Create vocabulary language : {config.data_param.language} ...')
 
         config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
@@ -49,14 +49,14 @@ class BaseTrainer:
             word_delimiter_token=config.feat_param.word_delimiter_token,
         )
 
-        logger.info(f'Vocabulary file : {config.feat_param.vocab_file}')
+        self.logger.info(f'Vocabulary file : {config.feat_param.vocab_file}')
 
-        logger.info('Loading Data module...')
+        self.logger.info('Loading Data module...')
         self.datamodule = get_datamodule(
             config.data_param
         )
 
-        logger.info('Loading Model module...')
+        self.logger.info('Loading Model module...')
         self.pl_model = BaseModule(
             config.network_param, config.feat_param, config.optim_param)
 
@@ -107,14 +107,26 @@ class BaseTrainer:
         self.datamodule.prepare_data()
         
         if not os.path.exists(self.datamodule.train_save_data_path):
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc = 4)
-            # self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"labels": self.pl_model.processor.tokenizer.encode(x["sentence"])}, batched=True, num_proc = 4)
+
+            self.logger.info('Processing train dataset ...')
+
+            self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=4)
+            # self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"labels": self.pl_model.processor.tokenizer.encode(x["sentence"])}, batched=True, num_proc = 4)            
+            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=4)
             
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch, num_proc=4, batched=True, batch_size=512)
-            
-            self.datamodule.val_dataset = self.datamodule.train_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()})
-            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, num_proc=4, batched=True, batch_size=512)
+            self.logger.info('Saving train dataset ...')
+            self.datamodule._save_dataset("train")
         
+        if not os.path.exists(self.datamodule.val_save_data_path):
+            
+            self.logger.info('Processing validation dataset ...')
+
+            self.datamodule.val_dataset = self.datamodule.val_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=4)
+            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=4)
+            
+            self.logger.info('Saving validation dataset ...')
+            self.datamodule._save_dataset("validation")
+
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
     def predict(self):
