@@ -55,6 +55,7 @@ class Wav2Vec2(BaseFeaturesExtractor):
         # in_features = self.model.lm_head.in_features
         # self.model.lm_head = nn.Linear(in_features=in_features, out_features=params.vocab_size)
 
+
 class WavLM(BaseFeaturesExtractor):
     """
     https://huggingface.co/docs/transformers/model_doc/wavlm#transformers.WavLMForCTC

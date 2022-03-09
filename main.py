@@ -20,13 +20,14 @@ def main():
     if parameters.hparams.train:
         wandb.init(
                 # vars(parameters),  # FIXME use the full parameters
+                name = f"{parameters.feat_param.network_name}_{parameters.data_param.language}",
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,
                 allow_val_change = True,
                 job_type = "train",
                 tags = [
-                    parameters.network_param.network_name,
+                    # parameters.network_param.network_name,
                     parameters.data_param.dataset_name,
                     parameters.data_param.subset,
                     parameters.optim_param.optimizer,

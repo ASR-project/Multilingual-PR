@@ -47,6 +47,17 @@ def get_features_extractors(features_extractors_name, params):
     except NotImplementedError:
         raise NotImplementedError(f'Not implemented only Wav2vec, WavLM and Hubert')
 
+def get_model(model_name, params):
+    """
+    get features extractors
+    """
+    try:
+        mod = importlib.import_module(f"models.models")
+        net = getattr(mod, model_name)
+        return net(params)
+    except NotImplementedError:
+        raise NotImplementedError(f'Not implemented only Wav2vec, WavLM and Hubert')
+
 def parse_params(parameters: Parameters) -> dict:
     wdb_config = {}
     for k,v in vars(parameters).items():
