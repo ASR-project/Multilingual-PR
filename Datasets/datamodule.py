@@ -98,48 +98,20 @@ class BaseDataModule(LightningDataModule):
 
 
     def _save_dataset(self, split):
+        save_path = getattr(self, f"{split}_save_data_path")
 
-        if split == "train":
-            if not os.path.exists(self.train_save_data_path):
-                file = open(self.train_save_data_path, "wb")
-                pickle.dump(self.train_dataset, file)
+        file = open(save_path, "wb")
+        pickle.dump(getattr(self, f"{split}_dataset"), file)
 
-                self.logger.info(f"Saved to {self.train_save_data_path}")
+        self.logger.info(f"Saved to {save_path}")
+        
+        self.push_artefact(save_path, {
+                            "dataset_name": self.config.dataset_name, 
+                            "subset": self.config.subset, 
+                            "split": split, 
+                            "sampling_rate": self.sampling_rate}, 
+                            f"{split} dataset processed")
 
-                self.push_artefact(self.train_save_data_path, {
-                                   "dataset_name": self.config.dataset_name, 
-                                   "subset": self.config.subset, 
-                                   "split": "train", 
-                                   "sampling_rate": self.sampling_rate}, 
-                                   "train dataset processed")
-
-        elif "val" in split:
-            if not os.path.exists(self.val_save_data_path):
-                file = open(self.val_save_data_path, "wb")
-                pickle.dump(self.val_dataset, file)
-
-                self.logger.info(f"Saved to {self.val_save_data_path}")
-                
-                self.push_artefact(self.val_save_data_path, {
-                                   "dataset_name": self.config.dataset_name, 
-                                   "subset": self.config.subset, 
-                                   "split": "validation", 
-                                   "sampling_rate": self.sampling_rate}, 
-                                   "validation dataset processed")
-
-        else:
-            if not os.path.exists(self.test_save_data_path):
-                file = open(self.test_save_data_path, "wb")
-                pickle.dump(self.test_dataset, file)
-
-                self.logger.info(f"Saved to {self.test_save_data_path}")
-                
-                self.push_artefact(self.test_save_data_path, {
-                                   "dataset_name": self.config.dataset_name, 
-                                   "subset": self.config.subset, 
-                                   "split": "test", 
-                                   "sampling_rate": self.sampling_rate}, 
-                                   "test dataset processed")
 
     def push_artefact(self, path_artifact, metadata, description):
         artifact = wandb.Artifact(
@@ -226,14 +198,6 @@ class BaseDataModule(LightningDataModule):
             backend = EspeakBackend(self.config.language)
             separator = Separator(phone=" ", word="| ", syllable="")
             self.test_dataset = self.test_dataset.add_column('phonemes', backend.phonemize(self.test_dataset['sentence'], njobs=self.config.num_proc, separator=separator))
-            
-            # self.test_dataset = load_dataset(self.config.dataset_name,
-            #                                  self.config.subset,
-            #                                  split='test',
-            #                                  use_auth_token=self.config.use_auth_token,
-            #                                  download_mode=self.config.download_mode,
-            #                                  cache_dir=self.config.cache_dir
-            #                                  )
 
         if stage == "predict":
             self.dataset = load_dataset(self.config.dataset_name,

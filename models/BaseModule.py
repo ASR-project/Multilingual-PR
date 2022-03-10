@@ -59,7 +59,7 @@ class BaseModule(LightningModule):
         if network_param.freeze:
             self.model.freeze_feature_extractor()
         
-        logger.info(f"Feature extactor :{'not'*(not network_param.freeze)} Freeze")
+        logger.info(f"Feature extactor :{'not'*(not network_param.freeze)} freezed")
 
     def forward(self, x):
         output = self.model(x)
