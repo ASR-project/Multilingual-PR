@@ -96,3 +96,8 @@ Refer to the directory ```tests``` and you can write your own testing function. 
 ## ToDo docker 
 - [ ] Add a workflow to automatically build and push the docker. 
 - [ ] Add a workflow to run a training on AZURE using their gpus 
+
+
+# language that we can done with annotation available
+Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
+(sv), Turkish (tr), Tatar (tt) and Mandarin (zh).
