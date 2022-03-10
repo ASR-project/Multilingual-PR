@@ -32,7 +32,7 @@ class BaseDataModule(LightningDataModule):
         save_path = getattr(self, f"{split}_save_data_path")
         name_dataset = f"{split}_dataset"
 
-        if os.exists(save_path):
+        if osp.exists(save_path):
             file = open(save_path, "rb")
             setattr(self, name_dataset, pickle.load(file))
         else:
@@ -76,7 +76,7 @@ class BaseDataModule(LightningDataModule):
 
     def push_artefact(self, path_artifact, metadata, description):
         artifact = wandb.Artifact(
-            name=os.basename(path_artifact),
+            name=osp.basename(path_artifact),
             type="dataset",
             metadata=metadata,
             description=description
@@ -93,7 +93,7 @@ class BaseDataModule(LightningDataModule):
             name_train_filter_path = f"{self.train_save_data_path}_filter_{top_db}_{self.config.max_input_length_in_sec}"
             name_val_filter_path = f"{self.val_save_data_path}_filter_{top_db}_{self.config.max_input_length_in_sec}"
 
-            if not os.exists(name_train_filter_path):
+            if not osp.exists(name_train_filter_path):
                 self.logger.info(
                     f"Length train dataset before filter {len(self.train_dataset)}")
                 self.train_dataset = self.train_dataset.map(
@@ -121,7 +121,7 @@ class BaseDataModule(LightningDataModule):
                 self.logger.info(
                     f"Loaded filtered train dataset : {name_train_filter_path}")
 
-            if not os.exists(name_val_filter_path):
+            if not osp.exists(name_val_filter_path):
                 self.logger.info(
                     f"Length val dataset before filter {len(self.val_dataset)}")
                 self.val_dataset = self.val_dataset.map(
