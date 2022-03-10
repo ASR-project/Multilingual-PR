@@ -102,9 +102,10 @@ class BaseTrainer:
             # tokenize the raw audio
             batch["audio"] = self.pl_model.processor([ad["array"] for ad in audio], sampling_rate=16000).input_values
             return batch
-        
-        self.datamodule.prepare_data()
-        
+
+        self.datamodule.prepare_data("train")
+        self.datamodule.prepare_data("val")
+
         if not os.path.exists(self.datamodule.train_save_data_path):
 
             self.logger.info('Processing train dataset ...')
@@ -158,8 +159,8 @@ class BaseTrainer:
             batch["audio"] = self.pl_model.processor([ad["array"] for ad in audio], sampling_rate=16000).input_values
             return batch
         
-        self.datamodule.prepare_data_test()
-        
+        self.datamodule.prepare_data("test")
+
         if not os.path.exists(self.datamodule.test_save_data_path):
 
             self.logger.info('Processing test dataset ...')

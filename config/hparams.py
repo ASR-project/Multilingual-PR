@@ -52,7 +52,7 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
+    network_name                  : str           = "WavLM"     # HuBERT, Wav2vec, WavLM
     pretrained                    : str           = ""
 
     freeze                        : bool          = False
