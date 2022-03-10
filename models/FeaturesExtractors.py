@@ -35,6 +35,7 @@ class Wav2Vec2(BaseFeaturesExtractor):
     def __init__(self, params):
         super().__init__(params)
         self.model = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft", feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
+        # self.model = Wav2Vec2FeatureExtractor.from_pretrained("patrickvonplaten/wavlm-libri-clean-100h-base-plus", feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
 
 class WavLM(BaseFeaturesExtractor):
     """

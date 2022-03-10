@@ -32,7 +32,7 @@ class Hparams:
     # modes
     tune_lr: bool  = False  # tune the model on first run
     dev_run: bool  = False
-    train   : bool = False
+    train   : bool = True
 
     best_model: str = ""
     
@@ -47,6 +47,8 @@ class Hparams:
 
     # testing params
     best_model_run: str = "Wav2Vec2_it"
+
+    # TODO add backbone name -> use the one pre-trained on English only
 
 @dataclass
 class NetworkParams:
@@ -78,14 +80,14 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "it"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "sv-SE"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
     # ISO6393                 : str                     = "jpn"    # look at the phoible.csv file https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv
     # phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
-    language                 : str                     = "it" 
+    language                 : str                     = "sv" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
 
     # Dataloader parameters
