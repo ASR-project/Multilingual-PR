@@ -31,6 +31,7 @@ def main():
                     parameters.data_param.subset,
                     parameters.optim_param.optimizer,
                     parameters.network_param.network_name,
+                    parameters.network_param.network_name,
                     ]
             )
         
