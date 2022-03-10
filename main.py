@@ -46,15 +46,33 @@ def main():
         agent = BaseTrainer(parameters, wandb_run)
         agent.run()
     else: 
-        wandb.init(
+        wandb_run = wandb.init(
                 # vars(parameters),  # FIXME use the full parameters
+                name = f"{parameters.feat_param.network_name}_{parameters.data_param.language}_predict",
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,
-                allow_val_change=True,
-                job_type="test"
+                allow_val_change = True,
+                job_type = "predict",
+                tags = [
+                    parameters.data_param.language,
+                    parameters.data_param.dataset_name,
+                    parameters.data_param.subset,
+                    parameters.optim_param.optimizer,
+                    parameters.feat_param.network_name,
+                    f"{parameters.data_param.dataset_name}-predict"
+                    ]
+            )
+
+        wandb_logger = WandbLogger(
+            config=wdb_config,# vars(parameters),  # FIXME use the full parameters
+            project=parameters.hparams.wandb_project,
+            entity=parameters.hparams.wandb_entity,
+            allow_val_change=True,
+            #save_dir=parameters.hparams.save_dir,
         )
-        agent = BaseTrainer(parameters)
+
+        agent = BaseTrainer(parameters, wandb_logger)
         agent.predict()
         
 if __name__ == '__main__':

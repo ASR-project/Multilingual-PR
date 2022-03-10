@@ -67,6 +67,35 @@ class BaseDataModule(LightningDataModule):
 
         return super().prepare_data()
 
+    def prepare_data_test(self) -> None:
+        self.logger.info(
+            "Preparing the dataset in prepare_data")
+
+        self.test_save_data_path = f"assets/datasets/test_{self.config.dataset_name}-{self.config.subset}"
+        if os.path.exists(self.test_save_data_path):
+            file = open(self.test_save_data_path, "rb")
+            self.test_dataset = pickle.load(file)
+        else:
+            self.test_dataset = load_dataset(self.config.dataset_name,
+                                              self.config.subset,
+                                              split='test',
+                                              use_auth_token=self.config.use_auth_token,
+                                              download_mode=self.config.download_mode,
+                                              cache_dir=self.config.cache_dir
+                                              )
+
+            self.test_dataset = self.test_dataset.remove_columns(
+                ["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"])
+            self.test_dataset = self.test_dataset.cast_column(
+                "audio", Audio(sampling_rate=16_000))
+
+        # self.train_dataset.features['audio'].sampling_rate FIXME
+        self.sampling_rate = 16000
+
+        self.logger.info("Done prepare_data")
+
+        return super().prepare_data()
+
 
     def _save_dataset(self, split):
 
@@ -99,7 +128,18 @@ class BaseDataModule(LightningDataModule):
                                    "validation dataset processed")
 
         else:
-            pass
+            if not os.path.exists(self.test_save_data_path):
+                file = open(self.test_save_data_path, "wb")
+                pickle.dump(self.test_dataset, file)
+
+                self.logger.info(f"Saved to {self.test_save_data_path}")
+                
+                self.push_artefact(self.test_save_data_path, {
+                                   "dataset_name": self.config.dataset_name, 
+                                   "subset": self.config.subset, 
+                                   "split": "test", 
+                                   "sampling_rate": self.sampling_rate}, 
+                                   "test dataset processed")
 
     def push_artefact(self, path_artifact, metadata, description):
         artifact = wandb.Artifact(
@@ -182,13 +222,18 @@ class BaseDataModule(LightningDataModule):
             self.val_dataset = self.val_dataset.add_column('phonemes', backend.phonemize(self.val_dataset['sentence'], njobs=self.config.num_proc, separator=separator))
 
         if stage == "test":
-            self.test_dataset = load_dataset(self.config.dataset_name,
-                                             self.config.subset,
-                                             split='test',
-                                             use_auth_token=self.config.use_auth_token,
-                                             download_mode=self.config.download_mode,
-                                             cache_dir=self.config.cache_dir
-                                             )
+            self.logger.info(f"Creating phonemes")
+            backend = EspeakBackend(self.config.language)
+            separator = Separator(phone=" ", word="| ", syllable="")
+            self.test_dataset = self.test_dataset.add_column('phonemes', backend.phonemize(self.test_dataset['sentence'], njobs=self.config.num_proc, separator=separator))
+            
+            # self.test_dataset = load_dataset(self.config.dataset_name,
+            #                                  self.config.subset,
+            #                                  split='test',
+            #                                  use_auth_token=self.config.use_auth_token,
+            #                                  download_mode=self.config.download_mode,
+            #                                  cache_dir=self.config.cache_dir
+            #                                  )
 
         if stage == "predict":
             self.dataset = load_dataset(self.config.dataset_name,

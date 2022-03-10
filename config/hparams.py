@@ -32,7 +32,7 @@ class Hparams:
     # modes
     tune_lr: bool  = False  # tune the model on first run
     dev_run: bool  = False
-    train   : bool = True
+    train   : bool = False
 
     best_model: str = ""
     
@@ -44,6 +44,9 @@ class Hparams:
     limit_train_batches: float = 1.0
     limit_val_batches: float = 1.0
     accumulate_grad_batches: int = 32 # 1 for no accumulation
+
+    # testing params
+    best_model_run: str = "Wav2Vec2_it"
 
 @dataclass
 class NetworkParams:
