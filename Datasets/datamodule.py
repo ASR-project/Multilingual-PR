@@ -24,6 +24,10 @@ class BaseDataModule(LightningDataModule):
             f"Loading Dataset : {self.config.dataset_name}, language : {self.config.subset}")
 
 
+    def prepare_data(self) -> None:
+        return super().prepare_data()
+
+
     def load_data(self, split) -> None:
         self.logger.info(f"Preparing the dataset in prepare_data: {split}")
 
@@ -32,7 +36,7 @@ class BaseDataModule(LightningDataModule):
         save_path = getattr(self, f"{split}_save_data_path")
         name_dataset = f"{split}_dataset"
 
-        if osp.exists(save_path):
+        if osp.exists(save_path) and not self.config.recreate_dataset:
             file = open(save_path, "rb")
             setattr(self, name_dataset, pickle.load(file))
         else:
@@ -92,7 +96,7 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f'{split}_dataset'
         dataset = getattr(self, name_dataset)
         
-        if not osp.exists(name_filter_path):
+        if not osp.exists(name_filter_path) or self.config.recreate_dataset:
             self.logger.info(
                 f"Length {split} dataset before filter {len(dataset)}")
             
@@ -123,9 +127,10 @@ class BaseDataModule(LightningDataModule):
             self.logger.info(
                 f"Loaded filtered {split} dataset : {name_filter_path}")
 
+        self.logger.info(f"Length {split} dataset : {len(dataset)}")
 
     def create_phonemes(self, split) -> None:
-        self.logger.info(f"Creating phonemes ...")
+        self.logger.info(f"Creating {split} phonemes ...")
         backend = EspeakBackend(self.config.language)
         separator = Separator(phone=" ", word="| ", syllable="")
         

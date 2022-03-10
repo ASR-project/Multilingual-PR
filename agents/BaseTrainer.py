@@ -105,7 +105,7 @@ class BaseTrainer:
 
         self.datamodule.load_data("train")
 
-        if not os.path.exists(self.datamodule.train_save_data_path):
+        if not os.path.exists(self.datamodule.train_save_data_path) or self.datamodule.config.recreate_dataset:
 
             self.logger.info('Processing train dataset ...')
 
@@ -117,7 +117,7 @@ class BaseTrainer:
 
         self.datamodule.load_data("val")
 
-        if not os.path.exists(self.datamodule.val_save_data_path):
+        if not os.path.exists(self.datamodule.val_save_data_path) or self.datamodule.config.recreate_dataset:
             
             self.logger.info('Processing validation dataset ...')
 
@@ -125,7 +125,7 @@ class BaseTrainer:
             self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
             
             self.logger.info('Saving validation dataset ...')
-            self.datamodule._save_dataset("validation")
+            self.datamodule._save_dataset("val")
 
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 

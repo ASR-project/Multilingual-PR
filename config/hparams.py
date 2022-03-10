@@ -52,7 +52,7 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "WavLM"     # HuBERT, Wav2vec, WavLM
+    network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
     pretrained                    : str           = ""
 
     freeze                        : bool          = False
@@ -86,8 +86,11 @@ class DatasetParams:
     num_workers             : int                     = 20         # number of workers for dataloaders
     batch_size              : int                     = 2 
     
+    # Dataset processing parameters
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
+
+    recreate_dataset        : bool                    = False
 
     # dataset artifact TODO
 
