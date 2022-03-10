@@ -52,19 +52,11 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name       : str           = "CTC_model"
-    weight_checkpoint  : str           = ""
-    # artifact           : str           = ""
-    # dropout            : float         = 0.75
-    # normalization      : str           = 'BatchNorm1d'
-    # activation         : str           = 'GELU'
-    # input_size         : int           = 1000
-
-@dataclass
-class FeatExtractParams:
     network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
-    weight_checkpoint             : str           = ""
-    
+    pretrained                    : str           = ""
+
+    freeze                        : bool          = False
+
     # Phoneme Tokenizer
     eos_token                     : str           = "</s>"
     bos_token                     : str           = "<s>"
@@ -79,15 +71,15 @@ class DatasetParams:
     """
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
-    use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "sv-SE"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
+    subset                  : str                     = "ta"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
-    # to create vocabulary of phonemes
+    # to create vocabulary of phonemes
     # ISO6393                 : str                     = "jpn"    # look at the phoible.csv file https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv
     # phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
-    language                 : str                     = "sv" 
+    language                 : str                     = "tt" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
 
     # Dataloader parameters
@@ -120,7 +112,6 @@ class Parameters:
     data_param    : DatasetParams     = DatasetParams()
     network_param : NetworkParams     = NetworkParams()
     optim_param   : OptimizerParams   = OptimizerParams()
-    feat_param    : FeatExtractParams = FeatExtractParams()
     
     def __post_init__(self):
         """Post-initialization code"""
@@ -129,12 +120,23 @@ class Parameters:
 
         self.hparams.wandb_project = f"{'test-'*self.hparams.test}asr"
 
-        self.feat_param.phonemizer_lang = self.data_param.language
-        print(f'Phonemizer language : {self.feat_param.phonemizer_lang }')
+        self.network_param.phonemizer_lang = self.data_param.language
+        print(f'Phonemizer language : {self.network_param.phonemizer_lang }')
 
         random.seed(self.hparams.seed_everything)
         torch.manual_seed(self.hparams.seed_everything)
         pl.seed_everything(self.hparams.seed_everything)
+
+        if self.network_param.pretrained == "":
+            if self.network_param.network_name == "Wav2Vec2":
+                self.network_param.pretrained = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
+            elif self.network_param.network_name == "WavLM":
+                self.network_param.pretrained = "patrickvonplaten/wavlm-libri-clean-100h-base-plus"
+            elif self.network_param.network_name == "Hubert":
+                self.network_param.pretrained = "facebook/hubert-large-ls960-ft"
+            else:
+                raise NotImplementedError("Only Wav2vec2, WavLM and Hubert are available !")
+        print(f"Pretrained model: {self.network_param.pretrained}")
 
     @classmethod
     def parse(cls):

@@ -10,7 +10,7 @@ def test_features():
     params = Parameters.parse()
 
     # load the right class
-    network_name = params.feat_param.network_name
+    network_name = params.network_param.network_name
     mod = importlib.import_module(f"models.FeaturesExtractors")
     feat_ext_class = getattr(mod, network_name)(params)
 

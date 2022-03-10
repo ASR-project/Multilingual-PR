@@ -16,7 +16,6 @@ class BaseTrainer:
         self.config = config.hparams
         self.wb_run = run
         self.network_param = config.network_param
-        self.feat_param = config.feat_param
 
         self.logger = init_logger("BaseTrainer", "INFO")
 
@@ -26,30 +25,30 @@ class BaseTrainer:
         # self.logger.info(
         #     f'Create vocabulary ISO6393 : {config.data_param.ISO6393} ...')
 
-        # config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
+        # config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
         #     config.data_param.ISO6393,
         #     config.data_param.phoible_csv_path,
-        #     eos_token=config.feat_param.eos_token,
-        #     bos_token=config.feat_param.bos_token,
-        #     unk_token=config.feat_param.unk_token,
-        #     pad_token=config.feat_param.pad_token,
-        #     word_delimiter_token=config.feat_param.word_delimiter_token,
+        #     eos_token=config.network_param.eos_token,
+        #     bos_token=config.network_param.bos_token,
+        #     unk_token=config.network_param.unk_token,
+        #     pad_token=config.network_param.pad_token,
+        #     word_delimiter_token=config.network_param.word_delimiter_token,
         # )
 
         self.logger.info(
             f'Create vocabulary language : {config.data_param.language} ...')
 
-        config.feat_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
+        config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
             config.data_param.language,
             config.data_param.root_path_annotation,
-            eos_token=config.feat_param.eos_token,
-            bos_token=config.feat_param.bos_token,
-            unk_token=config.feat_param.unk_token,
-            pad_token=config.feat_param.pad_token,
-            word_delimiter_token=config.feat_param.word_delimiter_token,
+            eos_token=config.network_param.eos_token,
+            bos_token=config.network_param.bos_token,
+            unk_token=config.network_param.unk_token,
+            pad_token=config.network_param.pad_token,
+            word_delimiter_token=config.network_param.word_delimiter_token,
         )
 
-        self.logger.info(f'Vocabulary file : {config.feat_param.vocab_file}')
+        self.logger.info(f'Vocabulary file : {config.network_param.vocab_file}')
 
         self.logger.info('Loading Data module...')
         self.datamodule = get_datamodule(
@@ -58,7 +57,7 @@ class BaseTrainer:
 
         self.logger.info('Loading Model module...')
         self.pl_model = BaseModule(
-            config.network_param, config.feat_param, config.optim_param)
+            config.network_param, config.optim_param)
 
         self.wb_run.watch(self.pl_model.model)
 
@@ -196,7 +195,7 @@ class BaseTrainer:
 
     def get_callbacks(self):
         callbacks = [RichProgressBar(), LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
-        monitor = "val/loss"
+        monitor = "val/per"
         mode = "min"
         wandb.define_metric(monitor, summary=mode)
         save_top_k = 1

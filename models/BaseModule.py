@@ -3,11 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor,Wav2Vec2ForCTC
+from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor,Wav2Vec2ForCTC, Wav2Vec2FeatureExtractor
 from utils.agent_utils import get_features_extractors, get_model
 from utils.logger import init_logger
 
-from models.CTC_model import CTC_model
 from itertools import chain
 
 
@@ -15,7 +14,7 @@ from torch.profiler import profile, record_function, ProfilerActivity
 
 
 class BaseModule(LightningModule):
-    def __init__(self, network_param, feat_param, optim_param):
+    def __init__(self, network_param, optim_param):
         """
             method used to define our model parameters
         """
@@ -32,44 +31,35 @@ class BaseModule(LightningModule):
 
         # Tokenizer
         # https://github.com/huggingface/transformers/blob/v4.16.2/src/transformers/models/wav2vec2_phoneme/tokenization_wav2vec2_phoneme.py
-        self.phonemes_tokenizer = Wav2Vec2PhonemeCTCTokenizer(vocab_file=feat_param.vocab_file,
-                                                              eos_token=feat_param.eos_token,
-                                                              bos_token=feat_param.bos_token,
-                                                              unk_token=feat_param.unk_token,
-                                                              pad_token=feat_param.pad_token,
-                                                              word_delimiter_token=feat_param.word_delimiter_token,
+        self.phonemes_tokenizer = Wav2Vec2PhonemeCTCTokenizer(vocab_file=network_param.vocab_file,
+                                                              eos_token=network_param.eos_token,
+                                                              bos_token=network_param.bos_token,
+                                                              unk_token=network_param.unk_token,
+                                                              pad_token=network_param.pad_token,
+                                                              word_delimiter_token=network_param.word_delimiter_token,
                                                               do_phonemize=False,
                                                               return_attention_mask=False,
                                                               )
 
-        feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
+        network_param.vocab_size = self.phonemes_tokenizer.vocab_size
 
         # Loss function
-        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token]) # FIXME Blank maybe wrong, actually ok
+        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[network_param.word_delimiter_token]) # FIXME Blank maybe wrong, actually ok
 
-        # Network
-        feature_extractor = get_features_extractors(
-            feat_param.network_name, feat_param)
-        logger.info(f"Features extractor : {feat_param.network_name}")
+        # Feature_extractor
+        feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft", feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
+        # feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("patrickvonplaten/wavlm-libri-clean-100h-base-plus", feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
+        logger.info(f"Features extractor : {network_param.network_name}")
+        self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor, tokenizer=self.phonemes_tokenizer)
 
-        # # CTC = CTC_model(network_param)
+        # Model
+        self.model = get_model(network_param.network_name, network_param)
+        logger.info(f"Model: {network_param.network_name}")
 
-        # if feat_param.weight_checkpoint != "":
-        #     feature_extractor.load_state_dict(torch.load(
-        #         feat_param.weight_checkpoint)["state_dict"])
-
-        # if network_param.weight_checkpoint != "":
-        #     feature_extractor.load_state_dict(torch.load(
-        #         network_param.weight_checkpoint)["state_dict"])
-
-        self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
+        if network_param.freeze:
+            self.model.freeze_feature_extractor()
         
-        self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft") # model that will actually be trained
-        in_features = self.model.lm_head.in_features
-        self.model.lm_head = nn.Linear(in_features=in_features, out_features=feat_param.vocab_size)
-
-        # self.model = get_model(feat_param.network_name, feat_param)
-        # logger.info(f"Model: {feat_param.network_name}")
+        logger.info(f"Feature extactor :{'not'*(not network_param.freeze)} Freeze")
 
     def forward(self, x):
         output = self.model(x)
@@ -125,10 +115,6 @@ class BaseModule(LightningModule):
     def _get_outputs(self, batch, batch_idx):
         """convenience function since train/valid/test steps are similar"""
         x = batch
-        
-        with self.processor.as_target_processor():
-            # tokenizattion but no phonemization 
-            x["labels"] = self.processor(x["phonemes"]).input_ids
 
         # x['array'] gives the actual raw audio
         output = self(x['array']).logits  
@@ -140,9 +126,12 @@ class BaseModule(LightningModule):
 
         # process targets
         # extract the indices from the dictionary 
-        targets = x["labels"]
-        target_lengths = torch.LongTensor([len(targ) for targ in targets])
-        targets = torch.Tensor(list(chain.from_iterable(targets))).int()
+        with self.processor.as_target_processor():
+            # tokenizattion but no phonemization 
+            x["labels"] = self.processor(x["phonemes"]).input_ids
+
+        target_lengths = torch.LongTensor([len(targ) for targ in  x["labels"]])
+        targets = torch.Tensor(list(chain.from_iterable(x["labels"]))).int()
         
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)
         
