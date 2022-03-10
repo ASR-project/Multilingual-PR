@@ -84,7 +84,44 @@ class BaseDataModule(LightningDataModule):
 
     
     def filtered_data(self, split, top_db=15) -> None:
-        return
+
+        self.logger.info(f"Filtering {split} dataset ...")
+
+        name_filter_path = f"{getattr(self, f'{split}_save_data_path')}_filter_{top_db}_{self.config.max_input_length_in_sec}"
+
+        name_dataset = f'{split}_dataset'
+        dataset = getattr(self, name_dataset)
+        
+        if not osp.exists(name_filter_path):
+            self.logger.info(
+                f"Length {split} dataset before filter {len(dataset)}")
+            
+            setattr(self, name_dataset, dataset.map(
+                lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=self.config.num_proc))
+            setattr(self, name_dataset, dataset.filter(lambda x: len(
+                x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_proc))
+
+            self.logger.info(
+                f"Length {split} dataset after filter {len(dataset)}")
+
+            file = open(name_filter_path, "wb")
+            pickle.dump(dataset, file)
+
+            self.logger.info(f"Saved to {name_filter_path}")
+            
+            self.push_artefact(name_filter_path, {
+                                "dataset_name": self.config.dataset_name,
+                                "subset": self.config.subset,
+                                "split": split,
+                                "sampling_rate": self.sampling_rate,
+                                "top_db": top_db,
+                                "max_input_length_in_sec": self.config.max_input_length_in_sec},
+                                "{split} dataset processed and filtered")
+        else:
+            file = open(name_filter_path, "rb")
+            dataset = pickle.load(file)
+            self.logger.info(
+                f"Loaded filtered {split} dataset : {name_filter_path}")
 
 
     def create_phonemes(self, split) -> None:
@@ -101,66 +138,9 @@ class BaseDataModule(LightningDataModule):
     def setup(self, stage=None):
         # Build dataset
         if stage in (None, "fit"):
-
-            top_db = 15
-            name_train_filter_path = f"{self.train_save_data_path}_filter_{top_db}_{self.config.max_input_length_in_sec}"
-            name_val_filter_path = f"{self.val_save_data_path}_filter_{top_db}_{self.config.max_input_length_in_sec}"
-
-            if not osp.exists(name_train_filter_path):
-                self.logger.info(
-                    f"Length train dataset before filter {len(self.train_dataset)}")
-                self.train_dataset = self.train_dataset.map(
-                    lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=self.config.num_proc)
-                self.train_dataset = self.train_dataset.filter(lambda x: len(
-                    x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_proc)
-                self.logger.info(
-                    f"Length train dataset after filter {len(self.train_dataset)}")
-
-                file = open(name_train_filter_path, "wb")
-                pickle.dump(self.train_dataset, file)
-
-                self.logger.info(f"Saved to {name_train_filter_path}")
-                self.push_artefact(name_train_filter_path, {
-                                   "dataset_name": self.config.dataset_name,
-                                   "subset": self.config.subset,
-                                   "split": "train",
-                                   "sampling_rate": self.sampling_rate,
-                                   "top_db": top_db,
-                                   "max_input_length_in_sec": self.config.max_input_length_in_sec},
-                                   "train dataset processed and filtered")
-            else:
-                file = open(name_train_filter_path, "rb")
-                self.train_dataset = pickle.load(file)
-                self.logger.info(
-                    f"Loaded filtered train dataset : {name_train_filter_path}")
-
-            if not osp.exists(name_val_filter_path):
-                self.logger.info(
-                    f"Length val dataset before filter {len(self.val_dataset)}")
-                self.val_dataset = self.val_dataset.map(
-                    lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=self.config.num_proc)
-                self.val_dataset = self.val_dataset.filter(lambda x: len(
-                    x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_proc)
-                self.logger.info(
-                    f"Length val dataset after filter {len(self.val_dataset)}")
-
-                file = open(name_val_filter_path, "wb")
-                pickle.dump(self.val_dataset, file)
-
-                self.logger.info(f"Saved to {name_val_filter_path}")
-                self.push_artefact(name_val_filter_path, {
-                                   "dataset_name": self.config.dataset_name,
-                                   "subset": self.config.subset,
-                                   "split": "validation",
-                                   "sampling_rate": self.sampling_rate,
-                                   "top_db": top_db,
-                                   "max_input_length_in_sec": self.config.max_input_length_in_sec},
-                                   "validation dataset processed and filtered")
-            else:
-                file = open(name_val_filter_path, "rb")
-                self.val_dataset = pickle.load(file)
-                self.logger.info(
-                    f"Loaded filtered val dataset : {name_val_filter_path}")
+            
+            self.filtered_data("train")
+            self.filtered_data("val")
 
             self.create_phonemes("train")
             self.create_phonemes("val")
