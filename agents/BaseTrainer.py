@@ -88,20 +88,20 @@ class BaseTrainer:
             log_every_n_steps=1,
             fast_dev_run=self.config.dev_run,
             amp_backend="apex",
-            # val_check_interval=self.config.val_check_interval,
-            # limit_val_batches = 2
+            val_check_interval=self.config.val_check_interval,
+            limit_train_batches=self.config.limit_train_batches,
+            limit_val_batches=self.config.limit_val_batches,
+            accumulate_grad_batches=self.config.accumulate_grad_batches
         )
+
         trainer.logger = self.wb_run
 
         chars_to_remove_regex = '[\,\?\.\!\-\;\:\"\“\%\‘\”\�\'\。]'
 
         def prepare_batch(batch):
-            # @TODO the dataset is a bit dirty for now
             audio = batch["audio"]
             # tokenize the raw audio
             batch["audio"] = self.pl_model.processor([ad["array"] for ad in audio], sampling_rate=16000).input_values
-            # with self.pl_model.processor.as_target_processor():
-            #     batch["labels"] = self.pl_model.processor(batch["sentence"]).input_ids
             return batch
         
         self.datamodule.prepare_data()
@@ -110,9 +110,8 @@ class BaseTrainer:
 
             self.logger.info('Processing train dataset ...')
 
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=4)
-            # self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"labels": self.pl_model.processor.tokenizer.encode(x["sentence"])}, batched=True, num_proc = 4)            
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=4)
+            self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=self.datamodule.config.num_proc)
+            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
             
             self.logger.info('Saving train dataset ...')
             self.datamodule._save_dataset("train")
@@ -121,8 +120,8 @@ class BaseTrainer:
             
             self.logger.info('Processing validation dataset ...')
 
-            self.datamodule.val_dataset = self.datamodule.val_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=4)
-            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=4)
+            self.datamodule.val_dataset = self.datamodule.val_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=self.datamodule.config.num_proc)
+            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
             
             self.logger.info('Saving validation dataset ...')
             self.datamodule._save_dataset("validation")
@@ -130,23 +129,57 @@ class BaseTrainer:
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
     def predict(self):
+        if not self.config.debug:
+            torch.autograd.set_detect_anomaly(False)
+            torch.autograd.profiler.profile(False)
+            torch.autograd.profiler.emit_nvtx(False)
+            torch.backends.cudnn.benchmark = True
+
+        trainer = pl.Trainer(
+            logger=self.wb_run,  # W&B integration
+            callbacks=self.get_callbacks(),
+            gpus=self.config.gpu,  # use all available GPU's
+            max_epochs=self.config.max_epochs,  # number of epochs
+            log_every_n_steps=1,
+            fast_dev_run=self.config.dev_run,
+            amp_backend="apex",
+            val_check_interval=self.config.val_check_interval,
+            limit_train_batches=self.config.limit_train_batches,
+            limit_val_batches=self.config.limit_val_batches,
+            accumulate_grad_batches=self.config.accumulate_grad_batches
+        )
+
+        trainer.logger = self.wb_run
+
+        chars_to_remove_regex = '[\,\?\.\!\-\;\:\"\“\%\‘\”\�\'\。]'
+
+        def prepare_batch(batch):
+            audio = batch["audio"]
+            # tokenize the raw audio
+            batch["audio"] = self.pl_model.processor([ad["array"] for ad in audio], sampling_rate=16000).input_values
+            return batch
+        
+        self.datamodule.prepare_data_test()
+        
+        if not os.path.exists(self.datamodule.test_save_data_path):
+
+            self.logger.info('Processing test dataset ...')
+
+            self.datamodule.test_dataset = self.datamodule.test_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=self.datamodule.config.num_proc)
+            self.datamodule.test_dataset = self.datamodule.test_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
+            
+            self.logger.info('Saving test dataset ...')
+            self.datamodule._save_dataset("test")
+
+        
+        path_model = f"{self.config.wandb_entity}/{self.config.wandb_project}/{self.config.best_model_run}:top-1"
+        best_model_path = get_artifact(path_model, type="model")
+
+        trainer.test(
+            self.pl_model, self.datamodule, ckpt_path=best_model_path
+        )
+
         return
-        # trainer = pl.Trainer(gpus=self.config.gpu)
-        # best_path = f"altegrad-gnn-link-prediction/{self.config.wandb_project}/{self.config.best_model}:top-1"
-        # best_model = get_artifact(best_path, type="model")
-
-        # raw_predictions = trainer.predict(
-        #     self.pl_model, self.datamodule, ckpt_path=best_model)
-        # raw_predictions = torch.cat(raw_predictions, axis=0)
-
-        # y_pred = raw_predictions.detach().cpu().numpy()
-        # predictions = zip(range(len(y_pred)), y_pred)
-
-        # with open(f"submissions/{self.config.best_model}{'-debug'*self.config.debug}.csv", "w") as pred:
-        #     csv_out = csv.writer(pred)
-        #     csv_out.writerow(['id', 'predicted'])
-        #     for row in predictions:
-        #         csv_out.writerow(row)
 
     def load_artifact(self, network_param, data_param):
         return

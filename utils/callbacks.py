@@ -126,6 +126,16 @@ class LogMetricsCallback(Callback):
         self.metrics_module_validation = MetricsModule(
             "val", device
         )
+    
+    def on_test_start(
+        self, trainer: "pl.Trainer", pl_module: "pl.LightningModule"
+    ) -> None:
+        device = pl_module.device
+
+        self.metrics_module_test = MetricsModule(
+            "test", device
+        )
+
 
     def on_train_batch_end(
         self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
@@ -150,6 +160,18 @@ class LogMetricsCallback(Callback):
         """Called when the validation epoch ends."""
 
         self.metrics_module_validation.log_metrics("val/", pl_module)
+    
+    def on_test_batch_end(
+        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
+    ):
+        """Called when the validation batch ends."""
+
+        self.metrics_module_test.update_metrics(outputs['preds'], outputs['targets'])
+
+    def on_test_epoch_end(self, trainer, pl_module):
+        """Called when the validation epoch ends."""
+
+        self.metrics_module_test.log_metrics("test/", pl_module)
 
 class LogAudioPrediction(Callback):
     def __init__(self, log_freq_audio, log_nb_audio) -> None:
@@ -172,6 +194,14 @@ class LogAudioPrediction(Callback):
 
         if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
             self.log_audio(pl_module, "train", batch, self.log_nb_audio, outputs, trainer.datamodule.sampling_rate)
+    
+    def on_test_batch_end(
+        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
+    ):
+        """Called when the test batch ends."""
+
+        if batch_idx == 0 and pl_module.current_epoch % self.log_freq_audio == 0:
+            self.log_audio(pl_module, "test", batch, self.log_nb_audio, outputs, trainer.datamodule.sampling_rate)
 
     def log_audio(self, pl_module, name, batch, n, outputs, sampling_rate):
         x = batch

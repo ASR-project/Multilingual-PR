@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor,Wav2Vec2ForCTC
-from utils.agent_utils import get_features_extractors
+from utils.agent_utils import get_features_extractors, get_model
 from utils.logger import init_logger
 
 from models.CTC_model import CTC_model
@@ -38,17 +38,15 @@ class BaseModule(LightningModule):
                                                               unk_token=feat_param.unk_token,
                                                               pad_token=feat_param.pad_token,
                                                               word_delimiter_token=feat_param.word_delimiter_token,
-                                                              do_phonemize=True,
-                                                              phonemizer_lang=feat_param.phonemizer_lang,
-                                                              phonemizer_backend=feat_param.phonemizer_backend,
+                                                              do_phonemize=False,
                                                               return_attention_mask=False,
                                                               )
 
         feat_param.vocab_size = self.phonemes_tokenizer.vocab_size
 
         # Loss function
-        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token])
-        # del self.phonemes_tokenizer
+        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[feat_param.word_delimiter_token]) # FIXME Blank maybe wrong, actually ok
+
         # Network
         feature_extractor = get_features_extractors(
             feat_param.network_name, feat_param)
@@ -56,34 +54,23 @@ class BaseModule(LightningModule):
 
         # # CTC = CTC_model(network_param)
 
-        if feat_param.weight_checkpoint != "":
-            feature_extractor.load_state_dict(torch.load(
-                feat_param.weight_checkpoint)["state_dict"])
+        # if feat_param.weight_checkpoint != "":
+        #     feature_extractor.load_state_dict(torch.load(
+        #         feat_param.weight_checkpoint)["state_dict"])
 
-        if network_param.weight_checkpoint != "":
-            feature_extractor.load_state_dict(torch.load(
-                network_param.weight_checkpoint)["state_dict"])
+        # if network_param.weight_checkpoint != "":
+        #     feature_extractor.load_state_dict(torch.load(
+        #         network_param.weight_checkpoint)["state_dict"])
 
         self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor.model, tokenizer=self.phonemes_tokenizer)
-        
-        # self.processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft",
-        #                                                       vocab_file=feat_param.vocab_file,
-        #                                                       eos_token=feat_param.eos_token,
-        #                                                       bos_token=feat_param.bos_token,
-        #                                                       unk_token=feat_param.unk_token,
-        #                                                       pad_token=feat_param.pad_token,
-        #                                                       word_delimiter_token=feat_param.word_delimiter_token,
-        #                                                       do_phonemize=True,
-        #                                                       phonemizer_lang=feat_param.phonemizer_lang,
-        #                                                       phonemizer_backend=feat_param.phonemizer_backend,
-        #                                                       return_attention_mask=False)
         
         self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft") # model that will actually be trained
         in_features = self.model.lm_head.in_features
         self.model.lm_head = nn.Linear(in_features=in_features, out_features=feat_param.vocab_size)
-        
-        
-        
+
+        # self.model = get_model(feat_param.network_name, feat_param)
+        # logger.info(f"Model: {feat_param.network_name}")
+
     def forward(self, x):
         output = self.model(x)
         return output
@@ -115,14 +102,6 @@ class BaseModule(LightningModule):
 
         return {"loss": loss, "logits": logits, "preds": preds, "targets": targets}
 
-    def predict_step(self, batch, batch_idx):
-
-        x = batch
-        output = self(x)
-        output = torch.sigmoid(output)
-
-        return output
-
     def configure_optimizers(self):
         """defines model optimizer"""
         optimizer = getattr(torch.optim, self.optim_param.optimizer)
@@ -148,30 +127,27 @@ class BaseModule(LightningModule):
         x = batch
         
         with self.processor.as_target_processor():
-            x["labels"] = self.processor(x["sentence"]).input_ids
+            # tokenizattion but no phonemization 
+            x["labels"] = self.processor(x["phonemes"]).input_ids
 
         # x['array'] gives the actual raw audio
         output = self(x['array']).logits  
 
-        # FIXME
         # process outputs
-        log_probs = F.log_softmax(output, dim=2)
+        log_probs = F.log_softmax(output, dim=-1)
         input_lengths = torch.LongTensor([len(b) for b in log_probs])
-        log_probs = log_probs.permute(1,0,2)
+        log_probs = log_probs.permute(1, 0, 2)
 
         # process targets
         # extract the indices from the dictionary 
-        # targets = self.processor(x['sentence']).input_ids
         targets = x["labels"]
         target_lengths = torch.LongTensor([len(targ) for targ in targets])
         targets = torch.Tensor(list(chain.from_iterable(targets))).int()
         
         loss = self.loss(log_probs, targets, input_lengths, target_lengths)
         
-        # if batch_idx < 2:  # should be smaller than the number of samples to log
+        # to compute metric and log samples
         phone_preds = self.processor.batch_decode(torch.argmax(output, dim=-1))   
         phone_targets = self.processor.batch_decode(x["labels"]) 
-
-        #targets = [self.phonemes_tokenizer.phonemize(sent) for sent in x['sentence']]
         
         return loss, output, phone_preds, phone_targets
