@@ -24,7 +24,7 @@ class BaseDataModule(LightningDataModule):
             f"Loading Dataset : {self.config.dataset_name}, language : {self.config.subset}")
 
 
-    def prepare_data(self, split) -> None:
+    def load_data(self, split) -> None:
         self.logger.info(f"Preparing the dataset in prepare_data: {split}")
 
         setattr(self, f"{split}_save_data_path", f"assets/datasets/{split}_{self.config.dataset_name}-{self.config.subset}")
@@ -55,8 +55,6 @@ class BaseDataModule(LightningDataModule):
 
         self.logger.info(f"Done prepare_data {split}")
 
-        return super().prepare_data()
-
 
     def _save_dataset(self, split):
         save_path = getattr(self, f"{split}_save_data_path")
@@ -83,6 +81,21 @@ class BaseDataModule(LightningDataModule):
         )
         artifact.add_file(path_artifact)
         wandb.log_artifact(artifact, aliases=["latest"])
+
+    
+    def filtered_data(self, split, top_db=15) -> None:
+        return
+
+
+    def create_phonemes(self, split) -> None:
+        self.logger.info(f"Creating phonemes ...")
+        backend = EspeakBackend(self.config.language)
+        separator = Separator(phone=" ", word="| ", syllable="")
+        
+        name_dataset = f"{split}_dataset"
+
+        setattr(self, name_dataset, getattr(self, name_dataset).add_column('phonemes', backend.phonemize(
+            getattr(self, name_dataset)['sentence'], njobs=self.config.num_proc, separator=separator)))
 
 
     def setup(self, stage=None):
@@ -149,21 +162,11 @@ class BaseDataModule(LightningDataModule):
                 self.logger.info(
                     f"Loaded filtered val dataset : {name_val_filter_path}")
 
-            self.logger.info(f"Creating phonemes")
-            backend = EspeakBackend(self.config.language)
-            separator = Separator(phone=" ", word="| ", syllable="")
-
-            self.train_dataset = self.train_dataset.add_column('phonemes', backend.phonemize(
-                self.train_dataset['sentence'], njobs=self.config.num_proc, separator=separator))
-            self.val_dataset = self.val_dataset.add_column('phonemes', backend.phonemize(
-                self.val_dataset['sentence'], njobs=self.config.num_proc, separator=separator))
+            self.create_phonemes("train")
+            self.create_phonemes("val")
 
         if stage == "test":
-            self.logger.info(f"Creating phonemes")
-            backend = EspeakBackend(self.config.language)
-            separator = Separator(phone=" ", word="| ", syllable="")
-            self.test_dataset = self.test_dataset.add_column('phonemes', backend.phonemize(
-                self.test_dataset['sentence'], njobs=self.config.num_proc, separator=separator))
+            self.create_phonemes("test")
 
         if stage == "predict":
             self.dataset = load_dataset(self.config.dataset_name,
