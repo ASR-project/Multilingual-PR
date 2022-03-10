@@ -127,6 +127,7 @@ class BaseModule(LightningModule):
         x = batch
         
         with self.processor.as_target_processor():
+            # tokenizattion but no phonemization 
             x["labels"] = self.processor(x["phonemes"]).input_ids
 
         # x['array'] gives the actual raw audio

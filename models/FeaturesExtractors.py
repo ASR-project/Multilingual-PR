@@ -34,27 +34,7 @@ class Wav2Vec2(BaseFeaturesExtractor):
 
     def __init__(self, params):
         super().__init__(params)
-
-        # self.feature_extractor2 = Wav2Vec2FeatureExtractor(feature_size=params.feature_size,
-        #                                             sampling_rate=params.sampling_rate, 
-        #                                             padding_value=params.padding_value, 
-        #                                             do_normalize=params.do_normalize,
-        #                                             return_attention_mask=params.return_attention_mask)
-
-        # self.processor = Wav2Vec2Processor(feature_extractor=feature_extractor)
-        # wav2vec2 = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h").wav2vec2
-        # self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
-        
-        # self.model = Wav2Vec2ForCTC.from_pretrained("jonatasgrosman/wav2vec2-large-xlsr-53-japanese")
-        
-        # self.model = Wav2Vec2FeatureExtractor(feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
         self.model = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft", feature_size = 1, sampling_rate= 16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
-        # self.feature_extractor = wav2vec2.feature_extractor
-        # self.feature_projection = wav2vec2.feature_projection
-        # self.encoder = wav2vec2.encoder
-        # in_features = self.model.lm_head.in_features
-        # self.model.lm_head = nn.Linear(in_features=in_features, out_features=params.vocab_size)
-
 
 class WavLM(BaseFeaturesExtractor):
     """
