@@ -82,11 +82,24 @@ And push it to wandb as an artifact
 - [ ] Train on 10 minutes, 1 hour and 10 hours of data
 - [ ] Benchmark for different languages
 
-### Evaluation
+### language that we can done with annotation available
+Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
+(sv), Turkish (tr), Tatar (tt) and Mandarin (zh).
 
-- [ ] Evaluate the model on custom test set built at the step 1
+### Benchmark
 
-# Running unit tests
+dataset: Common Voice Corpus 6.1 : https://commonvoice.mozilla.org/fr/datasets 
+
+| Language | Model | PER validation | PER test | Training time of data | Run |
+|---|---|---|---|---|---|
+| Sweedish | Wav2Vec2 | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Sweedish | WavLM | | X | X | X |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Sweedish | Hubert | | X | X | X |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Italian | Wav2Vec2 | | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Italian | WavLM | | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Italian | Hubert | | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+
+### Running unit tests
 
 - [ ] Add an automatic push to the main branch if the tests are successful. Otherwise don't. This will allow us to merge with main as soon as it is up and running.
 - [ ] Add dataset and model tests, which take care of asserts on the datasizes etc. 
@@ -97,7 +110,3 @@ Refer to the directory ```tests``` and you can write your own testing function. 
 - [ ] Add a workflow to automatically build and push the docker. 
 - [ ] Add a workflow to run a training on AZURE using their gpus 
 
-
-# language that we can done with annotation available
-Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
-(sv), Turkish (tr), Tatar (tt) and Mandarin (zh).
