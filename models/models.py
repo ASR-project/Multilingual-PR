@@ -26,7 +26,7 @@ class Wav2Vec2(BaseModel):
     def __init__(self, params):
         super().__init__(params)
 
-        self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft")
+        self.model = Wav2Vec2ForCTC.from_pretrained(params.pretrained_name)
         in_features = self.model.lm_head.in_features
         self.model.lm_head = nn.Linear(in_features=in_features, out_features=self.params.vocab_size)
 
@@ -37,7 +37,7 @@ class WavLM(BaseModel):
 
     def __init__(self, params):
         super().__init__(params)
-        self.model = WavLMForCTC.from_pretrained("patrickvonplaten/wavlm-libri-clean-100h-base-plus")
+        self.model = WavLMForCTC.from_pretrained(params.pretrained_name)
         in_features = self.model.lm_head.in_features
         self.model.lm_head = nn.Linear(in_features=in_features, out_features=self.params.vocab_size)
 
@@ -48,6 +48,6 @@ class Hubert(BaseModel):
 
     def __init__(self, params):
         super().__init__(params)
-        self.model = HubertForCTC.from_pretrained("facebook/hubert-large-ls960-ft")
+        self.model = HubertForCTC.from_pretrained(params.pretrained_name)
         in_features = self.model.lm_head.in_features
         self.model.lm_head = nn.Linear(in_features=in_features, out_features=self.params.vocab_size)

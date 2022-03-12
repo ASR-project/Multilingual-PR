@@ -31,7 +31,7 @@ def main():
                     parameters.optim_param.optimizer,
                     parameters.network_param.network_name,
                     f"{'not'*(not parameters.network_param.freeze)} freezed",
-                    parameters.network_param.pretrained
+                    parameters.network_param.pretrained_name
                     ]
             )
         

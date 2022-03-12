@@ -58,7 +58,7 @@ class BaseDataModule(LightningDataModule):
                 ["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"]))
 
             setattr(self, name_dataset, getattr(self, name_dataset).cast_column(
-                "audio", Audio(sampling_rate=16_000)))
+                "audio", Audio(sampling_rate=16000)))
 
         self.sampling_rate = 16000
 
@@ -74,14 +74,17 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f"{split}_dataset"
 
         if not osp.exists(save_path) or self.config.recreate_dataset:
-            self.logger.info('Processing {split} dataset ...')
+            self.logger.info(f'Processing {split} dataset ...')
 
-            dataset = getattr(self, name_dataset)
-            setattr(self, name_dataset, dataset.map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, num_proc=self.config.num_proc))
-            setattr(self, name_dataset, dataset.map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
+            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
+                                                    num_proc=self.config.num_proc, 
+                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    )
+            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
                                                     batched=True, 
                                                     batch_size=batch_size, 
-                                                    num_proc=self.config.num_proc)
+                                                    num_proc=self.config.num_proc,
+                                                    load_from_cache_file=not self.config.recreate_dataset)
                                                     )
 
             self.logger.info(f"Saving {split} dataset ...")
@@ -100,22 +103,25 @@ class BaseDataModule(LightningDataModule):
         name_filter_path = f"{getattr(self, f'{split}_save_data_path')}_filter_{top_db}_{self.config.max_input_length_in_sec}"
 
         name_dataset = f'{split}_dataset'
-        dataset = getattr(self, name_dataset)
         
         if not osp.exists(name_filter_path) or self.config.recreate_dataset:
             self.logger.info(
-                f"Length {split} dataset before filter {len(dataset)}")
+                f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
             
-            setattr(self, name_dataset, dataset.map(
-                lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=self.config.num_proc))
-            setattr(self, name_dataset, dataset.filter(lambda x: len(
-                x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_proc))
+            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, 
+                                                    num_proc=self.config.num_proc,
+                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    )
+            setattr(self, name_dataset, getattr(self, name_dataset).filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, 
+                                                    num_proc=self.config.num_proc,
+                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    )
 
             self.logger.info(
-                f"Length {split} dataset after filter {len(dataset)}")
+                f"Length {split} dataset after filter {len(getattr(self, name_dataset))}")
 
             file = open(name_filter_path, "wb")
-            pickle.dump(dataset, file)
+            pickle.dump(getattr(self, name_dataset), file)
 
             self.logger.info(f"Saved to {name_filter_path}")
             
@@ -129,11 +135,11 @@ class BaseDataModule(LightningDataModule):
                                 "{split} dataset processed and filtered")
         else:
             file = open(name_filter_path, "rb")
-            dataset = pickle.load(file)
+            setattr(self, name_dataset, pickle.load(file))
             self.logger.info(
                 f"Loaded filtered {split} dataset : {name_filter_path}")
 
-        self.logger.info(f"Length {split} dataset : {len(dataset)}")
+        self.logger.info(f"Length {split} dataset : {len(getattr(self, name_dataset))}")
 
 
     def create_phonemes(self, split) -> None:

@@ -24,7 +24,7 @@ class Hparams:
     root_dir        : str          = os.getcwd()  # root_dir
 
     # basic params
-    seed_everything: Optional[int] = None  # seed for the whole run
+    seed_everything: Optional[int] = 4172  # seed for the whole run
     gpu         : int = 1  # number or gpu
     max_epochs  : int = 30  # maximum number of epochs
     weights_path: str = osp.join(os.getcwd(), "weights")
@@ -40,7 +40,7 @@ class Hparams:
     log_nb_audio   : int = 2
 
     # trainer params
-    val_check_interval: float = 0.5 # 1.0 (at the end of the epoch)
+    val_check_interval: float = 1.0 # 1.0 (at the end of the epoch)
     limit_train_batches: float = 1.0
     limit_val_batches: float = 1.0
     accumulate_grad_batches: int = 32 # 1 for no accumulation
@@ -52,8 +52,8 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "Hubert"     # HuBERT, Wav2vec, WavLM
-    pretrained                    : str           = ""
+    network_name                  : str           = "Wav2Vec2"     # Hubert, Wav2Vec2, WavLM
+    pretrained_name                    : Optional[str] = ""
 
     freeze                        : bool          = False
 
@@ -84,13 +84,13 @@ class DatasetParams:
 
     # Dataloader parameters
     num_workers             : int                     = 20         # number of workers for dataloaders
-    batch_size              : int                     = 1 
+    batch_size              : int                     = 2 
     
     # Dataset processing parameters
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    recreate_dataset        : bool                    = False
+    recreate_dataset        : bool                    = True
 
     # dataset artifact TODO
 
@@ -100,7 +100,7 @@ class OptimizerParams:
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
     # lr            : float = 3e-5     # learning rate,               default = 5e-4
-    lr            : float = 3e-3
+    lr            : float = 5e-4
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 
@@ -131,16 +131,17 @@ class Parameters:
         torch.manual_seed(self.hparams.seed_everything)
         pl.seed_everything(self.hparams.seed_everything)
 
-        if self.network_param.pretrained == "":
+        if self.network_param.pretrained_name == "":
             if self.network_param.network_name == "Wav2Vec2":
-                self.network_param.pretrained = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
+                # self.network_param.pretrained_name = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
+                self.network_param.pretrained_name = "facebook/wav2vec2-base-960h"
             elif self.network_param.network_name == "WavLM":
-                self.network_param.pretrained = "patrickvonplaten/wavlm-libri-clean-100h-base-plus"
+                self.network_param.pretrained_name = "patrickvonplaten/wavlm-libri-clean-100h-base-plus"
             elif self.network_param.network_name == "Hubert":
-                self.network_param.pretrained = "facebook/hubert-large-ls960-ft"
+                self.network_param.pretrained_name = "facebook/hubert-large-ls960-ft"
             else:
-                raise NotImplementedError("Only Wav2vec2, WavLM and Hubert are available !")
-        print(f"Pretrained model: {self.network_param.pretrained}")
+                raise NotImplementedError("Only Wav2Vec2, WavLM and Hubert are available !")
+        print(f"Pretrained model: {self.network_param.pretrained_name}")
 
     @classmethod
     def parse(cls):
