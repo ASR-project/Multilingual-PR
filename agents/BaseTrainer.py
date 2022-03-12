@@ -6,10 +6,8 @@ from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar)
 from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
 from utils.logger import init_logger
-import re
 
 from utils.dataset_utils import create_vocabulary, create_vocabulary2
-import os 
 
 class BaseTrainer:
     def __init__(self, config, run=None) -> None:
@@ -95,37 +93,11 @@ class BaseTrainer:
 
         trainer.logger = self.wb_run
 
-        chars_to_remove_regex = '[\,\?\.\!\-\;\:\"\“\%\‘\”\�\'\。]'
-
-        def prepare_batch(batch):
-            audio = batch["audio"]
-            # tokenize the raw audio
-            batch["audio"] = self.pl_model.processor([ad["array"] for ad in audio], sampling_rate=16000).input_values
-            return batch
-
         self.datamodule.load_data("train")
-
-        if not os.path.exists(self.datamodule.train_save_data_path) or self.datamodule.config.recreate_dataset:
-
-            self.logger.info('Processing train dataset ...')
-
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=self.datamodule.config.num_proc)
-            self.datamodule.train_dataset = self.datamodule.train_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
-            
-            self.logger.info('Saving train dataset ...')
-            self.datamodule._save_dataset("train")
+        self.datamodule.process_dataset("train", self.pl_model.processor)
 
         self.datamodule.load_data("val")
-
-        if not os.path.exists(self.datamodule.val_save_data_path) or self.datamodule.config.recreate_dataset:
-            
-            self.logger.info('Processing validation dataset ...')
-
-            self.datamodule.val_dataset = self.datamodule.val_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=self.datamodule.config.num_proc)
-            self.datamodule.val_dataset = self.datamodule.val_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
-            
-            self.logger.info('Saving validation dataset ...')
-            self.datamodule._save_dataset("val")
+        self.datamodule.process_dataset("val", self.pl_model.processor)
 
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
@@ -152,27 +124,9 @@ class BaseTrainer:
 
         trainer.logger = self.wb_run
 
-        chars_to_remove_regex = '[\,\?\.\!\-\;\:\"\“\%\‘\”\�\'\。]'
-
-        def prepare_batch(batch):
-            audio = batch["audio"]
-            # tokenize the raw audio
-            batch["audio"] = self.pl_model.processor([ad["array"] for ad in audio], sampling_rate=16000).input_values
-            return batch
-        
         self.datamodule.load_data("test")
+        self.datamodule.process_dataset("test", self.pl_model.processor)
 
-        if not os.path.exists(self.datamodule.test_save_data_path):
-
-            self.logger.info('Processing test dataset ...')
-
-            self.datamodule.test_dataset = self.datamodule.test_dataset.map(lambda x: {"sentence": re.sub(chars_to_remove_regex, '', x["sentence"]).lower()}, num_proc=self.datamodule.config.num_proc)
-            self.datamodule.test_dataset = self.datamodule.test_dataset.map(prepare_batch, batched=True, batch_size=512, num_proc=self.datamodule.config.num_proc)
-            
-            self.logger.info('Saving test dataset ...')
-            self.datamodule._save_dataset("test")
-
-        
         path_model = f"{self.config.wandb_entity}/{self.config.wandb_project}/{self.config.best_model_run}:top-1"
         best_model_path = get_artifact(path_model, type="model")
 

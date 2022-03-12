@@ -12,7 +12,8 @@ import numpy as np
 import wandb
 from phonemizer.backend import EspeakBackend
 from phonemizer.separator import Separator
-
+from utils.constant import CHARS_TO_REMOVE_REGEX
+import re
 
 class BaseDataModule(LightningDataModule):
     def __init__(self, dataset_param):
@@ -29,9 +30,13 @@ class BaseDataModule(LightningDataModule):
 
 
     def load_data(self, split) -> None:
+        '''
+            Function to load dataset
+        '''
+
         self.logger.info(f"Preparing the dataset in prepare_data: {split}")
 
-        setattr(self, f"{split}_save_data_path", f"assets/datasets/{split}_{self.config.dataset_name}-{self.config.subset}")
+        setattr(self, f"{split}_save_data_path", osp.join("assets", "datasets", f"{split}_{self.config.dataset_name}-{self.config.subset}"))
 
         save_path = getattr(self, f"{split}_save_data_path")
         name_dataset = f"{split}_dataset"
@@ -60,34 +65,35 @@ class BaseDataModule(LightningDataModule):
         self.logger.info(f"Done prepare_data {split}")
 
 
-    def _save_dataset(self, split):
+    def process_dataset(self, split, processor, batch_size=512):
+        '''
+            Function to process data of a dataset (remove indesirable characters and process audio with processor)
+        '''
+
         save_path = getattr(self, f"{split}_save_data_path")
+        name_dataset = f"{split}_dataset"
 
-        file = open(save_path, "wb")
-        pickle.dump(getattr(self, f"{split}_dataset"), file)
+        if not osp.exists(save_path) or self.config.recreate_dataset:
+            self.logger.info('Processing {split} dataset ...')
 
-        self.logger.info(f"Saved to {save_path}")
+            dataset = getattr(self, name_dataset)
+            setattr(self, name_dataset, dataset.map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, num_proc=self.config.num_proc))
+            setattr(self, name_dataset, dataset.map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
+                                                    batched=True, 
+                                                    batch_size=batch_size, 
+                                                    num_proc=4)
+                                                    )
 
-        self.push_artefact(save_path, {
-            "dataset_name": self.config.dataset_name,
-            "subset": self.config.subset,
-            "split": split,
-            "sampling_rate": self.sampling_rate},
-            f"{split} dataset processed")
+            self.logger.info(f"Saving {split} dataset ...")
+            self._save_dataset(split)
+        else:
+            self.logger.info(f"{split} dataset already exists no processing necessary ...")
 
 
-    def push_artefact(self, path_artifact, metadata, description):
-        artifact = wandb.Artifact(
-            name=osp.basename(path_artifact),
-            type="dataset",
-            metadata=metadata,
-            description=description
-        )
-        artifact.add_file(path_artifact)
-        wandb.log_artifact(artifact, aliases=["latest"])
-
-    
     def filtered_data(self, split, top_db=15) -> None:
+        '''
+            Function to filter dataset (remove silence and remove long audio )
+        '''
 
         self.logger.info(f"Filtering {split} dataset ...")
 
@@ -129,7 +135,12 @@ class BaseDataModule(LightningDataModule):
 
         self.logger.info(f"Length {split} dataset : {len(dataset)}")
 
+
     def create_phonemes(self, split) -> None:
+        '''
+            Function to phonemize all sentence of the dataset
+        '''
+
         self.logger.info(f"Creating {split} phonemes ...")
         backend = EspeakBackend(self.config.language)
         separator = Separator(phone=" ", word="| ", syllable="")
@@ -138,6 +149,33 @@ class BaseDataModule(LightningDataModule):
 
         setattr(self, name_dataset, getattr(self, name_dataset).add_column('phonemes', backend.phonemize(
             getattr(self, name_dataset)['sentence'], njobs=self.config.num_proc, separator=separator)))
+
+
+    def _save_dataset(self, split):
+        save_path = getattr(self, f"{split}_save_data_path")
+
+        file = open(save_path, "wb")
+        pickle.dump(getattr(self, f"{split}_dataset"), file)
+
+        self.logger.info(f"Saved to {save_path}")
+
+        self.push_artefact(save_path, {
+            "dataset_name": self.config.dataset_name,
+            "subset": self.config.subset,
+            "split": split,
+            "sampling_rate": self.sampling_rate},
+            f"{split} dataset processed")
+
+
+    def push_artefact(self, path_artifact, metadata, description):
+        artifact = wandb.Artifact(
+            name=osp.basename(path_artifact),
+            type="dataset",
+            metadata=metadata,
+            description=description
+        )
+        artifact.add_file(path_artifact)
+        wandb.log_artifact(artifact, aliases=["latest"])
 
 
     def setup(self, stage=None):
