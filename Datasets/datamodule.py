@@ -81,7 +81,7 @@ class BaseDataModule(LightningDataModule):
             setattr(self, name_dataset, dataset.map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
                                                     batched=True, 
                                                     batch_size=batch_size, 
-                                                    num_proc=4)
+                                                    num_proc=self.config.num_proc)
                                                     )
 
             self.logger.info(f"Saving {split} dataset ...")
@@ -107,9 +107,9 @@ class BaseDataModule(LightningDataModule):
                 f"Length {split} dataset before filter {len(dataset)}")
             
             setattr(self, name_dataset, dataset.map(
-                lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=4))
+                lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=self.config.num_proc))
             setattr(self, name_dataset, dataset.filter(lambda x: len(
-                x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=4))
+                x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_proc))
 
             self.logger.info(
                 f"Length {split} dataset after filter {len(dataset)}")
