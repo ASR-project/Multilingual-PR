@@ -70,7 +70,7 @@ class BaseModule(LightningModule):
         loss, logits, preds, targets = self._get_outputs(batch, batch_idx)
 
         # Log loss
-        self.log("train/loss", loss)
+        self.log("train/loss", loss, batch_size=len(preds))
         
         return {"loss": loss, "logits": logits.detach(), "preds": preds, "targets": targets}
 

@@ -61,15 +61,14 @@ class BaseTrainer:
 
     def run(self):
         if self.config.tune_lr:
-            trainer = pl.Trainer(
+            tune_lr_trainer = pl.Trainer(
                 logger=self.wb_run,
                 gpus=self.config.gpu,
                 auto_lr_find=True,
                 accelerator="auto",
                 default_root_dir=self.wb_run.save_dir,
             )
-            trainer.logger = self.wb_run
-            trainer.tune(self.pl_model, datamodule=self.datamodule)
+            tune_lr_trainer.logger = self.wb_run
 
         if not self.config.debug:
             torch.autograd.set_detect_anomaly(False)
@@ -99,6 +98,10 @@ class BaseTrainer:
         self.datamodule.load_data("val")
         self.datamodule.process_dataset("val", self.pl_model.processor)
 
+        
+        if self.config.tune_lr:
+            tune_lr_trainer.tune(self.pl_model, datamodule=self.datamodule)   
+            
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
     def predict(self):

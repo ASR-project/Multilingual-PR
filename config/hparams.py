@@ -52,7 +52,7 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "Wav2Vec2"     # HuBERT, Wav2vec, WavLM
+    network_name                  : str           = "Hubert"     # HuBERT, Wav2vec, WavLM
     pretrained                    : str           = ""
 
     freeze                        : bool          = False
@@ -84,13 +84,13 @@ class DatasetParams:
 
     # Dataloader parameters
     num_workers             : int                     = 20         # number of workers for dataloaders
-    batch_size              : int                     = 2 
+    batch_size              : int                     = 1 
     
     # Dataset processing parameters
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    recreate_dataset        : bool                    = True
+    recreate_dataset        : bool                    = False
 
     # dataset artifact TODO
 
@@ -100,7 +100,7 @@ class OptimizerParams:
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
     # lr            : float = 3e-5     # learning rate,               default = 5e-4
-    lr            : float = 5e-4
+    lr            : float = 3e-3
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 
