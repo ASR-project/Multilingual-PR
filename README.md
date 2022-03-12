@@ -11,24 +11,29 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 ## Project structure
 
 ```
-├── assets                      # Put database here
-├── datamodules
+├── agents
+|   ├── BaseTrainer.py       
+|   
+├── assets                      # database and vocab phonemes are put here
+|
+├── config
+|   ├── hparams.py              # configuration file
+|
+├── Datasets
 |   |
-|   ├── commonvoice_datamodule.py     # datamodules PyTorch lightning for CommonVoice dataset
-|         
-├── datasets
-|   ├── commonvoice.py                # CommonVoice dataset HF
+|   ├── datamodule.py           # datamodules PyTorch lightning for CommonVoice dataset
 |          
-├── lightningmodules
-|   ├── classification.py        # lightning module for image classification (multi-label)
+├── models
+|   ├── BaseModule.py           #  lightning module 
+|   ├── models.py               # Wav2vec2 WavLM and Hubert using Hugging Face library
 | 
-├── utils                        # utils functions
+├── utils                       # utils functions
+|   ├── agent_utils.py
 |   ├── callbacks.py
-|   ├── utils_functions.py
-|
-├── weights                     # put models weights here
-|
-├── analyse_score_latent_space.ipynb  # notebook to analyse scores predicted
+|   ├── dataset_utils.py
+|   ├── logger.py
+|   ├── metrics.py              
+|   ├── per.py                  # torch metrics implementation of the phoneme error rate
 |
 ├── hparams.py                   # configuration file
 |
@@ -76,17 +81,33 @@ And push it to wandb as an artifact
 
 ### Modeling part
 
-- [ ] Implement CTC algorithm using PyTorch
-- [ ] Metric : implement the Phoneme Error Rate
+- [X] Implement CTC algorithm using PyTorch
+- [X] Metric : implement the Phoneme Error Rate
 - [ ] Train the model on the built dataset and using pretrained features of different SSL method
 - [ ] Train on 10 minutes, 1 hour and 10 hours of data
 - [ ] Benchmark for different languages
 
-### Evaluation
+### language that we can done with annotation available
+Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
+(sv), Turkish (tr), Tatar (tt) and Mandarin (zh).
 
-- [ ] Evaluate the model on custom test set built at the step 1
+### Benchmark
 
-# Running unit tests
+dataset: Common Voice Corpus 6.1 : https://commonvoice.mozilla.org/fr/datasets 
+
+| Language | Model | PER validation | PER test | Training time of data | Run |
+|---|---|---|---|---|---|
+| Sweedish | Wav2Vec2 | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Sweedish | WavLM | X | X | X |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Sweedish | Hubert | X | X | X |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Italian | Wav2Vec2 | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Italian | WavLM | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| Italian | Hubert | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| ... | Wav2Vec2 | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| ... | WavLM | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+| ... | Hubert | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
+
+### Running unit tests
 
 - [ ] Add an automatic push to the main branch if the tests are successful. Otherwise don't. This will allow us to merge with main as soon as it is up and running.
 - [ ] Add dataset and model tests, which take care of asserts on the datasizes etc. 
@@ -97,7 +118,3 @@ Refer to the directory ```tests``` and you can write your own testing function. 
 - [ ] Add a workflow to automatically build and push the docker. 
 - [ ] Add a workflow to run a training on AZURE using their gpus 
 
-
-# language that we can done with annotation available
-Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
-(sv), Turkish (tr), Tatar (tt) and Mandarin (zh).
