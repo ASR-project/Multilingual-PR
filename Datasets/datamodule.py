@@ -34,7 +34,7 @@ class BaseDataModule(LightningDataModule):
             Function to load dataset
         '''
 
-        self.logger.info(f"Preparing the dataset in prepare_data: {split}")
+        self.logger.info(f"Preparing the dataset in  prepare_data: {split}")
 
         setattr(self, f"{split}_save_data_path", osp.join("assets", "datasets", f"{split}_{self.config.dataset_name}-{self.config.subset}"))
 
@@ -107,9 +107,9 @@ class BaseDataModule(LightningDataModule):
                 f"Length {split} dataset before filter {len(dataset)}")
             
             setattr(self, name_dataset, dataset.map(
-                lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=self.config.num_proc))
+                lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, num_proc=4))
             setattr(self, name_dataset, dataset.filter(lambda x: len(
-                x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=self.config.num_proc))
+                x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, num_proc=4))
 
             self.logger.info(
                 f"Length {split} dataset after filter {len(dataset)}")
