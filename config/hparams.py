@@ -133,8 +133,8 @@ class Parameters:
 
         if self.network_param.pretrained_name == "":
             if self.network_param.network_name == "Wav2Vec2":
-                # self.network_param.pretrained_name = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
-                self.network_param.pretrained_name = "facebook/wav2vec2-base-960h"
+                self.network_param.pretrained_name = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
+                # self.network_param.pretrained_name = "facebook/wav2vec2-base-960h"
             elif self.network_param.network_name == "WavLM":
                 self.network_param.pretrained_name = "patrickvonplaten/wavlm-libri-clean-100h-base-plus"
             elif self.network_param.network_name == "Hubert":
