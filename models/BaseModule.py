@@ -59,7 +59,7 @@ class BaseModule(LightningModule):
         logger.info(f"Model: {network_param.network_name}")
 
         if network_param.freeze:
-            self.model.freeze_feature_extractor()
+            self.model.model.freeze_feature_extractor() #@TODO should get rid of our model wrapper
         
         logger.info(f"Feature extactor:{' not'*(not network_param.freeze)} freezed")
 

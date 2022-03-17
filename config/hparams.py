@@ -55,7 +55,7 @@ class NetworkParams:
     network_name                  : str           = "Wav2Vec2"     # Hubert, Wav2Vec2, WavLM
     pretrained_name                    : Optional[str] = ""
 
-    freeze                        : bool          = False
+    freeze                        : bool          = True
 
     # Phoneme Tokenizer
     eos_token                     : str           = "</s>"
@@ -90,7 +90,7 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    recreate_dataset        : bool                    = True
+    recreate_dataset        : bool                    = False
 
     # dataset artifact TODO
 
