@@ -78,13 +78,13 @@ class BaseDataModule(LightningDataModule):
 
             setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
                                                     num_proc=self.config.num_proc, 
-                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    load_from_cache_file=False)
                                                     )
             setattr(self, name_dataset, getattr(self, name_dataset).map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
                                                     batched=True, 
                                                     batch_size=batch_size, 
                                                     num_proc=self.config.num_proc,
-                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    load_from_cache_file=False)
                                                     )
 
             self.logger.info(f"Saving {split} dataset ...")
@@ -110,11 +110,11 @@ class BaseDataModule(LightningDataModule):
             
             setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, 
                                                     num_proc=self.config.num_proc,
-                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    load_from_cache_file=False)
                                                     )
             setattr(self, name_dataset, getattr(self, name_dataset).filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, 
                                                     num_proc=self.config.num_proc,
-                                                    load_from_cache_file=not self.config.recreate_dataset)
+                                                    load_from_cache_file=False)
                                                     )
 
             self.logger.info(
