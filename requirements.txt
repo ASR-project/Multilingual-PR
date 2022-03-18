@@ -11,3 +11,4 @@ phonemizer
 rich
 librosa
 wget
+espeak
