@@ -43,7 +43,7 @@ class Hparams:
     val_check_interval: float = 1.0 # 1.0 (at the end of the epoch)
     limit_train_batches: float = 1.0
     limit_val_batches: float = 1.0
-    accumulate_grad_batches: int = 32 # 1 for no accumulation
+    accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # testing params
     best_model_run: str = "Wav2Vec2_it"
@@ -52,7 +52,7 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "Wav2Vec2"     # Hubert, Wav2Vec2, WavLM
+    network_name                  : str           = "WavLM"     # Hubert, Wav2Vec2, WavLM
     pretrained_name                    : Optional[str] = ""
 
     freeze                        : bool          = True
@@ -100,7 +100,7 @@ class OptimizerParams:
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
     # lr            : float = 3e-5     # learning rate,               default = 5e-4
-    lr            : float = 5e-4
+    lr            : float = 3e-5
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 
