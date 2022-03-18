@@ -11,4 +11,4 @@ phonemizer
 rich
 librosa
 wget
-espeak
+py-espeak-ng
