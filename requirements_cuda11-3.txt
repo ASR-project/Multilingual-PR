@@ -15,4 +15,4 @@ soundfile
 torchaudio
 librosa
 wget
-zipfile
+tarfile
