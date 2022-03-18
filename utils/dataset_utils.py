@@ -65,7 +65,7 @@ def create_vocabulary2(language, path, eos_token, bos_token, unk_token, pad_toke
         wget.download(url, assets_path)
 
         tar = tarfile.open(osp.join(assets_path, "common_voices_splits.tar.gz"), "r:gz")
-        tar.extractall(path)
+        tar.extractall(path.split('/')[:-1])
         tar.close()
 
     json_file = osp.join(path, language, "phonesMatches_reduced.json")
