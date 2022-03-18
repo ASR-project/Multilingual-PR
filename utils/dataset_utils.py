@@ -1,11 +1,15 @@
-import torch
-from torch.nn.utils.rnn import pad_sequence
+import json
 import os
 import os.path as osp
-import json
+import tarfile
 
 import pandas as pd
+import torch
+import wget
+from torch.nn.utils.rnn import pad_sequence
+
 from utils.logger import init_logger
+
 
 def coll_fn(batch):
     
@@ -54,6 +58,15 @@ def create_vocabulary(ISO6393, path_csv, eos_token, bos_token, unk_token, pad_to
 def create_vocabulary2(language, path, eos_token, bos_token, unk_token, pad_token, word_delimiter_token):
 
     logger = init_logger("create_vocabulary", "INFO")
+
+    if not osp.exists(path):
+        assets_path = '/'.join(path.split('/')[:-1])
+        url="https://dl.fbaipublicfiles.com/cpc_audio/common_voices_splits.tar.gz"
+        wget.download(url, assets_path)
+
+        tar = tarfile.open(osp.join(assets_path, "common_voices_splits.tar.gz"), "r:gz")
+        tar.extractall(path)
+        tar.close()
 
     json_file = osp.join(path, language, "phonesMatches_reduced.json")
 

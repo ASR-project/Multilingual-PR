@@ -10,3 +10,4 @@ torchaudio
 phonemizer
 rich
 librosa
+tarfile
