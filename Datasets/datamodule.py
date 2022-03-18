@@ -6,7 +6,7 @@ from utils.logger import init_logger
 from datasets import Audio
 from librosa.effects import trim
 import pickle
-import os
+import os, errno
 import os.path as osp
 import numpy as np
 import wandb
@@ -159,7 +159,15 @@ class BaseDataModule(LightningDataModule):
 
     def _save_dataset(self, split):
         save_path = getattr(self, f"{split}_save_data_path")
-
+        dir_path = os.path.dirname(save_path)
+        
+        try:
+            os.makedirs(dir_path)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+        
+        
         file = open(save_path, "wb")
         pickle.dump(getattr(self, f"{split}_dataset"), file)
 
