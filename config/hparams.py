@@ -43,7 +43,6 @@ class Hparams:
     val_check_interval: float = 1.0 # 1.0 (at the end of the epoch)
     limit_train_batches: float = 1.0
     limit_val_batches: float = 1.0
-    accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # testing params
     best_model_run: str = "Wav2Vec2_it"
@@ -90,8 +89,6 @@ class DatasetParams:
 
     recreate_dataset        : bool                    = False
 
-    # dataset artifact TODO
-
 @dataclass
 class OptimizerParams: 
     """Optimization parameters"""
@@ -101,6 +98,8 @@ class OptimizerParams:
     lr            : float = 3e-5
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
+
+    accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # Scheduler parameters
     scheduler     : bool  = True
@@ -142,6 +141,7 @@ class Parameters:
         print(f"Pretrained model: {self.network_param.pretrained_name}")
 
         self.data_param.wandb_project = self.hparams.wandb_project
+        self.hparams.accumulate_grad_batches = self.optim_param.accumulate_grad_batches
 
     @classmethod
     def parse(cls):
