@@ -1,4 +1,3 @@
-import os
 import os.path as osp
 import pickle
 import re
@@ -48,42 +47,8 @@ class BaseDataModule(LightningDataModule):
 
         ag_u.create_directory(save_path)
 
-        if osp.exists(name_file_path) and not self.config.recreate_dataset:
-            file = open(name_file_path, "rb")
-            setattr(self, name_dataset, pickle.load(file))
-        else:
-            setattr(self, name_dataset, load_dataset(self.config.dataset_name,
-                                                    self.config.subset,
-                                                    split=split if split!="val" else "validation",
-                                                    use_auth_token=self.config.use_auth_token,
-                                                    download_mode=self.config.download_mode,
-                                                    cache_dir=self.config.cache_dir
-                                                    )
-                    )
-
-            setattr(self, name_dataset, getattr(self, name_dataset).remove_columns(
-                ["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"]))
-
-            setattr(self, name_dataset, getattr(self, name_dataset).cast_column(
-                "audio", Audio(sampling_rate=16000)))
-
-        self.sampling_rate = 16000
-
-        self.logger.info(f"Done prepare_data {split}")
-
-
-    def process_dataset(self, split, processor, batch_size=512):
-        '''
-            Function to process data of a dataset (remove indesirable characters and process audio with processor)
-        '''
-
-        save_path = getattr(self, f"{split}_save_data_path")
-        name_dataset = f"{split}_dataset"
-
-        if not osp.exists(save_path) or self.config.recreate_dataset:
+        if not osp.exists(name_file_path) or self.config.recreate_dataset:
             try:
-                name_file = save_path.split('/')[-1]
-
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
 
@@ -96,7 +61,65 @@ class BaseDataModule(LightningDataModule):
                 file = open(osp.join(save_path, name_file), "rb")
                 setattr(self, name_dataset, pickle.load(file))
                 self.logger.info(
-                    f"Loaded filtered {split} dataset : {osp.join(save_path, name_file)}")
+                    f"Loaded {split} dataset : {osp.join(save_path, name_file)}")
+            except:
+                setattr(self, name_dataset, load_dataset(self.config.dataset_name,
+                                                        self.config.subset,
+                                                        split=split if split!="val" else "validation",
+                                                        use_auth_token=self.config.use_auth_token,
+                                                        download_mode=self.config.download_mode,
+                                                        cache_dir=self.config.cache_dir
+                                                        )
+                        )
+
+                setattr(self, name_dataset, getattr(self, name_dataset).remove_columns(
+                    ["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"]))
+
+                setattr(self, name_dataset, getattr(self, name_dataset).cast_column(
+                    "audio", Audio(sampling_rate=16000)))
+
+                metadata_artifact = {
+                                    "dataset_name": self.config.dataset_name,
+                                    "subset": self.config.subset,
+                                    "split": split,
+                                    "sampling_rate": 16000,
+                                    }
+
+                self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset")
+        else:
+            file = open(name_file_path, "rb")
+            setattr(self, name_dataset, pickle.load(file))
+
+        self.sampling_rate = 16000
+
+        self.logger.info(f"Done prepare_data {split}")
+
+
+    def process_dataset(self, split, processor, batch_size=512):
+        '''
+            Function to process data of a dataset (remove indesirable characters and process audio with processor)
+        '''
+
+        save_path = getattr(self, f"{split}_save_data_path")
+        name_file = save_path.split('/')[-1] + "_process"
+        name_file_path = osp.join(save_path, name_file)
+        name_dataset = f"{split}_dataset"
+
+        if not osp.exists(name_file_path) or self.config.recreate_dataset:
+            try:
+                path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
+                self.logger.info(f"Try loading {path} in artifacts ...")
+
+                file = ag_u.get_artifact(path, type="dataset")
+                
+                shutil.copy2(file, save_path)
+
+                self.logger.info(f"Load {path} in artifacts OK")
+                
+                file = open(name_file_path, "rb")
+                setattr(self, name_dataset, pickle.load(file))
+                self.logger.info(
+                    f"Loaded processed {split} dataset : {name_file_path}")
             except:
                 self.logger.info(f'Processing {split} dataset ...')
 
@@ -112,7 +135,15 @@ class BaseDataModule(LightningDataModule):
                                                         )
 
                 self.logger.info(f"Saving {split} dataset ...")
-                self._save_dataset(split)
+
+                metadata_artifact = {
+                                    "dataset_name": self.config.dataset_name,
+                                    "subset": self.config.subset,
+                                    "split": split,
+                                    "sampling_rate": self.sampling_rate
+                                    }
+
+                self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed")
         else:
             self.logger.info(f"{split} dataset already exists no processing necessary ...")
 
@@ -124,13 +155,12 @@ class BaseDataModule(LightningDataModule):
 
         self.logger.info(f"Filtering {split} dataset ...")
 
-        name_folder_path = getattr(self, f'{split}_save_data_path')
-        name_file = f"{getattr(self, f'{split}_save_data_path').split('/')[-1]}_filter_{top_db}_{self.config.max_input_length_in_sec}"
-        name_filter_path = osp.join(getattr(self, f'{split}_save_data_path'), name_file)
-
+        save_path = getattr(self, f"{split}_save_data_path")
+        name_file = f"{save_path.split('/')[-1]}_filter_{top_db}_{self.config.max_input_length_in_sec}"
+        name_file_path = osp.join(save_path, name_file)
         name_dataset = f'{split}_dataset'
         
-        if not osp.exists(name_filter_path) or self.config.recreate_dataset:
+        if not osp.exists(name_file_path) or self.config.recreate_dataset:
             try:
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
@@ -139,10 +169,10 @@ class BaseDataModule(LightningDataModule):
 
                 shutil.copy2(file, getattr(self, f'{split}_save_data_path'))
 
-                file = open(name_filter_path, "rb")
+                file = open(name_file_path, "rb")
                 setattr(self, name_dataset, pickle.load(file))
                 self.logger.info(
-                    f"Loaded filtered {split} dataset : {name_filter_path}")
+                    f"Loaded filtered {split} dataset : {name_file_path}")
             except:
                 self.logger.info(
                     f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
@@ -159,24 +189,22 @@ class BaseDataModule(LightningDataModule):
                 self.logger.info(
                     f"Length {split} dataset after filter {len(getattr(self, name_dataset))}")
 
-                file = open(name_filter_path, "wb")
-                pickle.dump(getattr(self, name_dataset), file)
-
-                self.logger.info(f"Saved to {name_filter_path}")
-                
-                self.push_artefact(name_filter_path, {
+                metadata_artifact = {
                                     "dataset_name": self.config.dataset_name,
                                     "subset": self.config.subset,
                                     "split": split,
                                     "sampling_rate": self.sampling_rate,
                                     "top_db": top_db,
-                                    "max_input_length_in_sec": self.config.max_input_length_in_sec},
-                                    "{split} dataset processed and filtered")
+                                    "max_input_length_in_sec": self.config.max_input_length_in_sec
+                                    }
+
+                self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed and filtered")
+
         else:
-            file = open(name_filter_path, "rb")
+            file = open(name_file_path, "rb")
             setattr(self, name_dataset, pickle.load(file))
             self.logger.info(
-                f"Loaded filtered {split} dataset : {name_filter_path}")
+                f"Loaded filtered {split} dataset : {name_file_path}")
 
         self.logger.info(f"Length {split} dataset : {len(getattr(self, name_dataset))}")
 
@@ -196,21 +224,18 @@ class BaseDataModule(LightningDataModule):
             getattr(self, name_dataset)['sentence'], njobs=self.config.num_proc, separator=separator)))
 
 
-    def _save_dataset(self, split):
-        save_path = getattr(self, f"{split}_save_data_path")
-        save_path = osp.join(save_path, save_path.split('/')[-1])
+    def _save_dataset(self, split, name_file_path, metadata_artifact, description_artifact):
 
-        file = open(save_path, "wb")
+        file = open(name_file_path, "wb")
         pickle.dump(getattr(self, f"{split}_dataset"), file)
 
-        self.logger.info(f"Saved to {save_path}")
+        self.logger.info(f"Saved to {name_file_path}")
 
-        self.push_artefact(save_path, {
-            "dataset_name": self.config.dataset_name,
-            "subset": self.config.subset,
-            "split": split,
-            "sampling_rate": self.sampling_rate},
-            f"{split} dataset processed")
+        self.push_artefact(
+            name_file_path, 
+            metadata_artifact,
+            description_artifact
+            )
 
 
     def push_artefact(self, path_artifact, metadata, description):
