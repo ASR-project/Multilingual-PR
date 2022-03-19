@@ -150,6 +150,12 @@ class BaseDataModule(LightningDataModule):
                 self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed")
         else:
             self.logger.info(f"{split} dataset already exists no processing necessary ...")
+            
+            file = open(name_file_path, "rb")
+            setattr(self, name_dataset, pickle.load(file))
+            self.logger.info(
+                f"Loaded processed {split} dataset : {name_file_path}")
+
 
 
     def filtered_data(self, split, top_db=15) -> None:
