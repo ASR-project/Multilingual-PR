@@ -155,7 +155,10 @@ class BaseTrainer:
         #     data_param.keywords_artifact, type="dataset")
 
     def get_callbacks(self):
-        callbacks = [RichProgressBar(), LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
+        callbacks = [LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
+
+        if self.config.accumulate_grad_batches: callbacks += [RichProgressBar()]
+
         monitor = "val/per"
         mode = "min"
         wandb.define_metric(monitor, summary=mode)
