@@ -47,8 +47,8 @@ class BaseDataModule(LightningDataModule):
 
         ag_u.create_directory(save_path)
 
-        if not osp.exists(name_file_path) or self.config.recreate_dataset:
-            if not self.config.recreate_dataset:
+        if not osp.exists(name_file_path) or self.config.create_dataset:
+            if not self.config.create_dataset:
             # try
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
@@ -107,8 +107,8 @@ class BaseDataModule(LightningDataModule):
         name_file_path = osp.join(save_path, name_file)
         name_dataset = f"{split}_dataset"
 
-        if not osp.exists(name_file_path) or self.config.recreate_dataset:
-            if not self.config.recreate_dataset:
+        if not osp.exists(name_file_path) or self.config.create_dataset:
+            if not self.config.create_dataset:
             # try
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
@@ -164,8 +164,8 @@ class BaseDataModule(LightningDataModule):
         name_file_path = osp.join(save_path, name_file)
         name_dataset = f'{split}_dataset'
         
-        if not osp.exists(name_file_path) or self.config.recreate_dataset:
-            if not self.config.recreate_dataset:
+        if not osp.exists(name_file_path) or self.config.create_dataset:
+            if not self.config.create_dataset:
             # try
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")

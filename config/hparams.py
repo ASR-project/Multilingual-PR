@@ -87,7 +87,7 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    recreate_dataset        : bool                    = True # keep at true if not in local
+    create_dataset        : bool                    = True # True the first time that you launch (in local) Then False
 
 @dataclass
 class OptimizerParams: 
