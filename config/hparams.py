@@ -43,6 +43,7 @@ class Hparams:
     val_check_interval: float = 1.0 # 1.0 (at the end of the epoch)
     limit_train_batches: float = 1.0
     limit_val_batches: float = 1.0
+    enable_progress_bar: bool = True
 
     # testing params
     best_model_run: str = "Wav2Vec2_it"
