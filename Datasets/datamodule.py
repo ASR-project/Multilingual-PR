@@ -1,19 +1,22 @@
-from datasets import load_dataset
-from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader
-from utils.dataset_utils import coll_fn
-from utils.logger import init_logger
-from datasets import Audio
-from librosa.effects import trim
-import pickle
-import os, errno
+import os
 import os.path as osp
+import pickle
+import re
+import shutil
+
 import numpy as np
+import utils.agent_utils as ag_u
 import wandb
+from datasets import Audio, load_dataset
+from librosa.effects import trim
 from phonemizer.backend import EspeakBackend
 from phonemizer.separator import Separator
+from pytorch_lightning import LightningDataModule
+from torch.utils.data import DataLoader
 from utils.constant import CHARS_TO_REMOVE_REGEX
-import re
+from utils.dataset_utils import coll_fn
+from utils.logger import init_logger
+
 
 class BaseDataModule(LightningDataModule):
     def __init__(self, dataset_param):
@@ -39,10 +42,14 @@ class BaseDataModule(LightningDataModule):
         setattr(self, f"{split}_save_data_path", osp.join("assets", "datasets", f"{split}_{self.config.dataset_name}-{self.config.subset}"))
 
         save_path = getattr(self, f"{split}_save_data_path")
+        name_file = getattr(self, f'{split}_save_data_path').split('/')[-1]
+        name_file_path = osp.join(save_path, name_file)
         name_dataset = f"{split}_dataset"
 
-        if osp.exists(save_path) and not self.config.recreate_dataset:
-            file = open(save_path, "rb")
+        ag_u.create_directory(save_path)
+
+        if osp.exists(name_file_path) and not self.config.recreate_dataset:
+            file = open(name_file_path, "rb")
             setattr(self, name_dataset, pickle.load(file))
         else:
             setattr(self, name_dataset, load_dataset(self.config.dataset_name,
@@ -74,21 +81,38 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f"{split}_dataset"
 
         if not osp.exists(save_path) or self.config.recreate_dataset:
-            self.logger.info(f'Processing {split} dataset ...')
+            try:
+                name_file = save_path.split('/')[-1]
 
-            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
-                                                    num_proc=self.config.num_proc, 
-                                                    load_from_cache_file=False)
-                                                    )
-            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
-                                                    batched=True, 
-                                                    batch_size=batch_size, 
-                                                    num_proc=self.config.num_proc,
-                                                    load_from_cache_file=False)
-                                                    )
+                path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
+                self.logger.info(f"Try loading {path} in artifacts ...")
 
-            self.logger.info(f"Saving {split} dataset ...")
-            self._save_dataset(split)
+                file = ag_u.get_artifact(path, type="dataset")
+                
+                shutil.copy2(file, save_path)
+
+                self.logger.info(f"Load {path} in artifacts OK")
+                
+                file = open(osp.join(save_path, name_file), "rb")
+                setattr(self, name_dataset, pickle.load(file))
+                self.logger.info(
+                    f"Loaded filtered {split} dataset : {osp.join(save_path, name_file)}")
+            except:
+                self.logger.info(f'Processing {split} dataset ...')
+
+                setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
+                                                        num_proc=self.config.num_proc, 
+                                                        load_from_cache_file=False)
+                                                        )
+                setattr(self, name_dataset, getattr(self, name_dataset).map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
+                                                        batched=True, 
+                                                        batch_size=batch_size, 
+                                                        num_proc=self.config.num_proc,
+                                                        load_from_cache_file=False)
+                                                        )
+
+                self.logger.info(f"Saving {split} dataset ...")
+                self._save_dataset(split)
         else:
             self.logger.info(f"{split} dataset already exists no processing necessary ...")
 
@@ -100,39 +124,54 @@ class BaseDataModule(LightningDataModule):
 
         self.logger.info(f"Filtering {split} dataset ...")
 
-        name_filter_path = f"{getattr(self, f'{split}_save_data_path')}_filter_{top_db}_{self.config.max_input_length_in_sec}"
+        name_folder_path = getattr(self, f'{split}_save_data_path')
+        name_file = f"{getattr(self, f'{split}_save_data_path').split('/')[-1]}_filter_{top_db}_{self.config.max_input_length_in_sec}"
+        name_filter_path = osp.join(getattr(self, f'{split}_save_data_path'), name_file)
 
         name_dataset = f'{split}_dataset'
         
         if not osp.exists(name_filter_path) or self.config.recreate_dataset:
-            self.logger.info(
-                f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
-            
-            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, 
-                                                    num_proc=self.config.num_proc,
-                                                    load_from_cache_file=False)
-                                                    )
-            setattr(self, name_dataset, getattr(self, name_dataset).filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, 
-                                                    num_proc=self.config.num_proc,
-                                                    load_from_cache_file=False)
-                                                    )
+            try:
+                path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
+                self.logger.info(f"Try loading {path} in artifacts ...")
 
-            self.logger.info(
-                f"Length {split} dataset after filter {len(getattr(self, name_dataset))}")
+                file = ag_u.get_artifact(path, type="dataset")
 
-            file = open(name_filter_path, "wb")
-            pickle.dump(getattr(self, name_dataset), file)
+                shutil.copy2(file, getattr(self, f'{split}_save_data_path'))
 
-            self.logger.info(f"Saved to {name_filter_path}")
-            
-            self.push_artefact(name_filter_path, {
-                                "dataset_name": self.config.dataset_name,
-                                "subset": self.config.subset,
-                                "split": split,
-                                "sampling_rate": self.sampling_rate,
-                                "top_db": top_db,
-                                "max_input_length_in_sec": self.config.max_input_length_in_sec},
-                                "{split} dataset processed and filtered")
+                file = open(name_filter_path, "rb")
+                setattr(self, name_dataset, pickle.load(file))
+                self.logger.info(
+                    f"Loaded filtered {split} dataset : {name_filter_path}")
+            except:
+                self.logger.info(
+                    f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
+                
+                setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, 
+                                                        num_proc=self.config.num_proc,
+                                                        load_from_cache_file=False)
+                                                        )
+                setattr(self, name_dataset, getattr(self, name_dataset).filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, 
+                                                        num_proc=self.config.num_proc,
+                                                        load_from_cache_file=False)
+                                                        )
+
+                self.logger.info(
+                    f"Length {split} dataset after filter {len(getattr(self, name_dataset))}")
+
+                file = open(name_filter_path, "wb")
+                pickle.dump(getattr(self, name_dataset), file)
+
+                self.logger.info(f"Saved to {name_filter_path}")
+                
+                self.push_artefact(name_filter_path, {
+                                    "dataset_name": self.config.dataset_name,
+                                    "subset": self.config.subset,
+                                    "split": split,
+                                    "sampling_rate": self.sampling_rate,
+                                    "top_db": top_db,
+                                    "max_input_length_in_sec": self.config.max_input_length_in_sec},
+                                    "{split} dataset processed and filtered")
         else:
             file = open(name_filter_path, "rb")
             setattr(self, name_dataset, pickle.load(file))
@@ -159,15 +198,8 @@ class BaseDataModule(LightningDataModule):
 
     def _save_dataset(self, split):
         save_path = getattr(self, f"{split}_save_data_path")
-        dir_path = os.path.dirname(save_path)
-        
-        try:
-            os.makedirs(dir_path)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-        
-        
+        save_path = osp.join(save_path, save_path.split('/')[-1])
+
         file = open(save_path, "wb")
         pickle.dump(getattr(self, f"{split}_dataset"), file)
 

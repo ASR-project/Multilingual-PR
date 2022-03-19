@@ -1,5 +1,6 @@
 import importlib
 import os
+import errno
 
 import wandb
 from config.hparams import Parameters
@@ -76,3 +77,10 @@ def get_progress_bar():
         TimeRemainingColumn(),
         "\n"
     )
+
+def create_directory(dir_path):
+    try:
+        os.makedirs(dir_path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise

@@ -24,7 +24,7 @@ class Hparams:
     root_dir        : str          = os.getcwd()  # root_dir
 
     # basic params
-    seed_everything: Optional[int] = 4172  # seed for the whole run
+    seed_everything: Optional[int] = None  # seed for the whole run
     gpu         : int = 1  # number or gpu
     max_epochs  : int = 30  # maximum number of epochs
     weights_path: str = osp.join(os.getcwd(), "weights")
@@ -47,8 +47,6 @@ class Hparams:
 
     # testing params
     best_model_run: str = "Wav2Vec2_it"
-
-    # TODO add backbone name -> use the one pre-trained on English only
 
 @dataclass
 class NetworkParams:
@@ -142,6 +140,8 @@ class Parameters:
             else:
                 raise NotImplementedError("Only Wav2Vec2, WavLM and Hubert are available !")
         print(f"Pretrained model: {self.network_param.pretrained_name}")
+
+        self.data_param.wandb_project = self.hparams.wandb_project
 
     @classmethod
     def parse(cls):
