@@ -157,7 +157,7 @@ class BaseTrainer:
     def get_callbacks(self):
         callbacks = [LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
 
-        if self.config.accumulate_grad_batches: callbacks += [RichProgressBar()]
+        if self.config.enable_progress_bar: callbacks += [RichProgressBar()]
 
         monitor = "val/per"
         mode = "min"
