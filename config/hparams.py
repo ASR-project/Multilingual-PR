@@ -26,7 +26,7 @@ class Hparams:
     # basic params
     seed_everything: Optional[int] = None  # seed for the whole run
     gpu         : int = 1  # number or gpu
-    max_epochs  : int = 30  # maximum number of epochs
+    max_epochs  : int = 150  # maximum number of epochs
     weights_path: str = osp.join(os.getcwd(), "weights")
 
     # modes
