@@ -58,10 +58,10 @@ class BaseDataModule(LightningDataModule):
 
                 self.logger.info(f"Load {path} in artifacts OK")
                 
-                file = open(osp.join(save_path, name_file), "rb")
+                file = open(name_file_path, "rb")
                 setattr(self, name_dataset, pickle.load(file))
                 self.logger.info(
-                    f"Loaded {split} dataset : {osp.join(save_path, name_file)}")
+                    f"Loaded {split} dataset : {name_file_path}")
             except:
                 setattr(self, name_dataset, load_dataset(self.config.dataset_name,
                                                         self.config.subset,
