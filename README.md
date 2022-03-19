@@ -114,9 +114,9 @@ dataset: Common Voice Corpus 6.1 : https://commonvoice.mozilla.org/fr/datasets
 | Mandarin | Hubert | X | X | X | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
 
 ### Tasks
-Arthur: Sweedish
-Léo: Russe
-Clément: Mandarin
+Arthur: Sweedish\
+Léo: Russian\
+Clément: Mandarin\
 Younes: Dutch
 
 ### Running unit tests
