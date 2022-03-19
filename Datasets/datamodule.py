@@ -48,7 +48,8 @@ class BaseDataModule(LightningDataModule):
         ag_u.create_directory(save_path)
 
         if not osp.exists(name_file_path) or self.config.recreate_dataset:
-            try:
+            if not self.config.recreate_dataset:
+            # try
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
 
@@ -62,7 +63,8 @@ class BaseDataModule(LightningDataModule):
                 setattr(self, name_dataset, pickle.load(file))
                 self.logger.info(
                     f"Loaded {split} dataset : {name_file_path}")
-            except:
+            else:
+            # except
                 setattr(self, name_dataset, load_dataset(self.config.dataset_name,
                                                         self.config.subset,
                                                         split=split if split!="val" else "validation",
@@ -106,7 +108,8 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f"{split}_dataset"
 
         if not osp.exists(name_file_path) or self.config.recreate_dataset:
-            try:
+            if not self.config.recreate_dataset:
+            # try
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
 
@@ -120,7 +123,8 @@ class BaseDataModule(LightningDataModule):
                 setattr(self, name_dataset, pickle.load(file))
                 self.logger.info(
                     f"Loaded processed {split} dataset : {name_file_path}")
-            except:
+            else:
+            # except
                 self.logger.info(f'Processing {split} dataset ...')
 
                 setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
@@ -161,7 +165,8 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f'{split}_dataset'
         
         if not osp.exists(name_file_path) or self.config.recreate_dataset:
-            try:
+            if not self.config.recreate_dataset:
+            # try
                 path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
                 self.logger.info(f"Try loading {path} in artifacts ...")
 
@@ -173,7 +178,8 @@ class BaseDataModule(LightningDataModule):
                 setattr(self, name_dataset, pickle.load(file))
                 self.logger.info(
                     f"Loaded filtered {split} dataset : {name_file_path}")
-            except:
+            else:
+            # except
                 self.logger.info(
                     f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
                 
