@@ -44,7 +44,7 @@ class BaseModule(LightningModule):
         network_param.vocab_size = self.phonemes_tokenizer.vocab_size
 
         # Loss function
-        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[network_param.word_delimiter_token]) # FIXME Blank maybe wrong, actually ok
+        self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[network_param.word_delimiter_token])
 
         # Feature_extractor
         # feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft", feature_size=1, sampling_rate=16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)

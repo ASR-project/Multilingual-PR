@@ -99,7 +99,7 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
                     # either this works, or I will have to remove the model with the alias first then log the next
                     version.delete()
         except:
-            print("error in del artifact to ingrore")
+            print("error in del artifact to ignore")
             return
 
     def on_exception(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", exception: BaseException) -> None:
