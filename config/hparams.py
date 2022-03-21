@@ -75,10 +75,9 @@ class DatasetParams:
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    # ISO6393                 : str                     = "jpn"    # look at the phoible.csv file https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv
-    # phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     language                 : str                     = "ky" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
+    phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
 
     # Dataloader parameters
     num_workers             : int                     = 20         # number of workers for dataloaders

@@ -20,31 +20,29 @@ class BaseTrainer:
         self.logger.info('Loading artifact...')
         self.load_artifact(config.network_param, config.data_param)
 
-        # self.logger.info(
-        #     f'Create vocabulary ISO6393 : {config.data_param.ISO6393} ...')
-
-        # config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
-        #     config.data_param.ISO6393,
-        #     config.data_param.phoible_csv_path,
-        #     eos_token=config.network_param.eos_token,
-        #     bos_token=config.network_param.bos_token,
-        #     unk_token=config.network_param.unk_token,
-        #     pad_token=config.network_param.pad_token,
-        #     word_delimiter_token=config.network_param.word_delimiter_token,
-        # )
-
         self.logger.info(
             f'Create vocabulary language : {config.data_param.language} ...')
-
-        config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
-            config.data_param.language,
-            config.data_param.root_path_annotation,
-            eos_token=config.network_param.eos_token,
-            bos_token=config.network_param.bos_token,
-            unk_token=config.network_param.unk_token,
-            pad_token=config.network_param.pad_token,
-            word_delimiter_token=config.network_param.word_delimiter_token,
-        )
+        
+        if config.data_param.subset == "en":
+            config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
+                config.data_param.language,
+                config.data_param.phoible_csv_path,
+                eos_token=config.network_param.eos_token,
+                bos_token=config.network_param.bos_token,
+                unk_token=config.network_param.unk_token,
+                pad_token=config.network_param.pad_token,
+                word_delimiter_token=config.network_param.word_delimiter_token,
+            )
+        else:
+            config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
+                config.data_param.language,
+                config.data_param.root_path_annotation,
+                eos_token=config.network_param.eos_token,
+                bos_token=config.network_param.bos_token,
+                unk_token=config.network_param.unk_token,
+                pad_token=config.network_param.pad_token,
+                word_delimiter_token=config.network_param.word_delimiter_token,
+            )
 
         self.logger.info(f'Vocabulary file : {config.network_param.vocab_file}')
 
