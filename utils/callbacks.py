@@ -83,7 +83,7 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
         if self.verbose:  # only log when there are already 5 models
             epoch = monitor_candidates.get("epoch")
             step = monitor_candidates.get("step")
-            rank_zero_info(f"Saved '{self.name}' weights to wandb")
+            
 
     
     def log_artifact(self):
@@ -97,7 +97,7 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
         )
         model_artifact.add_file(self.filepath)
         wandb.log_artifact(model_artifact, aliases=[self.alias])
-        rank_zero_info(f"Done")
+        rank_zero_info(f"Done. Saved '{self.name}' weights to wandb")
         
     def del_artifacts(self):
         api = wandb.Api(
