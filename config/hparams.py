@@ -70,7 +70,7 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "zh-CN"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "zh-TW"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
@@ -89,7 +89,7 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    create_dataset        : bool                    = False # True the first time that you launch (in local) Then False
+    create_dataset        : bool                    = True # True the first time that you launch (in local) Then False
 
 @dataclass
 class OptimizerParams: 
