@@ -36,7 +36,7 @@ class BaseDataModule(LightningDataModule):
             Function to load dataset
         '''
 
-        self.logger.info(f"Preparing the dataset in  prepare_data: {split}")
+        self.logger.info(f"Loading the dataset in  load_data: {split}")
 
         setattr(self, f"{split}_save_data_path", osp.join("assets", "datasets", f"{split}_{self.config.dataset_name}-{self.config.subset}"))
 

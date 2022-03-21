@@ -82,5 +82,6 @@ def create_directory(dir_path):
     try:
         os.makedirs(dir_path)
     except OSError as e:
+        print(e)
         if e.errno != errno.EEXIST:
             raise

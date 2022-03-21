@@ -82,7 +82,9 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
         wandb.log_artifact(model_artifact, aliases=[alias])
 
         # ------------- Clean up previous version -----------------
-
+        rank_zero_info(f"Starting artifact cleanup")
+        self.del_artifacts()
+        rank_zero_info(f"Done")
         if self.verbose:  # only log when there are already 5 models
             epoch = monitor_candidates.get("epoch")
             step = monitor_candidates.get("step")
