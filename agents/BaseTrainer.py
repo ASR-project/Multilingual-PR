@@ -114,15 +114,10 @@ class BaseTrainer:
             logger=self.wb_run,  # W&B integration
             callbacks=self.get_callbacks(),
             gpus=self.config.gpu,  # use all available GPU's
-            max_epochs=self.config.max_epochs,  # number of epochs
             log_every_n_steps=1,
             fast_dev_run=self.config.dev_run,
             amp_backend="apex",
             enable_progress_bar=self.config.enable_progress_bar,
-            val_check_interval=self.config.val_check_interval,
-            limit_train_batches=self.config.limit_train_batches,
-            limit_val_batches=self.config.limit_val_batches,
-            accumulate_grad_batches=self.config.accumulate_grad_batches
         )
 
         trainer.logger = self.wb_run
