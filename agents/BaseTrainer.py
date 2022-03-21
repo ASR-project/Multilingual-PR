@@ -2,7 +2,7 @@ import pytorch_lightning as pl
 import torch
 import wandb
 from models.BaseModule import BaseModule
-from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar)
+from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar, EarlyStopping)
 from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
 from utils.logger import init_logger
@@ -114,15 +114,10 @@ class BaseTrainer:
             logger=self.wb_run,  # W&B integration
             callbacks=self.get_callbacks(),
             gpus=self.config.gpu,  # use all available GPU's
-            max_epochs=self.config.max_epochs,  # number of epochs
             log_every_n_steps=1,
             fast_dev_run=self.config.dev_run,
             amp_backend="apex",
             enable_progress_bar=self.config.enable_progress_bar,
-            val_check_interval=self.config.val_check_interval,
-            limit_train_batches=self.config.limit_train_batches,
-            limit_val_batches=self.config.limit_val_batches,
-            accumulate_grad_batches=self.config.accumulate_grad_batches
         )
 
         trainer.logger = self.wb_run
@@ -156,6 +151,8 @@ class BaseTrainer:
         callbacks = [LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
 
         if self.config.enable_progress_bar: callbacks += [RichProgressBar()]
+
+        if self.config.early_stopping: callbacks += [EarlyStopping(**self.config.early_stopping_params)]
 
         monitor = "val/per"
         mode = "min"

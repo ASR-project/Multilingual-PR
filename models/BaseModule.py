@@ -90,7 +90,7 @@ class BaseModule(LightningModule):
         loss, logits, preds, targets = self._get_outputs(batch,batch_idx)
 
         # Log loss
-        self.log("val/loss", loss)
+        self.log("test/loss", loss)
 
         return {"loss": loss, "logits": logits, "preds": preds, "targets": targets}
 
