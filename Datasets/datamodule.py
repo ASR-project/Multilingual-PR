@@ -226,8 +226,8 @@ class BaseDataModule(LightningDataModule):
             Function to phonemize all sentence of the dataset
         '''
 
-        self.logger.info(f"Creating {split} phonemes ...")
         language = self.config.language[:2] if self.config.language[:2] != "zh" else "cmn"
+        self.logger.info(f"Creating {split} phonemes language {language}...")
         backend = EspeakBackend(language)
         separator = Separator(phone=" ", word="| ", syllable="")
         
