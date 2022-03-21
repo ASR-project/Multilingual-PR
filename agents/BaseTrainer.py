@@ -2,7 +2,7 @@ import pytorch_lightning as pl
 import torch
 import wandb
 from models.BaseModule import BaseModule
-from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar)
+from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar, EarlyStopping)
 from utils.agent_utils import get_artifact, get_datamodule
 from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
 from utils.logger import init_logger
@@ -156,6 +156,8 @@ class BaseTrainer:
         callbacks = [LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
 
         if self.config.enable_progress_bar: callbacks += [RichProgressBar()]
+
+        if self.config.early_stopping: callbacks += [EarlyStopping(**self.callbacks_param.early_stopping_params)]
 
         monitor = "val/per"
         mode = "min"
