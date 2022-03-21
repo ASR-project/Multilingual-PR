@@ -71,25 +71,34 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
         reverse = False if self.mode == "min" else True
         score = sorted(self.best_k_models.values(), reverse=reverse)
         indices = [(i+1) for i, x in enumerate(score) if x == current]
-        alias = f"top-{indices[0]}"                      #
-        name = f"{wandb.run.name}"  # name of the model
-        model_artifact = wandb.Artifact(
-            type="model",
-            name=name,
-            metadata=self.config
-        )
-        model_artifact.add_file(filepath)
-        wandb.log_artifact(model_artifact, aliases=[alias])
+        self.alias = f"top-{indices[0]}"                      #
+        self.name = f"{wandb.run.name}"
+        
+        self.filepath = filepath
+        
+        
 
         # ------------- Clean up previous version -----------------
-        rank_zero_info(f"Starting artifact cleanup")
-        self.del_artifacts()
-        rank_zero_info(f"Done")
+        
         if self.verbose:  # only log when there are already 5 models
             epoch = monitor_candidates.get("epoch")
             step = monitor_candidates.get("step")
-            rank_zero_info(f"Saved '{name}' weights to wandb")
+            rank_zero_info(f"Saved '{self.name}' weights to wandb")
 
+    
+    def log_artifact(self):
+        rank_zero_info(f"Logging artifact")
+
+        
+        model_artifact = wandb.Artifact(
+            type="model",
+            name=self.name,
+            metadata=self.config
+        )
+        model_artifact.add_file(self.filepath)
+        wandb.log_artifact(model_artifact, aliases=[self.alias])
+        rank_zero_info(f"Done")
+        
     def del_artifacts(self):
         api = wandb.Api(
             overrides={"project": self.project, "entity": self.entity})
@@ -105,11 +114,11 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
             return
 
     def on_exception(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", exception: BaseException) -> None:
-        self.del_artifacts()
+        self.log_artifact()
         return super().on_exception(trainer, pl_module, exception)
 
     def on_train_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-        self.del_artifacts()
+        self.log_artifact()
 
 
 class LogMetricsCallback(Callback):
