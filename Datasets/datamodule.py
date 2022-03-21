@@ -48,46 +48,46 @@ class BaseDataModule(LightningDataModule):
         ag_u.create_directory(save_path)
 
         if not osp.exists(name_file_path) or self.config.create_dataset:
-            if not self.config.create_dataset:
-            # try
-                path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
-                self.logger.info(f"Try loading {path} in artifacts ...")
+            # if not self.config.create_dataset:
+            # # try
+            #     path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
+            #     self.logger.info(f"Try loading {path} in artifacts ...")
 
-                file = ag_u.get_artifact(path, type="dataset")
+            #     file = ag_u.get_artifact(path, type="dataset")
                 
-                shutil.copy2(file, save_path)
+            #     shutil.copy2(file, save_path)
 
-                self.logger.info(f"Load {path} in artifacts OK")
+            #     self.logger.info(f"Load {path} in artifacts OK")
                 
-                file = open(name_file_path, "rb")
-                setattr(self, name_dataset, pickle.load(file))
-                self.logger.info(
-                    f"Loaded {split} dataset : {name_file_path}")
-            else:
+            #     file = open(name_file_path, "rb")
+            #     setattr(self, name_dataset, pickle.load(file))
+            #     self.logger.info(
+            #         f"Loaded {split} dataset : {name_file_path}")
+            # else:
             # except
-                setattr(self, name_dataset, load_dataset(self.config.dataset_name,
-                                                        self.config.subset,
-                                                        split=split if split!="val" else "validation",
-                                                        use_auth_token=self.config.use_auth_token,
-                                                        download_mode=self.config.download_mode,
-                                                        cache_dir=self.config.cache_dir
-                                                        )
-                        )
+            setattr(self, name_dataset, load_dataset(self.config.dataset_name,
+                                                    self.config.subset,
+                                                    split=split if split!="val" else "validation",
+                                                    use_auth_token=self.config.use_auth_token,
+                                                    download_mode=self.config.download_mode,
+                                                    cache_dir=self.config.cache_dir
+                                                    )
+                    )
 
-                setattr(self, name_dataset, getattr(self, name_dataset).remove_columns(
-                    ["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"]))
+            setattr(self, name_dataset, getattr(self, name_dataset).remove_columns(
+                ["accent", "age", "client_id", "down_votes", "gender", "locale", "segment", "up_votes"]))
 
-                setattr(self, name_dataset, getattr(self, name_dataset).cast_column(
-                    "audio", Audio(sampling_rate=16000)))
+            setattr(self, name_dataset, getattr(self, name_dataset).cast_column(
+                "audio", Audio(sampling_rate=16000)))
 
-                metadata_artifact = {
-                                    "dataset_name": self.config.dataset_name,
-                                    "subset": self.config.subset,
-                                    "split": split,
-                                    "sampling_rate": 16000,
-                                    }
+            metadata_artifact = {
+                                "dataset_name": self.config.dataset_name,
+                                "subset": self.config.subset,
+                                "split": split,
+                                "sampling_rate": 16000,
+                                }
 
-                self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset")
+            self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset")
         else:
             file = open(name_file_path, "rb")
             setattr(self, name_dataset, pickle.load(file))
@@ -108,46 +108,46 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f"{split}_dataset"
 
         if not osp.exists(name_file_path) or self.config.create_dataset:
-            if not self.config.create_dataset:
-            # try
-                path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
-                self.logger.info(f"Try loading {path} in artifacts ...")
+            # if not self.config.create_dataset:
+            # # try
+            #     path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
+            #     self.logger.info(f"Try loading {path} in artifacts ...")
 
-                file = ag_u.get_artifact(path, type="dataset")
+            #     file = ag_u.get_artifact(path, type="dataset")
                 
-                shutil.copy2(file, save_path)
+            #     shutil.copy2(file, save_path)
 
-                self.logger.info(f"Load {path} in artifacts OK")
+            #     self.logger.info(f"Load {path} in artifacts OK")
                 
-                file = open(name_file_path, "rb")
-                setattr(self, name_dataset, pickle.load(file))
-                self.logger.info(
-                    f"Loaded processed {split} dataset : {name_file_path}")
-            else:
+            #     file = open(name_file_path, "rb")
+            #     setattr(self, name_dataset, pickle.load(file))
+            #     self.logger.info(
+            #         f"Loaded processed {split} dataset : {name_file_path}")
+            # else:
             # except
-                self.logger.info(f'Processing {split} dataset ...')
+            self.logger.info(f'Processing {split} dataset ...')
 
-                setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
-                                                        num_proc=self.config.num_proc, 
-                                                        load_from_cache_file=False)
-                                                        )
-                setattr(self, name_dataset, getattr(self, name_dataset).map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
-                                                        batched=True, 
-                                                        batch_size=batch_size, 
-                                                        num_proc=self.config.num_proc,
-                                                        load_from_cache_file=False)
-                                                        )
+            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {"sentence": re.sub(CHARS_TO_REMOVE_REGEX, '', x["sentence"]).lower()}, 
+                                                    num_proc=self.config.num_proc, 
+                                                    load_from_cache_file=False)
+                                                    )
+            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda batch: {"audio": processor([ad["array"] for ad in batch["audio"]], sampling_rate=16000).input_values}, 
+                                                    batched=True, 
+                                                    batch_size=batch_size, 
+                                                    num_proc=self.config.num_proc,
+                                                    load_from_cache_file=False)
+                                                    )
 
-                self.logger.info(f"Saving {split} dataset ...")
+            self.logger.info(f"Saving {split} dataset ...")
 
-                metadata_artifact = {
-                                    "dataset_name": self.config.dataset_name,
-                                    "subset": self.config.subset,
-                                    "split": split,
-                                    "sampling_rate": self.sampling_rate
-                                    }
+            metadata_artifact = {
+                                "dataset_name": self.config.dataset_name,
+                                "subset": self.config.subset,
+                                "split": split,
+                                "sampling_rate": self.sampling_rate
+                                }
 
-                self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed")
+            self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed")
         else:
             self.logger.info(f"{split} dataset already exists no processing necessary ...")
             
@@ -171,46 +171,46 @@ class BaseDataModule(LightningDataModule):
         name_dataset = f'{split}_dataset'
         
         if not osp.exists(name_file_path) or self.config.create_dataset:
-            if not self.config.create_dataset:
-            # try
-                path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
-                self.logger.info(f"Try loading {path} in artifacts ...")
+            # if not self.config.create_dataset:
+            # # try
+            #     path = f"asr-project/{self.config.wandb_project}/{name_file}:latest"
+            #     self.logger.info(f"Try loading {path} in artifacts ...")
 
-                file = ag_u.get_artifact(path, type="dataset")
+            #     file = ag_u.get_artifact(path, type="dataset")
 
-                shutil.copy2(file, getattr(self, f'{split}_save_data_path'))
+            #     shutil.copy2(file, getattr(self, f'{split}_save_data_path'))
 
-                file = open(name_file_path, "rb")
-                setattr(self, name_dataset, pickle.load(file))
-                self.logger.info(
-                    f"Loaded filtered {split} dataset : {name_file_path}")
-            else:
-            # except
-                self.logger.info(
-                    f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
-                
-                setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, 
-                                                        num_proc=self.config.num_proc,
-                                                        load_from_cache_file=False)
-                                                        )
-                setattr(self, name_dataset, getattr(self, name_dataset).filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, 
-                                                        num_proc=self.config.num_proc,
-                                                        load_from_cache_file=False)
-                                                        )
+            #     file = open(name_file_path, "rb")
+            #     setattr(self, name_dataset, pickle.load(file))
+            #     self.logger.info(
+            #         f"Loaded filtered {split} dataset : {name_file_path}")
+            # else:
+            # # except
+            self.logger.info(
+                f"Length {split} dataset before filter {len(getattr(self, name_dataset))}")
+            
+            setattr(self, name_dataset, getattr(self, name_dataset).map(lambda x: {'audio': trim(np.array(x["audio"]), top_db=top_db)[0]}, 
+                                                    num_proc=self.config.num_proc,
+                                                    load_from_cache_file=False)
+                                                    )
+            setattr(self, name_dataset, getattr(self, name_dataset).filter(lambda x: len(x["audio"]) < self.config.max_input_length_in_sec * self.sampling_rate, 
+                                                    num_proc=self.config.num_proc,
+                                                    load_from_cache_file=False)
+                                                    )
 
-                self.logger.info(
-                    f"Length {split} dataset after filter {len(getattr(self, name_dataset))}")
+            self.logger.info(
+                f"Length {split} dataset after filter {len(getattr(self, name_dataset))}")
 
-                metadata_artifact = {
-                                    "dataset_name": self.config.dataset_name,
-                                    "subset": self.config.subset,
-                                    "split": split,
-                                    "sampling_rate": self.sampling_rate,
-                                    "top_db": top_db,
-                                    "max_input_length_in_sec": self.config.max_input_length_in_sec
-                                    }
+            metadata_artifact = {
+                                "dataset_name": self.config.dataset_name,
+                                "subset": self.config.subset,
+                                "split": split,
+                                "sampling_rate": self.sampling_rate,
+                                "top_db": top_db,
+                                "max_input_length_in_sec": self.config.max_input_length_in_sec
+                                }
 
-                self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed and filtered")
+            self._save_dataset(split, name_file_path, metadata_artifact, f"{split} dataset processed and filtered")
 
         else:
             file = open(name_file_path, "rb")
@@ -227,7 +227,7 @@ class BaseDataModule(LightningDataModule):
         '''
 
         self.logger.info(f"Creating {split} phonemes ...")
-        backend = EspeakBackend(self.config.language)
+        backend = EspeakBackend(self.config.language[:2])
         separator = Separator(phone=" ", word="| ", syllable="")
         
         name_dataset = f"{split}_dataset"

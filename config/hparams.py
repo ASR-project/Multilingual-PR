@@ -26,7 +26,7 @@ class Hparams:
     # basic params
     seed_everything: Optional[int] = None  # seed for the whole run
     gpu         : int = 1  # number or gpu
-    max_epochs  : int = 150  # maximum number of epochs
+    max_epochs  : int = -1  # maximum number of epochs
     weights_path: str = osp.join(os.getcwd(), "weights")
 
     # modes
@@ -79,6 +79,7 @@ class DatasetParams:
     # phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     language                 : str                     = "zh" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
+    phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
 
     # Dataloader parameters
     num_workers             : int                     = 20         # number of workers for dataloaders
@@ -88,7 +89,7 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    create_dataset        : bool                    = True # True the first time that you launch (in local) Then False
+    create_dataset        : bool                    = False # True the first time that you launch (in local) Then False
 
 @dataclass
 class OptimizerParams: 
