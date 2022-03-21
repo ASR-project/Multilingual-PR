@@ -75,8 +75,6 @@ class DatasetParams:
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    # ISO6393                 : str                     = "jpn"    # look at the phoible.csv file https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv
-    # phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
     language                 : str                     = "zh" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
@@ -89,7 +87,7 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    create_dataset        : bool                    = True # True the first time that you launch (in local) Then False
+    create_dataset        : bool                    = False 
 
 @dataclass
 class OptimizerParams: 
