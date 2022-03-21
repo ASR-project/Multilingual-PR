@@ -227,7 +227,8 @@ class BaseDataModule(LightningDataModule):
         '''
 
         self.logger.info(f"Creating {split} phonemes ...")
-        backend = EspeakBackend(self.config.language[:2])
+        language = self.config.language[:2] if self.config.language[:2] != "zh" else "cmn"
+        backend = EspeakBackend(language)
         separator = Separator(phone=" ", word="| ", syllable="")
         
         name_dataset = f"{split}_dataset"
