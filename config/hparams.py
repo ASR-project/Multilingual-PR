@@ -50,7 +50,7 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "WavLM"     # Hubert, Wav2Vec2, WavLM
+    network_name                  : str           = "Wav2Vec2"     # Hubert, Wav2Vec2, WavLM
     pretrained_name                    : Optional[str] = ""
 
     freeze                        : bool          = True
@@ -70,12 +70,14 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "ky"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "zh-CN"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    language                 : str                     = "ky" 
+    # ISO6393                 : str                     = "jpn"    # look at the phoible.csv file https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv
+    # phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
+    language                 : str                     = "zh" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
 
