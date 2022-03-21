@@ -3,7 +3,8 @@ from pickle import FALSE
 import random
 from dataclasses import dataclass
 from os import path as osp
-from typing import Any, ClassVar, Dict, List, Optional, dict_field
+from typing import Any, ClassVar, Dict, List, Optional
+from simple_parsing.helpers import Serializable, choice, dict_field, list_field
 
 import pytorch_lightning as pl
 import simple_parsing
