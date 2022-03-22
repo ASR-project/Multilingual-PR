@@ -102,7 +102,10 @@ class BaseModule(LightningModule):
         if self.optim_param.scheduler!=None:
             if self.optim_param.scheduler=="Cosine":
                 scheduler = LinearWarmupCosineAnnealingLR(
-                    optimizer, warmup_epochs=self.optim_param.warmup_epochs, max_epochs=self.optim_param.max_epochs
+                    optimizer, warmup_epochs=self.optim_param.warmup_epochs, 
+                    max_epochs=self.optim_param.max_epochs,
+                    warmup_start_lr=self.optim_param.warmup_start_lr,
+                    eta_min=self.optim_param.eta_min
                 )
             else:
                 scheduler = {"scheduler": ReduceLROnPlateau(
