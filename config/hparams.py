@@ -109,7 +109,9 @@ class OptimizerParams:
     accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # Scheduler parameters
-    scheduler     : bool  = True
+    scheduler     : str = "Cosine" # Cosine or ReduceLROnPlateau or None
+    max_epochs    : int = 10
+    warmup_epochs : int = 1 
 
 @dataclass
 class Parameters:
