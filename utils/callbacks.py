@@ -75,15 +75,6 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
         self.name = f"{wandb.run.name}"
         
         self.filepath = filepath
-        
-        
-
-        # ------------- Clean up previous version -----------------
-        
-        if self.verbose:  # only log when there are already 5 models
-            epoch = monitor_candidates.get("epoch")
-            step = monitor_candidates.get("step")
-            
 
     
     def log_artifact(self):
