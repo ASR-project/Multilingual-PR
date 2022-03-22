@@ -102,7 +102,8 @@ class BaseTrainer:
             tune_lr_trainer.tune(self.pl_model, datamodule=self.datamodule)   
             
         trainer.fit(self.pl_model, datamodule=self.datamodule)
-
+      
+    @torch.no_grad()
     def predict(self):
         if not self.config.debug:
             torch.autograd.set_detect_anomaly(False)
