@@ -37,17 +37,6 @@ def get_datamodule(data_param):
     """
     return BaseDataModule(data_param)
 
-def get_features_extractors(features_extractors_name, params):
-    """
-    get features extractors
-    """
-    try:
-        mod = importlib.import_module(f"models.FeaturesExtractors")
-        net = getattr(mod, features_extractors_name)
-        return net(params)
-    except NotImplementedError:
-        raise NotImplementedError(f'Not implemented only Wav2vec, WavLM and Hubert')
-
 def get_model(model_name, params):
     """
     get features extractors
