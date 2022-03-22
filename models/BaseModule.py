@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+from pl_bolts.optimizers.lr_scheduler import LinearWarmupCosineAnnealingLR
 from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor, Wav2Vec2FeatureExtractor
 from utils.agent_utils import get_model
 from utils.logger import init_logger
@@ -98,15 +99,17 @@ class BaseModule(LightningModule):
         optimizer = optimizer(self.parameters(), lr=self.lr,
                               weight_decay=self.optim_param.weight_decay)
 
-        if self.optim_param.scheduler:
-            # scheduler = LinearWarmupCosineAnnealingLR(
-            #     optimizer, warmup_epochs=self.optim_param.warmup_epochs, max_epochs=self.optim_param.max_epochs
-            # )
-            scheduler = {"scheduler": ReduceLROnPlateau(
-                optimizer, mode="min", patience=10, min_lr=5e-6
-            ),
-                "monitor": "val/loss"
-            }
+        if self.optim_param.scheduler!=None:
+            if self.optim_param.scheduler=="Cosine":
+                scheduler = LinearWarmupCosineAnnealingLR(
+                    optimizer, warmup_epochs=self.optim_param.warmup_epochs, max_epochs=self.optim_param.max_epochs
+                )
+            else:
+                scheduler = {"scheduler": ReduceLROnPlateau(
+                    optimizer, mode="min", patience=10, min_lr=5e-6
+                ),
+                    "monitor": "val/loss"
+                }
 
             return [[optimizer], [scheduler]]
 
