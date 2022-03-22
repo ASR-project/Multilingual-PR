@@ -3,8 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor,Wav2Vec2ForCTC, Wav2Vec2FeatureExtractor
-from utils.agent_utils import get_features_extractors, get_model
+from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor, Wav2Vec2FeatureExtractor
+from utils.agent_utils import get_model
 from utils.logger import init_logger
 
 from itertools import chain
@@ -47,8 +47,6 @@ class BaseModule(LightningModule):
         self.loss = nn.CTCLoss(blank= self.phonemes_tokenizer.encoder[network_param.word_delimiter_token])
 
         # Feature_extractor
-        # feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-xlsr-53-espeak-cv-ft", feature_size=1, sampling_rate=16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
-        # feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(network_param.pretrained_name, feature_size=1, sampling_rate=16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
         feature_extractor = Wav2Vec2FeatureExtractor(feature_size=1, sampling_rate=16000, padding_value=0.0, do_normalize=True, return_attention_mask=False)
 
         logger.info(f"Features extractor : {network_param.network_name}")
