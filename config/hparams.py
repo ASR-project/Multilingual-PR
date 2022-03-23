@@ -102,9 +102,7 @@ class OptimizerParams:
     """Optimization parameters"""
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
-    # lr            : float = 3e-5     # learning rate,               default = 5e-4
     lr            : float = 2e-4
-    min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 
     accumulate_grad_batches: int = 16 # 1 for no accumulation
@@ -120,6 +118,10 @@ class OptimizerParams:
 
     # Step LR scheduler
     step_size      : int = 5
+
+    # ReduceLROnPlateau scheduler
+    min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
+    patience       : int = 10
 
 @dataclass
 class Parameters:
