@@ -113,7 +113,7 @@ class BaseModule(LightningModule):
                 )
             else:
                 scheduler = {"scheduler": ReduceLROnPlateau(
-                    optimizer, mode="min", patience=10, min_lr=5e-6
+                    optimizer, mode="min", patience=5, min_lr=5e-6
                 ),
                     "monitor": "val/loss"
                 }
