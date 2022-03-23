@@ -47,17 +47,17 @@ class Hparams:
     enable_progress_bar: bool   = True
 
     # testing params
-    best_model_run: str = "Wav2Vec2_it"
+    best_model_run: str = "Hubert_nl"
 
     # Early Stopping
     early_stopping        : bool          = True
     early_stopping_params: Dict[str, Any] = dict_field(
-        dict(monitor="val/per", patience=60, mode="min", verbose=True)
+        dict(monitor="val/per", patience=10, mode="min", verbose=True)
     )
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "Hubert"     # Hubert, Wav2Vec2, WavLM
+    network_name                  : str           = "WavLM"     # Hubert, Wav2Vec2, WavLM
     pretrained_name                    : Optional[str] = ""
 
     freeze                        : bool          = True
@@ -77,12 +77,12 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "nl"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "it"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    language                 : str                     = "nl" 
+    language                 : str                     = "it" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
 
@@ -102,7 +102,7 @@ class OptimizerParams:
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
     # lr            : float = 3e-5     # learning rate,               default = 5e-4
-    lr            : float = 3e-5
+    lr            : float = 5e-6
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 
@@ -111,7 +111,7 @@ class OptimizerParams:
     # Scheduler parameters
     scheduler     : str = "Cosine" # Cosine or ReduceLROnPlateau or None
     max_epochs    : int = 10
-    warmup_epochs : int = 1 
+    warmup_epochs : int = 2 
 
 @dataclass
 class Parameters:
