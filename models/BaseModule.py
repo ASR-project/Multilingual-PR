@@ -115,7 +115,7 @@ class BaseModule(LightningModule):
             elif self.optim_param.scheduler=="StepLR":
                 scheduler = StepLR(
                     optimizer,
-                    step_size=5
+                    step_size=self.optim_param.step_size
                 )
             else:
                 scheduler = {"scheduler": ReduceLROnPlateau(
