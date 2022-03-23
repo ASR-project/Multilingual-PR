@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
-from torch.optim.lr_scheduler import ReduceLROnPlateau, StepLR
+from torch.optim.lr_scheduler import ReduceLROnPlateau, StepLR, MultiStepLR
 from pl_bolts.optimizers.lr_scheduler import LinearWarmupCosineAnnealingLR
 from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor, Wav2Vec2FeatureExtractor
 from utils.agent_utils import get_model
@@ -115,7 +115,14 @@ class BaseModule(LightningModule):
             elif self.optim_param.scheduler=="StepLR":
                 scheduler = StepLR(
                     optimizer,
-                    step_size=self.optim_param.step_size
+                    step_size=self.optim_param.step_size,
+                    gamma=self.optim_param.gamma
+                )
+            elif self.optim_param.scheduler=="MultiStepLR":
+                scheduler = MultiStepLR(
+                    optimizer,
+                    milestones=self.optim_param.milestones,
+                    gamma=self.optim_param.gamma
                 )
             else:
                 scheduler = {"scheduler": ReduceLROnPlateau(

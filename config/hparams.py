@@ -108,7 +108,7 @@ class OptimizerParams:
     accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # Scheduler parameters
-    scheduler     : str = "StepLR" # Cosine or ReduceLROnPlateau, StepLR or None
+    scheduler     : str = "StepLR" # Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None
     
     # Cosine scheduler
     max_epochs    : int = 10
@@ -118,9 +118,13 @@ class OptimizerParams:
 
     # Step LR scheduler
     step_size      : int = 5
+    gamma           : float = 0.1 # also for multi step lr
+
+    # MultiStepLR scheduler
+    milestones      : List[Any] = list_field(3, 6, 10, 15)
 
     # ReduceLROnPlateau scheduler
-    min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
+    min_lr        : float = 5e-9
     patience       : int = 10
 
 @dataclass
