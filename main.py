@@ -28,9 +28,10 @@ def main():
                 ]
 
         if parameters.hparams.limit_train_batches!=1.0: tags += [f'{parameters.hparams.limit_train_batches}_train']
-        
+        if parameters.network_param.freeze_transformer: tags += ["transformer_freezed"]
+
         wandb.init(
-                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}{'_fine_tune'*(not parameters.network_param.freeze)}{f'_{parameters.hparams.limit_train_batches}_train'*(parameters.hparams.limit_train_batches!=1.0)}",
+                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}{'_CNN_not_freezed'*(not parameters.network_param.freeze)}{f'_{parameters.hparams.limit_train_batches}_train'*(parameters.hparams.limit_train_batches!=1.0)}{'_tf_freezed'*(parameters.network_param.freeze_transformer)}",
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,

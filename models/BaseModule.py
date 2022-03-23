@@ -62,6 +62,10 @@ class BaseModule(LightningModule):
         
         logger.info(f"Feature extactor:{' not'*(not network_param.freeze)} freezed")
 
+        if network_param.freeze_transformer:
+            self.model.model.requires_grad_(False)
+            self.model.model.lm_head.requires_grad_(True)
+
     def forward(self, x):
         output = self.model(x)
         return output

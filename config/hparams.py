@@ -42,8 +42,8 @@ class Hparams:
 
     # trainer params
     val_check_interval  : float = 1.0 # 1.0 (at the end of the epoch)
-    limit_train_batches: float  = 0.01#1.0
-    limit_val_batches   : float = 0.01 #1.0
+    limit_train_batches: float  = 1.0 #1.0
+    limit_val_batches   : float = 1.0 #1.0
     enable_progress_bar: bool   = True
 
     # testing params
@@ -61,6 +61,7 @@ class NetworkParams:
     pretrained_name                    : Optional[str] = ""
 
     freeze                        : bool          = True
+    freeze_transformer            : bool          = True
 
     # Phoneme Tokenizer
     eos_token                     : str           = "</s>"
@@ -77,12 +78,12 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "it"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "sv-SE"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    language                 : str                     = "it" 
+    language                 : str                     = "sv" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
 
