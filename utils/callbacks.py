@@ -93,10 +93,8 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
         
         model_artifact.add_file(self.filepath)
         wandb.log_artifact(model_artifact, aliases=[self.alias])
+        model_artifact.wait()
         rank_zero_info(f"Done. Saved '{self.name}' weights to wandb")
-        
-        
-        
         rank_zero_info(f"Cleaning up artifacts")
         artifacts = []
         for art in list(api.artifact_versions("model", self.name)):
