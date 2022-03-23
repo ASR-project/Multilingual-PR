@@ -19,7 +19,7 @@ def main():
     
     if parameters.hparams.train:
         wandb.init(
-                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}",
+                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}{'_fine_tune'*(not parameters.network_param.freeze)}",
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,
