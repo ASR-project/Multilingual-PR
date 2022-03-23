@@ -52,7 +52,7 @@ class Hparams:
     # Early Stopping
     early_stopping        : bool          = True
     early_stopping_params: Dict[str, Any] = dict_field(
-        dict(monitor="val/per", patience=10, mode="min", verbose=True)
+        dict(monitor="val/per", patience=50, mode="min", verbose=True)
     )
 
 @dataclass
