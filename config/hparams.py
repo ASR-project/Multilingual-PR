@@ -111,7 +111,9 @@ class OptimizerParams:
     # Scheduler parameters
     scheduler     : str = "Cosine" # Cosine or ReduceLROnPlateau or None
     max_epochs    : int = 10
-    warmup_epochs : int = 2 
+    warmup_epochs : int = 1 
+    warmup_start_lr: float = 1e-1
+    eta_min: float = 5e-9
 
 @dataclass
 class Parameters:
