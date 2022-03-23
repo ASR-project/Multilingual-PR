@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import ReduceLROnPlateau, StepLR
 from pl_bolts.optimizers.lr_scheduler import LinearWarmupCosineAnnealingLR
 from transformers import Wav2Vec2PhonemeCTCTokenizer, Wav2Vec2Processor, Wav2Vec2FeatureExtractor
 from utils.agent_utils import get_model
@@ -106,14 +106,20 @@ class BaseModule(LightningModule):
         if self.optim_param.scheduler!=None:
             if self.optim_param.scheduler=="Cosine":
                 scheduler = LinearWarmupCosineAnnealingLR(
-                    optimizer, warmup_epochs=self.optim_param.warmup_epochs, 
+                    optimizer, 
+                    warmup_epochs=self.optim_param.warmup_epochs, 
                     max_epochs=self.optim_param.max_epochs,
                     warmup_start_lr=self.optim_param.warmup_start_lr,
                     eta_min=self.optim_param.eta_min
                 )
+            elif self.optim_param.scheduler=="StepLR":
+                scheduler = StepLR(
+                    optimizer,
+                    step_size=5
+                )
             else:
                 scheduler = {"scheduler": ReduceLROnPlateau(
-                    optimizer, mode="min", patience=5, min_lr=5e-6
+                    optimizer, mode="min", patience=10, min_lr=5e-6
                 ),
                     "monitor": "val/loss"
                 }
