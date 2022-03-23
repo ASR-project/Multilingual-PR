@@ -42,8 +42,8 @@ class Hparams:
 
     # trainer params
     val_check_interval  : float = 1.0 # 1.0 (at the end of the epoch)
-    limit_train_batches: float  = 1.0
-    limit_val_batches   : float = 1.0
+    limit_train_batches: float  = 0.01#1.0
+    limit_val_batches   : float = 0.01 #1.0
     enable_progress_bar: bool   = True
 
     # testing params
@@ -102,17 +102,17 @@ class OptimizerParams:
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
     # lr            : float = 3e-5     # learning rate,               default = 5e-4
-    lr            : float = 5e-6
+    lr            : float = 2e-4
     min_lr        : float = 5e-9     # min lr reached at the end of the cosine schedule
     weight_decay  : float = 1e-8
 
     accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # Scheduler parameters
-    scheduler     : str = "Cosine" # Cosine or ReduceLROnPlateau or None
+    scheduler     : str = "ReduceLROnPlateau" # Cosine or ReduceLROnPlateau or None
     max_epochs    : int = 10
     warmup_epochs : int = 1 
-    warmup_start_lr: float = 1e-1
+    warmup_start_lr: float = 1e-5
     eta_min: float = 5e-9
 
 @dataclass

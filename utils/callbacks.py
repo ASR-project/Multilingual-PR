@@ -70,8 +70,8 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
 
         reverse = False if self.mode == "min" else True
         score = sorted(self.best_k_models.values(), reverse=reverse)
-        indices = [(i+1) for i, x in enumerate(score) if x == current]
-        self.alias = f"top-{indices[0]}"                      #
+        # indices = [(i+1) for i, x in enumerate(score) if x == current]
+        self.alias = f"latest"                      #
         self.name = f"{wandb.run.name}"
         
         self.filepath = filepath
@@ -80,15 +80,44 @@ class AutoSaveModelCheckpoint(ModelCheckpoint):
     def log_artifact(self):
         rank_zero_info(f"Logging artifact")
 
-        
+        api = wandb.Api(overrides={"project": self.project, "entity": self.entity})
         model_artifact = wandb.Artifact(
             type="model",
             name=self.name,
             metadata=self.config
         )
+        
+        
+        
+        
+        
         model_artifact.add_file(self.filepath)
         wandb.log_artifact(model_artifact, aliases=[self.alias])
         rank_zero_info(f"Done. Saved '{self.name}' weights to wandb")
+        
+        
+        
+        rank_zero_info(f"Cleaning up artifacts")
+        artifacts = []
+        for art in list(api.artifact_versions("model", self.name)):
+            try:
+                per = art.logged_by().summary.get("val/per", 0)
+                artifacts.append((art,per))
+            except: 
+                pass
+            
+        artifacts = sorted(artifacts,key=lambda art: art[-1]['min'], reverse=False)
+        
+        for i,artifact in enumerate(artifacts):
+            artifact[0].aliases = [f'top-{i+1}']
+            try:
+                artifact[0].save()
+            except: 
+                pass
+        
+        rank_zero_info(f"Done")
+        
+        
         
     def del_artifacts(self):
         api = wandb.Api(
