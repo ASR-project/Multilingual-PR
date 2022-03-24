@@ -108,7 +108,7 @@ class OptimizerParams:
     accumulate_grad_batches: int = 16 # 1 for no accumulation
 
     # Scheduler parameters
-    scheduler     : str = "StepLR" # Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None
+    scheduler     : Optional[str] = None # Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None
     
     # Cosine scheduler
     max_epochs      : int   = 10
