@@ -47,7 +47,7 @@ class Hparams:
     enable_progress_bar: bool   = True
 
     # testing params
-    best_model_run: str = "Hubert_nl"
+    best_model_run: str = "WavLM_sv"
 
     # Early Stopping
     early_stopping        : bool          = True
@@ -57,7 +57,7 @@ class Hparams:
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "WavLM"     # Hubert, Wav2Vec2, WavLM
+    network_name                  : str           = "Hubert"     # Hubert, Wav2Vec2, WavLM
     pretrained_name                    : Optional[str] = ""
 
     freeze                        : bool          = True
@@ -78,12 +78,12 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "sv-SE"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "nl"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    language                 : str                     = "sv" 
+    language                 : str                     = "nl" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
     phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
 
@@ -102,7 +102,7 @@ class OptimizerParams:
     """Optimization parameters"""
 
     optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
-    lr            : float = 2e-4
+    lr            : float = 3e-4
     weight_decay  : float = 1e-8
 
     accumulate_grad_batches: int = 16 # 1 for no accumulation
@@ -111,21 +111,21 @@ class OptimizerParams:
     scheduler     : str = "StepLR" # Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None
     
     # Cosine scheduler
-    max_epochs    : int = 10
-    warmup_epochs : int = 1 
-    warmup_start_lr: float = 1e-5
-    eta_min: float = 5e-9
+    max_epochs      : int   = 10
+    warmup_epochs   : int   = 1
+    warmup_start_lr: float  = 3e-4
+    eta_min         : float = 5e-6
 
     # Step LR scheduler
-    step_size      : int = 5
-    gamma           : float = 0.1 # also for multi step lr
+    step_size : int   = 2
+    gamma     : float = 0.1 # also for multi step lr
 
     # MultiStepLR scheduler
-    milestones      : List[Any] = list_field(3, 6, 10, 15)
+    milestones : List[Any] = list_field(2, 4, 6, 10)
 
     # ReduceLROnPlateau scheduler
-    min_lr        : float = 5e-9
-    patience       : int = 10
+    min_lr   : float = 5e-9
+    patience : int   = 10
 
 @dataclass
 class Parameters:
