@@ -18,8 +18,8 @@ class Hparams:
     """Hyperparameters of for the run"""
 
     # wandb
-    wandb_entity  : str  = "asr-project"         # name of the project
-    debug         : bool = False            # test code before running, if testing, no checkpoints are written
+    wandb_entity  : str  = "asr-project"            # name of the project
+    debug         : bool = False                    # test code before running, if testing, no checkpoints are written
     test          : bool = True
     wandb_project : str  = f"{'test-'*test}asr"
     root_dir      : str  = os.getcwd()  # root_dir
@@ -42,8 +42,8 @@ class Hparams:
 
     # trainer params
     val_check_interval  : float = 1.0 # 1.0 (at the end of the epoch)
-    limit_train_batches: float  = 1.0 #1.0
-    limit_val_batches   : float = 1.0 #1.0
+    limit_train_batches: float  = 1.0 # 1.0
+    limit_val_batches   : float = 1.0 # 1.0
     enable_progress_bar: bool   = True
 
     # testing params
@@ -58,7 +58,7 @@ class Hparams:
 @dataclass
 class NetworkParams:
     network_name                  : str           = "Hubert"     # Hubert, Wav2Vec2, WavLM
-    pretrained_name                    : Optional[str] = ""
+    pretrained_name               : Optional[str] = ""
 
     freeze                        : bool          = True
     freeze_transformer            : bool          = True
@@ -85,7 +85,7 @@ class DatasetParams:
     # to create vocabulary of phonemes
     language                 : str                     = "nl" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
-    phoible_csv_path        : str                     = osp.join(os.getcwd(), "assets")
+    phoible_csv_path         : str                     = osp.join(os.getcwd(), "assets")
 
     # Dataloader parameters
     num_workers             : int                     = 20         # number of workers for dataloaders
@@ -101,7 +101,7 @@ class DatasetParams:
 class OptimizerParams: 
     """Optimization parameters"""
 
-    optimizer     : str   = "AdamW"  # Optimizer default vit: AdamW, default resnet50: Adam
+    optimizer     : str   = "AdamW"
     lr            : float = 3e-4
     weight_decay  : float = 1e-8
 
