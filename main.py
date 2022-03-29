@@ -50,21 +50,26 @@ def main():
         agent = BaseTrainer(parameters, wandb_run)
         agent.run()
     else: 
+        tags = [
+                    parameters.data_param.dataset_name,
+                    parameters.data_param.subset,
+                    parameters.data_param.language,
+                    parameters.network_param.network_name,
+                    f"{'not'*(not parameters.network_param.freeze)} freezed",
+                    parameters.network_param.pretrained_name,
+                    "test"
+                ]
+        if parameters.hparams.limit_train_batches!=1.0: tags += [f'{parameters.hparams.limit_train_batches}_train']
+        if parameters.network_param.freeze_transformer: tags += ["transformer_freezed"]
+        
         wandb_run = wandb.init(
-                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}_test",
+                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}{'_CNN_not_freezed'*(not parameters.network_param.freeze)}{f'_{parameters.hparams.limit_train_batches}_train'*(parameters.hparams.limit_train_batches!=1.0)}{'_tf_freezed'*(parameters.network_param.freeze_transformer)}_test",
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,
                 allow_val_change = True,
                 job_type = "test",
-                tags = [
-                    parameters.data_param.language,
-                    parameters.data_param.dataset_name,
-                    parameters.data_param.subset,
-                    parameters.optim_param.optimizer,
-                    parameters.network_param.network_name,
-                    "test"
-                    ]
+                tags = tags
             )
 
         wandb_logger = WandbLogger(
