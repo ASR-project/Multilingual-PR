@@ -1,4 +1,5 @@
 import faulthandler
+from pytest import param
 
 faulthandler.enable()
 
@@ -63,7 +64,7 @@ def main():
         if parameters.network_param.freeze_transformer: tags += ["transformer_freezed"]
         
         wandb_run = wandb.init(
-                name = f"{parameters.network_param.network_name}_{parameters.data_param.language}{'_CNN_not_freezed'*(not parameters.network_param.freeze)}{f'_{parameters.hparams.limit_train_batches}_train'*(parameters.hparams.limit_train_batches!=1.0)}{'_tf_freezed'*(parameters.network_param.freeze_transformer)}_test",
+                name = parameters.hparams.best_model_run + "_test",
                 config = wdb_config,
                 project = parameters.hparams.wandb_project,
                 entity = parameters.hparams.wandb_entity,
