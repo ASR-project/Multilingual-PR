@@ -27,7 +27,7 @@ class Hparams:
     # basic params
     seed_everything: Optional[int] = None  # seed for the whole run
     gpu             : int          = 1  # number or gpu
-    max_epochs      : int          = 150  # maximum number of epochs
+    max_epochs      : int          = 50  # maximum number of epochs
     weights_path    : str          = osp.join(os.getcwd(), "weights")
 
     # modes
@@ -78,12 +78,12 @@ class DatasetParams:
     # Hugging Face datasets parameters
     dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
     use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "nl"              # chosen language (see https://huggingface.co/datasets/common_voice)
+    subset                  : str                     = "sv-SE"              # chosen language (see https://huggingface.co/datasets/common_voice)
     download_mode           : str                     = "reuse_dataset_if_exists"
     cache_dir               : str                     = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    language                 : str                     = "nl" 
+    language                 : str                     = "sv" 
     root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
     phoible_csv_path         : str                     = osp.join(os.getcwd(), "assets")
 
@@ -95,7 +95,7 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    create_dataset        : bool                    = False 
+    create_dataset        : bool                    = True 
 
 @dataclass
 class OptimizerParams: 
@@ -121,7 +121,7 @@ class OptimizerParams:
     gamma     : float = 0.1 # also for multi step lr
 
     # MultiStepLR scheduler
-    milestones : List[Any] = list_field(2, 4, 6, 10)
+    milestones : List[Any] = list_field(8, 10, 15)
 
     # ReduceLROnPlateau scheduler
     min_lr   : float = 5e-9
