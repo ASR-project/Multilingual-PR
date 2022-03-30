@@ -130,27 +130,6 @@ Pretrained English models to other languages
 
 ### Backbone freezed
 
-| Language                 | Training data (in hours) | Language Family                 | Model    | PER validation | PER test       | Runs                                                                                                            |
-|--------------------------|--------------------------|---------------------------------|----------|----------------|----------------|-----------------------------------------------------------------------------------------------------------------|
-| \multirow{3}{*}{Italian} | \multirow{3}{*}{62.34}   | \multirow{3}{*}{Romance}        | Wav2Vec2 | 38.94          | 36.84          | \href{https://wandb.ai/asr-project/test-asr/runs/1wkydddw?workspace=user-clementapa}{Wav2Vec2\_it\_tf\_freezed} |
-|                          |                          |                                 | Hubert   | 23.85          | 21.15          | \href{https://wandb.ai/asr-project/test-asr/runs/2esx3e99?workspace=user-clementapa}{Hubert\_it\_tf\_freezed}   |
-|                          |                          |                                 | WavLM    | 27.29          | 25.98          | \href{https://wandb.ai/asr-project/test-asr/runs/2771pb3w?workspace=user-clementapa}{WavLM\_it\_tf\_freezed}    |
-| \multirow{3}{*}{Russian} | \multirow{3}{*}{15.55}   | \multirow{3}{*}{East Slavic}    | Wav2Vec2 | 50.11          | 48.69          | \href{https://wandb.ai/asr-project/test-asr/runs/tqxh9iho?workspace=user-clementapa}{Wav2Vec2\_ru\_tf\_freezed} |
-|                          |                          |                                 | Hubert   | \textbf{38.36} | \textbf{36.18} | \href{https://wandb.ai/asr-project/test-asr/runs/1vcphgy6?workspace=user-clementapa}{Hubert\_ru\_tf\_freezed}   |
-|                          |                          |                                 | WavLM    | 40.66          | 38.76          | \href{https://wandb.ai/asr-project/test-asr/runs/3em0h48e?workspace=user-clementapa}{WavLM\_ru\_tf\_freezed}    |
-| \multirow{3}{*}{Dutch}   | \multirow{3}{*}{12.78}   | \multirow{3}{*}{West Germanic}  | Wav2Vec2 | 40.15          | 39.23          | \href{https://wandb.ai/asr-project/test-asr/runs/3qiea6qt?workspace=user-clementapa}{Wav2Vec2\_nl\_tf\_freezed} |
-|                          |                          |                                 | Hubert   | \textbf{27.62} | \textbf{26.68} | \href{https://wandb.ai/asr-project/test-asr/runs/13nprcb5?workspace=user-clementapa}{Hubert\_nl\_tf\_freezed}   |
-|                          |                          |                                 | WavLM    | 34.94          | 35.67          | \href{https://wandb.ai/asr-project/test-asr/runs/204zyxrk?workspace=user-clementapa}{WavLM\_nl\_tf\_freezed}    |
-| \multirow{3}{*}{Swedish} | \multirow{3}{*}{3.22}    | \multirow{3}{*}{North Germanic} | Wav2Vec2 | 50.30          | 45.23          | \href{https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa}{Wav2Vec2\_sv\_tf\_freezed} |
-|                          |                          |                                 | Hubert   | \textbf{37.34} | \textbf{32.68} | \href{https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa}{Hubert\_sv\_tf\_freezed}   |
-|                          |                          |                                 | WavLM    | 43.65          | 40.55          | \href{https://wandb.ai/asr-project/test-asr/runs/qt9ymhm1?workspace=user-clementapa}{WavLM\_sv\_tf\_freezed}    |
-| \multirow{3}{*}{Turkish} | \multirow{3}{*}{2.52}    | \multirow{3}{*}{Turkic}         | Wav2Vec2 | 53.92          | 52.08          | \href{https://wandb.ai/asr-project/test-asr/runs/1kyc217g?workspace=user-clementapa}{Wav2Vec2\_tr\_tf\_freezed} |
-|                          |                          |                                 | Hubert   | \textbf{39.55} | \textbf{37.08} | \href{https://wandb.ai/asr-project/test-asr/runs/9flufqqm?workspace=user-clementapa}{Hubert\_tr\_tf\_freezed}   |
-|                          |                          |                                 | WavLM    | 47.18          | 45.53          | \href{https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa}{WavLM\_tr\_tf\_freezed}    |
-| \multirow{3}{*}{Average} | \multirow{3}{*}{-}       | \multirow{3}{*}{All}            | Wav2Vec2 | x              | -              | \multirow{3}{*}{-}                                                                                              |
-|                          |                          |                                 | Hubert   | \textbf{x}     | -              |                                                                                                                 |
-|                          |                          |                                 | WavLM    | x              | -              |                                                                                                                 |
-
 
 | Language | Training data (in hours) | Model | PER validation | PER test | Run |
 |---|---|---|---|---|---|
