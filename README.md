@@ -130,6 +130,29 @@ Pretrained English models to other languages
 
 ### Backbone freezed
 
+| Language | Training data (in hours) | Language Family | Model    | PER validation | PER test | Runs |
+|----------|--------------------------|-----------------|----------|----------------|----------|------|
+| Italian  | 62.34                    | Romance         | Wav2Vec2 | 38.94          | 36.84    |      |
+|          |                          |                 | Hubert   | 23.85          |  21.15   |      |
+|          |                          |                 | WavLM    | 27.29          | 25.98    |      |
+| Russian  | 15.55                    | East Slavic     | Wav2Vec2 | 50.11          | 48.69    |      |
+|          |                          |                 | Hubert   | 38.36          | 36.18    |      |
+|          |                          |                 | WavLM    | 40.66          | 38.76    |      |
+| Dutch    | 12.78                    | West Germanic   | Wav2Vec2 | 40.15          | 39.23    |      |
+|          |                          |                 | Hubert   | 27.62          | 26.68    |      |
+|          |                          |                 | WavLM    | 34.94          | 35.67    |      |
+| Swedish  | 3.22                     | North Germanic  | Wav2Vec2 | 50.30          | 45.23    |      |
+|          |                          |                 | Hubert   | 37.34          | 32.68    |      |
+|          |                          |                 | WavLM    | 43.65          | 40.55    |      |
+| Turkish  | 2.52                     | Turkic          | Wav2Vec2 | 53.92          | 52.08    |      |
+|          |                          |                 | Hubert   | 39.55          | 37.08    |      |
+|          |                          |                 | WavLM    | 47.18          | 45.53    |      |
+| Average  | -                        | All             | Wav2Vec2 | 46.684         | 44.414   |      |
+|          |                          |                 | Hubert   | 33.344         | 30.754   |      |
+|          |                          |                 | WavLM    | 38.744         | 37.298   |      |
+
+
+
 
 | Language | Training data (in hours) | Model | PER validation | PER test | Run |
 |---|---|---|---|---|---|
