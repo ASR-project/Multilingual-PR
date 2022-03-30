@@ -147,9 +147,10 @@ Pretrained English models to other languages
 | Turkish  | 2.52                     | Turkic          | Wav2Vec2 | 53.92          | 52.08    |      |
 |          |                          |                 | Hubert   | 39.55          | 37.08    |      |
 |          |                          |                 | WavLM    | 47.18          | 45.53    |      |
-| Average  | -                        | All             | Wav2Vec2 | 47.18          | 45.53    |      |
-|          |                          |                 | Hubert   | 46.684         | 44.414   |      |
-|          |                          |                 | WavLM    | 33.344         | 30.754   |      |
+| Average  | -                        | All             | Wav2Vec2 | 46.684         | 44.414   |      |
+|          |                          |                 | Hubert   | 33.344         | 30.754   |      |
+|          |                          |                 | WavLM    | 38.744         | 37.298   |      |
+
 
 
 
