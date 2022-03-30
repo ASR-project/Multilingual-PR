@@ -93,8 +93,8 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 |---|---|
 | Italian :it: | *Romance* |
 | Russian :ru: | *East Slavic* |
-| Dutch :nl: | *West Germanic* |
-| Swedish :sv: | *North Germanic* |
+| Dutch 🇳🇱 | *West Germanic* |
+| Swedish 🇸🇪 | *North Germanic* |
 | Turkish :tr: | *Turkic* |
 
 </center>
