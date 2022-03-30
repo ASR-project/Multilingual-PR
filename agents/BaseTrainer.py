@@ -17,9 +17,6 @@ class BaseTrainer:
 
         self.logger = init_logger("BaseTrainer", "INFO")
 
-        self.logger.info('Loading artifact...')
-        self.load_artifact(config.network_param, config.data_param)
-
         self.logger.info(
             f'Create vocabulary language : {config.data_param.language} ...')
         
@@ -97,7 +94,6 @@ class BaseTrainer:
         self.datamodule.load_data("val")
         self.datamodule.process_dataset("val", self.pl_model.processor)
 
-        
         if self.config.tune_lr:
             tune_lr_trainer.tune(self.pl_model, datamodule=self.datamodule)   
             
@@ -135,18 +131,6 @@ class BaseTrainer:
 
         return
 
-    def load_artifact(self, network_param, data_param):
-        return
-        # data_param.phoneme_labels_file = get_artifact(
-        #     data_param.phoneme_artifact, type="dataset")
-        # network_param.weight_checkpoint = get_artifact(
-        #     network_param.artifact, type="model")
-        # data_param.abstract_embeddings_file = get_artifact(
-        #     data_param.abstract_embeddings_artifact, type="dataset")
-        # data_param.keywords_embeddings_file = get_artifact(
-        #     data_param.keywords_embeddings_artifact, type="dataset")
-        # data_param.keywords_file = get_artifact(
-        #     data_param.keywords_artifact, type="dataset")
 
     def get_callbacks(self):
         callbacks = [LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
