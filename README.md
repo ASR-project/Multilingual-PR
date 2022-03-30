@@ -110,26 +110,26 @@ Pretrained English models to other languages
 
 ### 🚀 Fine-tuning
 
-| Language | Training data (in hours) | Language Family | Model    | PER validation | PER test | Runs |
-|----------|--------------------------|-----------------|----------|----------------|----------|------|
-| talian   | 62.34                    | Romance         | Wav2Vec2 | 19.05          | 17.95    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | Hubert   | 14.05          | 12.67    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | WavLM    | 19.83          | 25.60    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-| Russian  | 15.55                    | East Slavic     | Wav2Vec2 | 32.16          | 31.66    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | Hubert   | 25.10          | 24.09    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | WavLM    | 20.25          | 18.88    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-| Dutch    | 12.78                    | West Germanic   | Wav2Vec2 | 16.18          | 20.83    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | Hubert   | 12.77          | 16.49    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | WavLM    | 15.96          | 19.91    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-| Swedish  | 3.22                     | North Germanic  | Wav2Vec2 | 26.50          | 24.16    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | Hubert   | 21.77          | 19.38    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | WavLM    | 26.86          | 24.61    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-| Turkish  | 2.52                     | Turkic          | Wav2Vec2 | 19.62          | 19.03    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | Hubert   | 15.51          | 14.19    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | WavLM    | 19.85          | 18.95    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-| Average  | -                        | All             | Wav2Vec2 | 22.70          | 22.73    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | Hubert   | 17.84          | 17.36    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
-|          |                          |                 | WavLM    | 20.55          | 21.59    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa)      |
+| Language | Training data (in hours) | Language Family | Model    | PER validation | PER test | Runs                                                                                                                                                              |
+|----------|--------------------------|-----------------|----------|----------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Italian  | 62.34                    | Romance         | Wav2Vec2 | 19.05          | 17.95    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1y0wqakj?workspace=user-clementapa)|
+|          |                          |                 | Hubert   | 14.05          | 12.67    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/22429a1f?workspace=user-clementapa) |
+|          |                          |                 | WavLM    | 19.83          | 25.60    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1tozo0p7?workspace=user-clementapa)  |
+| Russian  | 15.55                    | East Slavic     | Wav2Vec2 | 32.16          | 31.66    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3n11rfhy?workspace=user-clementapa)|
+|          |                          |                 | Hubert   | 25.10          | 24.09    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/109itv4h?workspace=user-clementapa) |
+|          |                          |                 | WavLM    | 20.25          | 18.88    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1i0j5f2r?workspace=user-clementapa)  |
+| Dutch    | 12.78                    | West Germanic   | Wav2Vec2 | 16.18          | 20.83    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/22slhrhk?workspace=user-clementapa) |
+|          |                          |                 | Hubert   | 12.77          | 16.49    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1d4o8yug?workspace=user-clementapa)  |
+|          |                          |                 | WavLM    | 15.96          | 19.91    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9orkmct?workspace=user-clementapa)  |
+| Swedish  | 3.22                     | North Germanic  | Wav2Vec2 | 26.50          | 24.16    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1cm9q4ud?workspace=user-clementapa) |
+|          |                          |                 | Hubert   | 21.77          | 19.38    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1ztn3i01?workspace=user-clementapa)   |
+|          |                          |                 | WavLM    | 26.86          | 24.61    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2ofpwcgv?workspace=user-clementapa)   |
+| Turkish  | 2.52                     | Turkic          | Wav2Vec2 | 19.62          | 19.03    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3ebdnaq9?workspace=user-clementapa) |
+|          |                          |                 | Hubert   | 15.51          | 14.19    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3jp8et3b?workspace=user-clementapa)   |
+|          |                          |                 | WavLM    | 19.85          | 18.95    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2ldnghcw?workspace=user-clementapa)   |
+| Average  | -                        | All             | Wav2Vec2 | 22.70          | 22.73    |                                                                                                                                                                  |
+|          |                          |                 | Hubert   | 17.84          | 17.36    |                                                                                                                                                                   |
+|          |                          |                 | WavLM    | 20.55          | 21.59    |                                                                                                                                                                   |
 
 
 ### 🧊 Frozen Features
@@ -159,18 +159,18 @@ Pretrained English models to other languages
 
 | Training set | Training data | Model    | PER validation | PER test | Runs |
 |--------------|---------------|----------|----------------|----------|------|
-| 5%           | ~ 10 min      | Wav2Vec2 | 55.35          | 50.91    |      |
-|              |               | Hubert   | 44.96          | 39.38    |      |
-|              |               | WavLM    | 56.22          | 51.25    |      |
-| 10%          | ~ 20 min      | Wav2Vec2 | 52.97          | 49.01    |      |
-|              |               | Hubert   | 42.61          | 37.50    |      |
-|              |               | WavLM    | 46.54          | 43.64    |      |
-| 50%          | ~ 2 h         | Wav2Vec2 | 51.23          | 46.24    |      |
-|              |               | Hubert   | 39.91          | 35.27    |      |
-|              |               | WavLM    | 44.57          | 42.33    |      |
-| 100%         | ~ 3 h         | Wav2Vec2 | 50.30          | 45.23    |      |
-|              |               | Hubert   | 37.34          | 32.68    |      |
-|              |               | WavLM    | 43.65          | 40.55    |      |
+| 5%           | ~ 10 min      | Wav2Vec2 | 55.35          | 50.91    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3ti8zmeo?workspace=user-clementapa)       |
+|              |               | Hubert   | 44.96          | 39.38    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/259nzpmx?workspace=user-clementapa)       |
+|              |               | WavLM    | 56.22          | 51.25    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa)       |
+| 10%          | ~ 20 min      | Wav2Vec2 | 52.97          | 49.01    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1e0h39p9?workspace=user-clementapa)       |
+|              |               | Hubert   | 42.61          | 37.50    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2a975lju?workspace=user-clementapa)       |
+|              |               | WavLM    | 46.54          | 43.64    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/oh1g6apq?workspace=user-clementapa)       |
+| 50%          | ~ 2 h         | Wav2Vec2 | 51.23          | 46.24    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/tq9rqz7g?workspace=user-clementapa)       |
+|              |               | Hubert   | 39.91          | 35.27    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/32cckeib?workspace=user-clementapa)       |
+|              |               | WavLM    | 44.57          | 42.33    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa)       |
+| 100%         | ~ 3 h         | Wav2Vec2 | 50.30          | 45.23    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa)       |
+|              |               | Hubert   | 37.34          | 32.68    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa)       |
+|              |               | WavLM    | 43.65          | 40.55    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa)       |
 
 
 ## :pushpin: Project structure
