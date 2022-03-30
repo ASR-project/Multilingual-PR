@@ -159,18 +159,18 @@ Pretrained English models to other languages
 
 | Training set | Training data | Model    | PER validation | PER test | Runs |
 |--------------|---------------|----------|----------------|----------|------|
-| 5%           | ~ 10 min      | Wav2Vec2 | 55.35          | 50.91    |      |
-|              |               | Hubert   | 44.96          | 39.38    |      |
-|              |               | WavLM    | 56.22          | 51.25    |      |
-| 10%          | ~ 20 min      | Wav2Vec2 | 52.97          | 49.01    |      |
-|              |               | Hubert   | 42.61          | 37.50    |      |
-|              |               | WavLM    | 46.54          | 43.64    |      |
-| 50%          | ~ 2 h         | Wav2Vec2 | 51.23          | 46.24    |      |
-|              |               | Hubert   | 39.91          | 35.27    |      |
-|              |               | WavLM    | 44.57          | 42.33    |      |
-| 100%         | ~ 3 h         | Wav2Vec2 | 50.30          | 45.23    |      |
-|              |               | Hubert   | 37.34          | 32.68    |      |
-|              |               | WavLM    | 43.65          | 40.55    |      |
+| 5%           | ~ 10 min      | Wav2Vec2 | 55.35          | 50.91    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3ti8zmeo?workspace=user-clementapa)       |
+|              |               | Hubert   | 44.96          | 39.38    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/259nzpmx?workspace=user-clementapa)       |
+|              |               | WavLM    | 56.22          | 51.25    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa)       |
+| 10%          | ~ 20 min      | Wav2Vec2 | 52.97          | 49.01    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1e0h39p9?workspace=user-clementapa)       |
+|              |               | Hubert   | 42.61          | 37.50    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2a975lju?workspace=user-clementapa)       |
+|              |               | WavLM    | 46.54          | 43.64    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/oh1g6apq?workspace=user-clementapa)       |
+| 50%          | ~ 2 h         | Wav2Vec2 | 51.23          | 46.24    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/tq9rqz7g?workspace=user-clementapa)       |
+|              |               | Hubert   | 39.91          | 35.27    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/32cckeib?workspace=user-clementapa)       |
+|              |               | WavLM    | 44.57          | 42.33    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa)       |
+| 100%         | ~ 3 h         | Wav2Vec2 | 50.30          | 45.23    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa)       |
+|              |               | Hubert   | 37.34          | 32.68    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa)       |
+|              |               | WavLM    | 43.65          | 40.55    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa)       |
 
 
 ## :pushpin: Project structure
