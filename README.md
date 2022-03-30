@@ -12,7 +12,11 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
   <img width="300" height="300" src="assets/img_readme/parrot.png">
 </p>
 
-This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Wandb.
+This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Weight & Biases.
+
+## :bird: Introduction 
+
+TODO (wait to do correctly in the report)
 
 ## :sparkles: Main features
 
@@ -83,15 +87,19 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 
 ## :family: Language Family
 
+<center>
+
 | Language | Family |
 |---|---|
-| Italian | *Romance* |
-| Russian | *East Slavic* |
-| Dutch | *West Germanic* |
-| Swedish | *North Germanic* |
-| Turkish | *Turkic* |
+| Italian :it: | *Romance* |
+| Russian :ru: | *East Slavic* |
+| Dutch :nl: | *West Germanic* |
+| Swedish :sv: | *North Germanic* |
+| Turkish :tr: | *Turkic* |
 
-English is a part of the *West Germanic* family.\
+</center>
+
+**English** is a part of the *West Germanic* family.\
 Source: https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md
 
 ## :chart_with_upwards_trend: Main results
