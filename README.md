@@ -157,6 +157,22 @@ Pretrained English models to other languages
 
 ### ⌚ Training data  
 
+| Training set | Training data | Model    | PER validation | PER test | Runs |
+|--------------|---------------|----------|----------------|----------|------|
+| 5%           | ~ 10 min      | Wav2Vec2 | 55.35          | 50.91    |      |
+|              |               | Hubert   | 44.96          | 39.38    |      |
+|              |               | WavLM    | 56.22          | 51.25    |      |
+| 10%          | ~ 20 min      | Wav2Vec2 | 52.97          | 49.01    |      |
+|              |               | Hubert   | 42.61          | 37.50    |      |
+|              |               | WavLM    | 46.54          | 43.64    |      |
+| 50%          | ~ 2 h         | Wav2Vec2 | 51.23          | 46.24    |      |
+|              |               | Hubert   | 39.91          | 35.27    |      |
+|              |               | WavLM    | 44.57          | 42.33    |      |
+| 100%         | ~ 3 h         | Wav2Vec2 | 50.30          | 45.23    |      |
+|              |               | Hubert   | 37.34          | 32.68    |      |
+|              |               | WavLM    | 43.65          | 40.55    |      |
+
+
 ## :pushpin: Project structure
 
 ```
