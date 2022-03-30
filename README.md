@@ -147,7 +147,7 @@ Pretrained English models to other languages
 | Turkish :tr:| 2.52                     | Turkic          | Wav2Vec2 | 53.92          | 52.08    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1kyc217g?workspace=user-clementapa)      |
 |          |                          |                 | Hubert   | 39.55          | 37.08    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/9flufqqm?workspace=user-clementapa)      |
 |          |                          |                 | WavLM    | 47.18          | 45.53    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa) 
-| Average  | -                        | All             | Wav2Vec2 | 46.684         | 44.414   | -    |
+| Average  |                          | All             | Wav2Vec2 | 46.684         | 44.414   | -    |
 |          |                          |                 | Hubert   | 33.344         | 30.754   | -    | 
 |          |                          |                 | WavLM    | 38.744         | 37.298   | -    | 
 
