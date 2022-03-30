@@ -186,10 +186,10 @@ Pretrained English models to other languages
 
  <p align="center">
     <a href="https://huggingface.co/">
-  <img src="https://raw.githubusercontent.com/huggingface/awesome-huggingface/main/logo.svg" width="10%" height="10%" alt="logo hugging face"/>
+    <img src="https://raw.githubusercontent.com/huggingface/awesome-huggingface/main/logo.svg" width="10%" height="10%" style="margin-right: 50px;" alt="logo hugging face"/>
     <a href="https://wandb.ai/site">
-  <img src="https://raw.githubusercontent.com/wandb/assets/main/wandb-logo-yellow-dots-black-wb.svg" width="25%" height="25%" alt="logo wandb"/>
-  <a href="https://pytorch-lightning.readthedocs.io/en/latest/">
-  <img src="https://github.com/PyTorchLightning/pytorch-lightning/blob/master/docs/source/_static/images/logo.png" width="25%" height="25%" alt="logo pytorch lightning"/>
+    <img src="https://raw.githubusercontent.com/wandb/assets/main/wandb-logo-yellow-dots-black-wb.svg"  style="margin-right: 50px;" width="25%" height="25%" alt="logo wandb"/>
+    <a href="https://pytorch-lightning.readthedocs.io/en/latest/">
+    <img src="https://github.com/PyTorchLightning/pytorch-lightning/blob/master/docs/source/_static/images/logo.png" width="25%" height="25%" alt="logo pytorch lightning"/>
 
 </p>
