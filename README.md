@@ -108,7 +108,7 @@ dataset: Common Voice Corpus 6.1 : https://commonvoice.mozilla.org/fr/datasets
 
 Pretrained English models to other languages
 
-### Fine-tuning
+### 🚀 Fine-tuning
 
 | Language | Training data (in hours) | Model | PER validation | PER test | Run |
 |---|---|---|---|---|---|
@@ -128,7 +128,7 @@ Pretrained English models to other languages
 | Turkish | X | Hubert | X | X |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
 | Turkish | X | WavLM | X | X |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr?workspace=user-clementapa) |
 
-### Backbone freezed
+### 🧊 Frozen Features
 
 | Language | Training data (in hours) | Language Family | Model    | PER validation | PER test | Runs |
 |----------|--------------------------|-----------------|----------|----------------|----------|------|
@@ -151,6 +151,7 @@ Pretrained English models to other languages
 |          |                          |                 | Hubert   | 33.344         | 30.754   | -    | 
 |          |                          |                 | WavLM    | 38.744         | 37.298   | -    | 
 
+### ⌚ Training data  
 
 ## :pushpin: Project structure
 
