@@ -61,6 +61,7 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 - Wav2vec2:  [facebook/wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
 - WavLM: [microsoft/wavlm-base](https://huggingface.co/microsoft/wavlm-base)
 - HuBERT: [facebook/hubert-large-ls960-ft](https://huggingface.co/facebook/hubert-large-ls960-ft)
+
 ## :scroll: Data processing part
 
 - [X] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
@@ -82,7 +83,7 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 - [X] Implement CTC algorithm using PyTorch
 - [X] Metric : implement the Phoneme Error Rate
 - [x] Train the model on the built dataset and using pretrained features of different SSL method
-- [ ] Train on 10 minutes, 1 hour and 10 hours of data
+- [x] Train on 10 minutes, 1 hour and 10 hours of data
 - [x] Benchmark for different languages
 
 ## :family: Language Family
@@ -112,19 +113,19 @@ Pretrained English models to other languages
 
 | Language | Training data (in hours) | Language Family | Model    | PER validation | PER test | Runs                                                                                                                                                              |
 |----------|--------------------------|-----------------|----------|----------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Italian  | 62.34                    | Romance         | Wav2Vec2 | 19.05          | 17.95    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1y0wqakj?workspace=user-clementapa)|
+| Italian :it: | 62.34                    | Romance         | Wav2Vec2 | 19.05          | 17.95    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1y0wqakj?workspace=user-clementapa)|
 |          |                          |                 | Hubert   | 14.05          | 12.67    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/22429a1f?workspace=user-clementapa) |
 |          |                          |                 | WavLM    | 19.83          | 25.60    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1tozo0p7?workspace=user-clementapa)  |
-| Russian  | 15.55                    | East Slavic     | Wav2Vec2 | 32.16          | 31.66    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3n11rfhy?workspace=user-clementapa)|
+| Russian :ru: | 15.55                    | East Slavic     | Wav2Vec2 | 32.16          | 31.66    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3n11rfhy?workspace=user-clementapa)|
 |          |                          |                 | Hubert   | 25.10          | 24.09    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/109itv4h?workspace=user-clementapa) |
 |          |                          |                 | WavLM    | 20.25          | 18.88    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1i0j5f2r?workspace=user-clementapa)  |
-| Dutch    | 12.78                    | West Germanic   | Wav2Vec2 | 16.18          | 20.83    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/22slhrhk?workspace=user-clementapa) |
+| Dutch 🇳🇱 | 12.78                    | West Germanic   | Wav2Vec2 | 16.18          | 20.83    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/22slhrhk?workspace=user-clementapa) |
 |          |                          |                 | Hubert   | 12.77          | 16.49    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1d4o8yug?workspace=user-clementapa)  |
 |          |                          |                 | WavLM    | 15.96          | 19.91    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9orkmct?workspace=user-clementapa)  |
-| Swedish  | 3.22                     | North Germanic  | Wav2Vec2 | 26.50          | 24.16    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1cm9q4ud?workspace=user-clementapa) |
+| Swedish 🇸🇪 | 3.22                     | North Germanic  | Wav2Vec2 | 26.50          | 24.16    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1cm9q4ud?workspace=user-clementapa) |
 |          |                          |                 | Hubert   | 21.77          | 19.38    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1ztn3i01?workspace=user-clementapa)   |
 |          |                          |                 | WavLM    | 26.86          | 24.61    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2ofpwcgv?workspace=user-clementapa)   |
-| Turkish  | 2.52                     | Turkic          | Wav2Vec2 | 19.62          | 19.03    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3ebdnaq9?workspace=user-clementapa) |
+| Turkish :tr:| 2.52                     | Turkic          | Wav2Vec2 | 19.62          | 19.03    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3ebdnaq9?workspace=user-clementapa) |
 |          |                          |                 | Hubert   | 15.51          | 14.19    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/3jp8et3b?workspace=user-clementapa)   |
 |          |                          |                 | WavLM    | 19.85          | 18.95    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/2ldnghcw?workspace=user-clementapa)   |
 | Average  | -                        | All             | Wav2Vec2 | 22.70          | 22.73    |                                                                                                                                                                  |
@@ -151,9 +152,9 @@ Pretrained English models to other languages
 | Turkish :tr:| 2.52                     | Turkic          | Wav2Vec2 | 53.92          | 52.08    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/1kyc217g?workspace=user-clementapa)      |
 |          |                          |                 | Hubert   | 39.55          | 37.08    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/9flufqqm?workspace=user-clementapa)      |
 |          |                          |                 | WavLM    | 47.18          | 45.53    | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa) 
-| Average  |                          | All             | Wav2Vec2 | 46.684         | 44.414   | -    |
-|          |                          |                 | Hubert   | 33.344         | 30.754   | -    | 
-|          |                          |                 | WavLM    | 38.744         | 37.298   | -    | 
+| Average  |                          | All             | Wav2Vec2 | 46.684         | 44.414   |      |
+|          |                          |                 | Hubert   | 33.344         | 30.754   |      | 
+|          |                          |                 | WavLM    | 38.744         | 37.298   |      | 
 
 ### ⌚ Training data  
 
@@ -172,6 +173,17 @@ Pretrained English models to other languages
 |              |               | Hubert   | 37.34          | 32.68    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa)       |
 |              |               | WavLM    | 43.65          | 40.55    |[![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa)       |
 
+<p align="center">
+  <em> Variation in the amount of training data with **frozen features** of models pre-trained with the 3 different methods. Language: Swedish 🇸🇪. </em>
+</p>
+
+<p align="center">
+  <img src="assets/img_readme/PER test vs Training data.png" width="500" height="300"/>
+  <img src="assets/img_readme/PER validation vs Training data.png" width="500" height="300"/>
+</p>
+<p align="center">
+  <em> PER on the test set and on the validation set vs Training data for the Swedish language with frozen features. </em>
+</p>
 
 ## :pushpin: Project structure
 
@@ -216,5 +228,4 @@ Pretrained English models to other languages
     <img src="https://raw.githubusercontent.com/wandb/assets/main/wandb-dots-logo.svg"  style="margin-right: 50px;" width="10%" height="10%" alt="logo wandb"/>
     <a href="https://pytorch-lightning.readthedocs.io/en/latest/">
     <img src="https://github.com/PyTorchLightning/pytorch-lightning/blob/master/docs/source/_static/images/logo.png" width="25%" height="25%" alt="logo pytorch lightning"/>
-
 </p>
