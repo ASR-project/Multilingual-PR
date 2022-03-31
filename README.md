@@ -90,18 +90,18 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 
 <center>
 
-| Language | Family |
-|---|---|
-| Italian :it: | *Romance* |
-| Russian :ru: | *East Slavic* |
-| Dutch 🇳🇱 | *West Germanic* |
-| Swedish 🇸🇪 | *North Germanic* |
-| Turkish :tr: | *Turkic* |
+| Language | Family | Proximity with English |
+|----------|--------|------------------------|
+| Italian :it: | *Romance* | 47.8 |
+| Russian :ru: | *East Slavic* | 60.3 |
+| Dutch 🇳🇱 | *West Germanic* | 27.2 |
+| Swedish 🇸🇪 | *North Germanic* | 26.7 |
+| Turkish :tr: | *Turkic* | 92.0 |
 
 </center>
 
 **English** is a part of the *West Germanic* family.\
-Source: https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md
+Source: https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md and http://www.elinguistics.net/Compare_Languages.aspx
 
 ## :chart_with_upwards_trend: Main results
 
