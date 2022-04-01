@@ -73,7 +73,9 @@ class BaseModule(LightningModule):
     def training_step(self, batch, batch_idx):
         """needs to return a loss from a single batch"""
         loss, logits, preds, targets = self._get_outputs(batch, batch_idx)
-
+        if loss != loss:
+            print("loss is nan, model collapse, exiting")
+            exit(1)
         # Log loss
         self.log("train/loss", loss, batch_size=len(preds))
         
