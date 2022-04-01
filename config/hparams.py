@@ -37,7 +37,7 @@ class Hparams:
 
     best_model: str = ""
     
-    log_freq_audio : int = 1
+    log_freq_audio : int = 10
     log_nb_audio   : int = 2
 
     # trainer params
@@ -52,12 +52,12 @@ class Hparams:
     # Early Stopping
     early_stopping        : bool          = True
     early_stopping_params: Dict[str, Any] = dict_field(
-        dict(monitor="val/per", patience=50, mode="min", verbose=True)
+        dict(monitor="val/per", patience=5, mode="min", verbose=True)
     )
 
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "Hubert"     # Hubert, Wav2Vec2, WavLM
+    network_name                  : str           = "WavLM"     # Hubert, Wav2Vec2, WavLM
     pretrained_name               : Optional[str] = ""
 
     freeze                        : bool          = True
@@ -95,14 +95,14 @@ class DatasetParams:
     max_input_length_in_sec : float                   = 5
     num_proc                : int                     = 4
 
-    create_dataset        : bool                    = False 
+    create_dataset          : bool                    = False 
 
 @dataclass
 class OptimizerParams: 
     """Optimization parameters"""
 
     optimizer     : str   = "AdamW"
-    lr            : float = 3e-4
+    lr            : float = 2e-2
     weight_decay  : float = 1e-8
 
     accumulate_grad_batches: int = 16 # 1 for no accumulation
@@ -113,7 +113,7 @@ class OptimizerParams:
     # Cosine scheduler
     max_epochs      : int   = 10
     warmup_epochs   : int   = 1
-    warmup_start_lr: float  = 3e-4
+    warmup_start_lr: float  = 6e-4
     eta_min         : float = 5e-6
 
     # Step LR scheduler
@@ -154,7 +154,7 @@ class Parameters:
                 # self.network_param.pretrained_name = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
                 self.network_param.pretrained_name = "facebook/wav2vec2-base-960h"
             elif self.network_param.network_name == "WavLM":
-                self.network_param.pretrained_name = "microsoft/wavlm-base"
+                self.network_param.pretrained_name = "microsoft/wavlm-large"
             elif self.network_param.network_name == "Hubert":
                 self.network_param.pretrained_name = "facebook/hubert-large-ls960-ft"
             else:
