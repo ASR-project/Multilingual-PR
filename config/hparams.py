@@ -27,7 +27,7 @@ class Hparams:
     # basic params
     seed_everything: Optional[int] = None  # seed for the whole run
     gpu             : int          = 1  # number or gpu
-    max_epochs      : int          = 50  # maximum number of epochs
+    max_epochs      : int          = 100  # maximum number of epochs
     weights_path    : str          = osp.join(os.getcwd(), "weights")
 
     # modes
@@ -52,7 +52,7 @@ class Hparams:
     # Early Stopping
     early_stopping        : bool          = True
     early_stopping_params: Dict[str, Any] = dict_field(
-        dict(monitor="val/per", patience=5, mode="min", verbose=True)
+        dict(monitor="val/per", patience=10, mode="min", verbose=True)
     )
 
 @dataclass
