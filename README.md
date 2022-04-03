@@ -16,7 +16,16 @@ This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Weight 
 
 ## :bird: Introduction 
 
-TODO (wait to do correctly in the report)
+The scarcity of annotated data, and the heavy cost of producing them, limits our ability to train deep neural network for audio processing tasks.Therefore, the speech community developed feature learning methods with a minimal need fo annotated data, which mostly fall under unsupervised and self-supervised techniques.
+
+Recently, the rise of self-supervised learning methods for textual modality has outperformed state-of-the-art methods on downstream tasks, by fine-tuning the pretrained models on a relatively small amount of data. These approaches have recently been tested for other modalities such as images and audios.
+
+Phoneme recognition is an exciting challenge that involves processing a raw audio recording and predict the corresponding sequence of phonemes that are pronounced by the speaker. Throughout this project, we will compare specifically three different self-supervised models, Wav2vec (2019, 2020), HuBERT (2021) and WavLM (2022) pretrained on a corpus of English speech that we will use in various ways to perform phoneme recognition for different languages with a network trained with Connectionist Temporal Classification (CTC) algorithm. Different questions will be addressed:
+
++ *How well do they predict phonemes for each language?*
++ *What is the impact of choosing English as a pretrained language, especially for languages that are very different from English? Which method(s) works best for transferring knowledge from English to other languages?*
++ *Which method extracts the best features for phoneme recognition?*
++ *What is the influence of the abundance of training data on the performance of models? In this project, we address these questions by drawing conclusions from our experiments.*
 
 ## :sparkles: Main features
 
@@ -24,7 +33,7 @@ TODO (wait to do correctly in the report)
 + Freedom to select any languages available on CommonVoice hosted at [HuggingFace](https://huggingface.co/datasets/common_voice). 
 + Nice visualization tool through wandb.
 
-## :pencil2: Schema  
+## :pencil2: Network Architecture for phoneme recognition  
 
 <p align="center">
   <img width="400" height="500" src="assets/img_readme/Network.drawio.png">
@@ -148,7 +157,7 @@ it, nl, tr, ru, sv
 ```
 Feel free to try any other languages and submit a Pull Request :electric_plug:.
 
-## :paperclip: Pre-trained model studied
+## :paperclip: Pre-trained models
 
 <p align="center">
   <img src="assets/img_readme/wav2vec2.png" width="400" height="200"/>
@@ -159,34 +168,12 @@ Feel free to try any other languages and submit a Pull Request :electric_plug:.
 <em> Schema of Wav2vec2, HuBERT and WavLM. </em>
 </p>
 
-For our experiments, we used models hosted on Hugging Face library, that are pre-trained on 960 hours of **English** audio data from Librispeech dataset on 16kHz sampled speech audio. The following pre-trained models were used:
+We used the following pretrained Hugging Face models:
 - Wav2vec2:  [facebook/wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
 - WavLM: [microsoft/wavlm-base](https://huggingface.co/microsoft/wavlm-base)
 - HuBERT: [facebook/hubert-large-ls960-ft](https://huggingface.co/facebook/hubert-large-ls960-ft)
 
-## :scroll: Data processing part
 
-- [X] Explore the dataset on Mozilla common voices (https://commonvoice.mozilla.org/fr) available on HuggingFace? (https://huggingface.co/datasets/common_voice & https://huggingface.co/mozilla-foundation)
-- [X] Script to transform sentence to phoneme (phonemizer : https://github.com/bootphon/phonemizer) : sentence_to_phoneme.py (language available : https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md)
-- [X] Tokenize labels to apply CTC
-- [X] metric per
-- [x] Wandb display using Hugging Face ? :
-    - [x] Phoneme Error Rate (train and validation)
-    - [x] Loss values (train and validation)
-    - [x] some validation audio files with phoneme in labels and predictions ?
-- [x] Get the features from a pre-trained model (Wav2Vec, HuBert and WavLM) on HuggingFace on the retrieved dataset
-    - [x] Wav2Vec : https://huggingface.co/facebook/wav2vec2-base https://huggingface.co/docs/transformers/v4.16.2/en/model_doc/wav2vec2#overview
-    - [x] HuBert : https://huggingface.co/docs/transformers/model_doc/hubert https://huggingface.co/docs/transformers/v4.16.2/en/model_doc/hubert#overview
-    - [x] WavLM : https://huggingface.co/microsoft/wavlm-base https://huggingface.co/docs/transformers/v4.16.2/en/model_doc/wavlm#overview
-- [X] Split the dataset into a trainval / test set. Make sure that the speakers do not occur both on the train set and test set -> **Already done in HF**
-
-## :pencil: Modeling part
-
-- [X] Implement CTC algorithm using PyTorch
-- [X] Metric : implement the Phoneme Error Rate
-- [x] Train the model on the built dataset and using pretrained features of different SSL method
-- [x] Train on 10 minutes, 1 hour and 10 hours of data
-- [x] Benchmark for different languages
 
 ## :family: Language Family
 
