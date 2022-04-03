@@ -25,7 +25,9 @@ Phoneme recognition is an exciting challenge that involves processing a raw audi
 + *How well do they predict phonemes for each language?*
 + *What is the impact of choosing English as a pretrained language, especially for languages that are very different from English? Which method(s) works best for transferring knowledge from English to other languages?*
 + *Which method extracts the best features for phoneme recognition?*
-+ *What is the influence of the abundance of training data on the performance of models? In this project, we address these questions by drawing conclusions from our experiments.*
++ *What is the influence of the abundance of training data on the performance of models?*
+
+In this project, we address these questions by drawing conclusions from our experiments.
 
 ## :sparkles: Main features
 
@@ -258,7 +260,7 @@ Pretrained English models to other languages
 |   |     | WavLM *Base*    | **47\.18**     | **45\.53** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/dsusk8l8?workspace=user-clementapa>) |
 |   |     | Hubert *Large*  | 39\.55   | 37\.08     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/9flufqqm?workspace=user-clementapa>) |
 |   |     | WavLM *Large*   | **30\.66**     | **30\.14** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2n2y94s8?workspace=user-clementapa>) |
-| Average |     | Wav2Vec2 *Base* | 46\.68   | 44\.41     |    |
+| Average |  \-   | Wav2Vec2 *Base* | 46\.68   | 44\.41     |    |
 |   |     | WavLM *Base*    | **38\.74**     | **37\.30** |    |
 |   |     | Hubert *Large*  | 33\.34   | 30\.75     |    |
 |   |     | WavLM *Large*   | **30\.22**     | **28\.31** |    |
@@ -290,7 +292,7 @@ Pretrained English models to other languages
   <img src="assets/img_readme/PER validation vs Training data.png" width="500" height="300"/>
 </p>
 <p align="center">
-  <em> PER on the test set and on the validation set vs Training data for the Swedish language with frozen features. </em>
+  <em> PER on the test and validation sets vs Training data for the Swedish language with frozen features. </em>
 </p>
 
 ## :pushpin: Project structure
