@@ -1,13 +1,11 @@
 import torch.nn as nn
-from transformers import (HubertForCTC,
-                          Wav2Vec2ForCTC,
-                          WavLMForCTC)
+from transformers import HubertForCTC, Wav2Vec2ForCTC, WavLMForCTC
 
 
 class BaseModel(nn.Module):
     """
-        BaseFeaturesExtractor class that will extract features according to the type of model
-        https://huggingface.co/blog/fine-tune-wav2vec2-english
+    BaseFeaturesExtractor class that will extract features according to the type of model
+    https://huggingface.co/blog/fine-tune-wav2vec2-english
     """
 
     def __init__(self, params):
@@ -17,6 +15,7 @@ class BaseModel(nn.Module):
     def forward(self, x):
         outputs = self.model(x)
         return outputs
+
 
 class Wav2Vec2(BaseModel):
     """
@@ -28,7 +27,10 @@ class Wav2Vec2(BaseModel):
 
         self.model = Wav2Vec2ForCTC.from_pretrained(params.pretrained_name)
         in_features = self.model.lm_head.in_features
-        self.model.lm_head = nn.Linear(in_features=in_features, out_features=self.params.vocab_size)
+        self.model.lm_head = nn.Linear(
+            in_features=in_features, out_features=self.params.vocab_size
+        )
+
 
 class WavLM(BaseModel):
     """
@@ -39,7 +41,10 @@ class WavLM(BaseModel):
         super().__init__(params)
         self.model = WavLMForCTC.from_pretrained(params.pretrained_name)
         in_features = self.model.lm_head.in_features
-        self.model.lm_head = nn.Linear(in_features=in_features, out_features=self.params.vocab_size)
+        self.model.lm_head = nn.Linear(
+            in_features=in_features, out_features=self.params.vocab_size
+        )
+
 
 class Hubert(BaseModel):
     """
@@ -50,4 +55,6 @@ class Hubert(BaseModel):
         super().__init__(params)
         self.model = HubertForCTC.from_pretrained(params.pretrained_name)
         in_features = self.model.lm_head.in_features
-        self.model.lm_head = nn.Linear(in_features=in_features, out_features=self.params.vocab_size)
+        self.model.lm_head = nn.Linear(
+            in_features=in_features, out_features=self.params.vocab_size
+        )

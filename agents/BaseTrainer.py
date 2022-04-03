@@ -2,12 +2,21 @@ import pytorch_lightning as pl
 import torch
 import wandb
 from models.BaseModule import BaseModule
-from pytorch_lightning.callbacks import (LearningRateMonitor, RichProgressBar, EarlyStopping)
+from pytorch_lightning.callbacks import (
+    LearningRateMonitor,
+    RichProgressBar,
+    EarlyStopping,
+)
 from utils.agent_utils import get_artifact, get_datamodule
-from utils.callbacks import AutoSaveModelCheckpoint, LogMetricsCallback, LogAudioPrediction
+from utils.callbacks import (
+    AutoSaveModelCheckpoint,
+    LogMetricsCallback,
+    LogAudioPrediction,
+)
 from utils.logger import init_logger
 
 from utils.dataset_utils import create_vocabulary, create_vocabulary2
+
 
 class BaseTrainer:
     def __init__(self, config, run=None) -> None:
@@ -18,10 +27,14 @@ class BaseTrainer:
         self.logger = init_logger("BaseTrainer", "INFO")
 
         self.logger.info(
-            f'Create vocabulary language : {config.data_param.language} ...')
-        
+            f"Create vocabulary language : {config.data_param.language} ..."
+        )
+
         if config.data_param.subset == "en":
-            config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary(
+            (
+                config.network_param.vocab_file,
+                config.network_param.len_vocab,
+            ) = create_vocabulary(
                 config.data_param.language,
                 config.data_param.phoible_csv_path,
                 eos_token=config.network_param.eos_token,
@@ -31,7 +44,10 @@ class BaseTrainer:
                 word_delimiter_token=config.network_param.word_delimiter_token,
             )
         else:
-            config.network_param.vocab_file, config.network_param.len_vocab = create_vocabulary2(
+            (
+                config.network_param.vocab_file,
+                config.network_param.len_vocab,
+            ) = create_vocabulary2(
                 config.data_param.language,
                 config.data_param.root_path_annotation,
                 eos_token=config.network_param.eos_token,
@@ -41,16 +57,13 @@ class BaseTrainer:
                 word_delimiter_token=config.network_param.word_delimiter_token,
             )
 
-        self.logger.info(f'Vocabulary file : {config.network_param.vocab_file}')
+        self.logger.info(f"Vocabulary file : {config.network_param.vocab_file}")
 
-        self.logger.info('Loading Data module...')
-        self.datamodule = get_datamodule(
-            config.data_param
-        )
+        self.logger.info("Loading Data module...")
+        self.datamodule = get_datamodule(config.data_param)
 
-        self.logger.info('Loading Model module...')
-        self.pl_model = BaseModule(
-            config.network_param, config.optim_param)
+        self.logger.info("Loading Model module...")
+        self.pl_model = BaseModule(config.network_param, config.optim_param)
 
         self.wb_run.watch(self.pl_model.model)
 
@@ -83,7 +96,7 @@ class BaseTrainer:
             val_check_interval=self.config.val_check_interval,
             limit_train_batches=self.config.limit_train_batches,
             limit_val_batches=self.config.limit_val_batches,
-            accumulate_grad_batches=self.config.accumulate_grad_batches
+            accumulate_grad_batches=self.config.accumulate_grad_batches,
         )
 
         trainer.logger = self.wb_run
@@ -95,8 +108,8 @@ class BaseTrainer:
         self.datamodule.process_dataset("val", self.pl_model.processor)
 
         if self.config.tune_lr:
-            tune_lr_trainer.tune(self.pl_model, datamodule=self.datamodule)   
-            
+            tune_lr_trainer.tune(self.pl_model, datamodule=self.datamodule)
+
         trainer.fit(self.pl_model, datamodule=self.datamodule)
 
     @torch.no_grad()
@@ -125,19 +138,22 @@ class BaseTrainer:
         path_model = f"{self.config.wandb_entity}/{self.config.wandb_project}/{self.config.best_model_run}:top-1"
         best_model_path = get_artifact(path_model, type="model")
 
-        trainer.test(
-            self.pl_model, self.datamodule, ckpt_path=best_model_path
-        )
+        trainer.test(self.pl_model, self.datamodule, ckpt_path=best_model_path)
 
         return
 
-
     def get_callbacks(self):
-        callbacks = [LearningRateMonitor(), LogMetricsCallback(), LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio)]
+        callbacks = [
+            LearningRateMonitor(),
+            LogMetricsCallback(),
+            LogAudioPrediction(self.config.log_freq_audio, self.config.log_nb_audio),
+        ]
 
-        if self.config.enable_progress_bar: callbacks += [RichProgressBar()]
+        if self.config.enable_progress_bar:
+            callbacks += [RichProgressBar()]
 
-        if self.config.early_stopping: callbacks += [EarlyStopping(**self.config.early_stopping_params)]
+        if self.config.early_stopping:
+            callbacks += [EarlyStopping(**self.config.early_stopping_params)]
 
         monitor = "val/per"
         mode = "min"
@@ -145,8 +161,7 @@ class BaseTrainer:
         save_top_k = 1
         every_n_epochs = 1
         callbacks += [
-            AutoSaveModelCheckpoint  # ModelCheckpoint
-            (
+            AutoSaveModelCheckpoint(  # ModelCheckpoint
                 config=(self.network_param).__dict__,
                 project=self.config.wandb_project,
                 entity=self.config.wandb_entity,
@@ -157,7 +172,7 @@ class BaseTrainer:
                 dirpath=self.config.weights_path + f"/{str(wandb.run.name)}",
                 save_top_k=save_top_k,
                 every_n_epochs=every_n_epochs,
-                auto_insert_metric_name=False
+                auto_insert_metric_name=False,
             )
         ]  # our model checkpoint callback
 

@@ -3,20 +3,22 @@ import torch
 from torch import Tensor, tensor
 from typing import Any, Dict, List, Optional, Union, Tuple
 
+
 class PhonemeErrorRate(Metric):
-    '''
+    """
     https://github.com/PyTorchLightning/metrics/blob/master/torchmetrics/text/wer.py#L23-L93
-    '''
+    """
+
     def __init__(self, compute_on_step=False):
         super().__init__(compute_on_step=compute_on_step)
         self.add_state("errors", tensor(0, dtype=torch.float), dist_reduce_fx="sum")
         self.add_state("total", tensor(0, dtype=torch.float), dist_reduce_fx="sum")
 
     def update(self, preds, targets):
-        '''
+        """
         preds : list of sentence phoneme
         targets : list of sentence phoneme
-        '''
+        """
         errors, total = _per_update(preds, targets)
 
         self.errors += errors

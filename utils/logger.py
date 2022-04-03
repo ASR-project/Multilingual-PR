@@ -1,5 +1,6 @@
 import logging
 
+
 class CustomFormatter(logging.Formatter):
     """Logging Formatter to add colors and count warning / errors"""
 
@@ -9,11 +10,11 @@ class CustomFormatter(logging.Formatter):
     green = "\x1b[32;1m"
     reset = "\x1b[0m"
     orange = "\x1b[33;1m"
-    date = "%(asctime)s ["  
-    level_name = "%(levelname)s" 
+    date = "%(asctime)s ["
+    level_name = "%(levelname)s"
     prefix = "]\t"
     other = "%(name)s\t%(message)s"
-    datefmt='%H:%M:%S'
+    datefmt = "%H:%M:%S"
 
     FORMATS = {
         logging.DEBUG: date + green + level_name + reset + prefix + other,
@@ -25,11 +26,12 @@ class CustomFormatter(logging.Formatter):
 
     def format(self, record):
         log_fmt = self.FORMATS.get(record.levelno)
-        formatter = logging.Formatter(log_fmt, '%H:%M:%S')
+        formatter = logging.Formatter(log_fmt, "%H:%M:%S")
         return formatter.format(record)
 
+
 def init_logger(name, log_level):
-    
+
     logger = logging.getLogger(name)
     logger.setLevel(getattr(logging, log_level))
     ch = logging.StreamHandler()

@@ -13,128 +13,141 @@ import torch.optim
 
 ################################## Global parameters ##################################
 
+
 @dataclass
 class Hparams:
     """Hyperparameters of for the run"""
 
     # wandb
-    wandb_entity  : str  = "asr-project"            # name of the project
-    debug         : bool = False                    # test code before running, if testing, no checkpoints are written
-    test          : bool = True
-    wandb_project : str  = f"{'test-'*test}asr"
-    root_dir      : str  = os.getcwd()  # root_dir
+    wandb_entity: str = "asr-project"  # name of the project
+    debug: bool = (
+        False  # test code before running, if testing, no checkpoints are written
+    )
+    test: bool = True
+    wandb_project: str = f"{'test-'*test}asr"
+    root_dir: str = os.getcwd()  # root_dir
 
     # basic params
     seed_everything: Optional[int] = None  # seed for the whole run
-    gpu             : int          = 1  # number or gpu
-    max_epochs      : int          = 100  # maximum number of epochs
-    weights_path    : str          = osp.join(os.getcwd(), "weights")
+    gpu: int = 1  # number or gpu
+    max_epochs: int = 100  # maximum number of epochs
+    weights_path: str = osp.join(os.getcwd(), "weights")
 
     # modes
-    tune_lr: bool  = False  # tune the model on first run
-    dev_run: bool  = False
-    train   : bool = True
+    tune_lr: bool = False  # tune the model on first run
+    dev_run: bool = False
+    train: bool = True
 
     best_model: str = ""
-    
-    log_freq_audio : int = 10
-    log_nb_audio   : int = 2
+
+    log_freq_audio: int = 10
+    log_nb_audio: int = 2
 
     # trainer params
-    val_check_interval  : float = 1.0 # 1.0 (at the end of the epoch)
-    limit_train_batches: float  = 1.0 # 1.0
-    limit_val_batches   : float = 1.0 # 1.0
-    enable_progress_bar: bool   = True
+    val_check_interval: float = 1.0  # 1.0 (at the end of the epoch)
+    limit_train_batches: float = 1.0  # 1.0
+    limit_val_batches: float = 1.0  # 1.0
+    enable_progress_bar: bool = True
 
     # testing params
     best_model_run: str = "WavLM_sv"
 
     # Early Stopping
-    early_stopping        : bool          = True
+    early_stopping: bool = True
     early_stopping_params: Dict[str, Any] = dict_field(
         dict(monitor="val/per", patience=10, mode="min", verbose=True)
     )
 
+
 @dataclass
 class NetworkParams:
-    network_name                  : str           = "WavLM"     # Hubert, Wav2Vec2, WavLM
-    pretrained_name               : Optional[str] = ""
+    network_name: str = "WavLM"  # Hubert, Wav2Vec2, WavLM
+    pretrained_name: Optional[str] = ""
 
-    freeze                        : bool          = True
-    freeze_transformer            : bool          = True
+    freeze: bool = True
+    freeze_transformer: bool = True
 
     # Phoneme Tokenizer
-    eos_token                     : str           = "</s>"
-    bos_token                     : str           = "<s>"
-    unk_token                     : str           = "<unk>"
-    pad_token                     : str           = "<pad>"
-    word_delimiter_token          : str           = "|"
+    eos_token: str = "</s>"
+    bos_token: str = "<s>"
+    unk_token: str = "<unk>"
+    pad_token: str = "<pad>"
+    word_delimiter_token: str = "|"
+
 
 @dataclass
 class DatasetParams:
     """Dataset Parameters
     ! The batch_size and number of crops should be defined here
     """
+
     # Hugging Face datasets parameters
-    dataset_name            : str                     = "common_voice"    # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
-    use_auth_token          : bool                    = False             # True if use mozilla-foundation datasets
-    subset                  : str                     = "sv-SE"              # chosen language (see https://huggingface.co/datasets/common_voice)
-    download_mode           : str                     = "reuse_dataset_if_exists"
-    cache_dir               : str                     = osp.join(os.getcwd(), "assets")
+    dataset_name: str = "common_voice"  # https://huggingface.co/mozilla-foundation or https://huggingface.co/datasets/common_voice # dataset, use <Dataset>Eval for FT
+    use_auth_token: bool = False  # True if use mozilla-foundation datasets
+    subset: str = (
+        "sv-SE"  # chosen language (see https://huggingface.co/datasets/common_voice)
+    )
+    download_mode: str = "reuse_dataset_if_exists"
+    cache_dir: str = osp.join(os.getcwd(), "assets")
 
     # to create vocabulary of phonemes
-    language                 : str                     = "sv" 
-    root_path_annotation     : str                     = osp.join(os.getcwd(), "assets", "common_voices_splits")
-    phoible_csv_path         : str                     = osp.join(os.getcwd(), "assets")
+    language: str = "sv"
+    root_path_annotation: str = osp.join(os.getcwd(), "assets", "common_voices_splits")
+    phoible_csv_path: str = osp.join(os.getcwd(), "assets")
 
     # Dataloader parameters
-    num_workers             : int                     = 20         # number of workers for dataloaders
-    batch_size              : int                     = 2 
-    
-    # Dataset processing parameters
-    max_input_length_in_sec : float                   = 5
-    num_proc                : int                     = 4
+    num_workers: int = 20  # number of workers for dataloaders
+    batch_size: int = 2
 
-    create_dataset          : bool                    = False 
+    # Dataset processing parameters
+    max_input_length_in_sec: float = 5
+    num_proc: int = 4
+
+    create_dataset: bool = False
+
 
 @dataclass
-class OptimizerParams: 
+class OptimizerParams:
     """Optimization parameters"""
 
-    optimizer     : str   = "AdamW"
-    lr            : float = 2e-2
-    weight_decay  : float = 1e-8
+    optimizer: str = "AdamW"
+    lr: float = 2e-2
+    weight_decay: float = 1e-8
 
-    accumulate_grad_batches: int = 16 # 1 for no accumulation
+    accumulate_grad_batches: int = 16  # 1 for no accumulation
 
-    # Scheduler parameters
-    scheduler     : Optional[str] = None # Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None
-    
-    # Cosine scheduler
-    max_epochs      : int   = 10
-    warmup_epochs   : int   = 1
-    warmup_start_lr: float  = 6e-4
-    eta_min         : float = 5e-6
+    # Scheduler parameters
+    scheduler: Optional[
+        str
+    ] = None  # Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None
+
+    # Cosine scheduler
+    max_epochs: int = 10
+    warmup_epochs: int = 1
+    warmup_start_lr: float = 6e-4
+    eta_min: float = 5e-6
 
     # Step LR scheduler
-    step_size : int   = 2
-    gamma     : float = 0.1 # also for multi step lr
+    step_size: int = 2
+    gamma: float = 0.1  # also for multi step lr
 
-    # MultiStepLR scheduler
-    milestones : List[Any] = list_field(8, 10, 15)
+    # MultiStepLR scheduler
+    milestones: List[Any] = list_field(8, 10, 15)
 
     # ReduceLROnPlateau scheduler
-    min_lr   : float = 5e-9
-    patience : int   = 10
+    min_lr: float = 5e-9
+    patience: int = 10
+
 
 @dataclass
 class Parameters:
     """base options."""
-    hparams       : Hparams           = Hparams()
-    data_param    : DatasetParams     = DatasetParams()
-    network_param : NetworkParams     = NetworkParams()
-    optim_param   : OptimizerParams   = OptimizerParams()
-    
+
+    hparams: Hparams = Hparams()
+    data_param: DatasetParams = DatasetParams()
+    network_param: NetworkParams = NetworkParams()
+    optim_param: OptimizerParams = OptimizerParams()
+
     def __post_init__(self):
         """Post-initialization code"""
         if self.hparams.seed_everything is None:
@@ -143,7 +156,7 @@ class Parameters:
         self.hparams.wandb_project = f"{'test-'*self.hparams.test}asr"
 
         self.network_param.phonemizer_lang = self.data_param.language
-        print(f'Phonemizer language : {self.network_param.phonemizer_lang }')
+        print(f"Phonemizer language : {self.network_param.phonemizer_lang }")
 
         random.seed(self.hparams.seed_everything)
         torch.manual_seed(self.hparams.seed_everything)
@@ -158,7 +171,9 @@ class Parameters:
             elif self.network_param.network_name == "Hubert":
                 self.network_param.pretrained_name = "facebook/hubert-large-ls960-ft"
             else:
-                raise NotImplementedError("Only Wav2Vec2, WavLM and Hubert are available !")
+                raise NotImplementedError(
+                    "Only Wav2Vec2, WavLM and Hubert are available !"
+                )
         print(f"Pretrained model: {self.network_param.pretrained_name}")
 
         self.data_param.wandb_project = self.hparams.wandb_project
