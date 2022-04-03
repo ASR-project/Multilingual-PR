@@ -94,7 +94,7 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 The language family tree can be found in the following figure. This gives insight on the genetic proximity of each language.
 
 <p align="center">
-  <img src="assets/img_readme/ASR_language%20family.png" width="400" height="200"/>
+  <img src="assets/img_readme/ASR_language%20family.png"/>
 </p>
 
 | Language | Family | Proximity with English |
