@@ -1,5 +1,6 @@
 from utils.per import PhonemeErrorRate
 
+
 class MetricsModule:
     def __init__(self, set_name, device) -> None:
         """
@@ -7,7 +8,7 @@ class MetricsModule:
         """
         self.device = device
         dict_metrics = {}
-        dict_metrics['per'] = PhonemeErrorRate(compute_on_step=False).to(device)
+        dict_metrics["per"] = PhonemeErrorRate(compute_on_step=False).to(device)
 
         self.dict_metrics = dict_metrics
 

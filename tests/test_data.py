@@ -19,5 +19,5 @@ def test_features():
     path_features = feat_ext_class.extract_features(dummy_input)
     assert os.path.exists(path_features)
 
-    loaded_features = np.load(open(path_features, 'rb'))
+    loaded_features = np.load(open(path_features, "rb"))
     assert len(loaded_features) == 0
