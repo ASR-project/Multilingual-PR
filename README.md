@@ -9,14 +9,23 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 ![PyTorch Lightning](https://img.shields.io/badge/PyTorch-Lightning-blueviolet.svg?style=plastic)
 
 <p align="center">
-  <img width="300" height="300" src="assets/img_readme/parrot.png">
+  <img width="25%" height="25%" src="assets/img_readme/parrot.png">
 </p>
 
 This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Weight & Biases.
 
 ## :bird: Introduction 
 
-TODO (wait to do correctly in the report)
+The scarcity of annotated data, and the heavy cost of producing them, limits our ability to train deep neural network for audio processing tasks.Therefore, the speech community developed feature learning methods with a minimal need fo annotated data, which mostly fall under unsupervised and self-supervised techniques.
+
+Recently, the rise of self-supervised learning methods for textual modality has outperformed state-of-the-art methods on downstream tasks, by fine-tuning the pretrained models on a relatively small amount of data. These approaches have recently been tested for other modalities such as images and audios.
+
+Phoneme recognition is an exciting challenge that involves processing a raw audio recording and predict the corresponding sequence of phonemes that are pronounced by the speaker. Throughout this project, we will compare specifically three different self-supervised models, Wav2vec (2019, 2020), HuBERT (2021) and WavLM (2022) pretrained on a corpus of English speech that we will use in various ways to perform phoneme recognition for different languages with a network trained with Connectionist Temporal Classification (CTC) algorithm. Different questions will be addressed: 
+- *How well do they predict phonemes for each language?*
+- *What is the impact of choosing English as a pretrained language, especially for languages that are very different from English? Which method(s) works best for transferring knowledge from English to other languages?*
+- *Which method extracts the best features for phoneme recognition?*
+- *What is the influence of the abundance of training data on the performance of models?*
+In this project, we address these questions by drawing conclusions from our experiments. 
 
 ## :sparkles: Main features
 
@@ -24,7 +33,7 @@ TODO (wait to do correctly in the report)
 + Freedom to select any languages available on CommonVoice hosted at [HuggingFace](https://huggingface.co/datasets/common_voice). 
 + Nice visualization tool through wandb.
 
-## :pencil2: Schema  
+## :pencil2: Network Architecture for phoneme recognition  
 
 <p align="center">
   <img width="400" height="500" src="assets/img_readme/Network.drawio.png">
@@ -42,7 +51,7 @@ Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), 
 The project is based on [Mozilla CommonVoice dataset](https://commonvoice.mozilla.org/fr) available on [HuggingFace](https://huggingface.co/datasets/common_voice). 
 When the script is launched, the program will automatically download the correct dataset and transform ground truth sentences to phonemes using [phonemizer](https://github.com/bootphon/phonemizer). You are free to chose any dataset available on HuggingFace with phonemes dictionaries previously cited to run your models. For our experiments we use:
 ```
-it, nl, tr, ru, sv
+it, nl, tr, ru, sv-SE
 ```
 Feel free to try any other languages and submit a Pull Request :electric_plug:.
 
@@ -58,10 +67,10 @@ Feel free to try any other languages and submit a Pull Request :electric_plug:.
 </p>
 
 For our experiments, we used models hosted on Hugging Face library, that are pre-trained on 960 hours of **English** audio data from Librispeech dataset on 16kHz sampled speech audio. The following pre-trained models were used:
-- Wav2vec2 Base:  [facebook/wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
-- WavLM Base: [microsoft/wavlm-base](https://huggingface.co/microsoft/wavlm-base)
-- WavLM Large: [microsoft/wavlm-large](https://huggingface.co/microsoft/wavlm-large)
-- HuBERT Large: [facebook/hubert-large-ls960-ft](https://huggingface.co/facebook/hubert-large-ls960-ft)
+- Wav2vec2 *Base*:  [facebook/wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
+- WavLM *Base*: [microsoft/wavlm-base](https://huggingface.co/microsoft/wavlm-base)
+- WavLM *Large*: [microsoft/wavlm-large](https://huggingface.co/microsoft/wavlm-large)
+- HuBERT *Large*: [facebook/hubert-large-ls960-ft](https://huggingface.co/facebook/hubert-large-ls960-ft)
 
 ## :scroll: Data processing part
 
