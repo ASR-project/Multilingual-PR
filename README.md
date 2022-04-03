@@ -33,14 +33,14 @@ TODO (wait to do correctly in the report)
   <em> Diagram of the models used for the experiments. N=22 and h=1024 for HuBERT Large and WavLM Large, and N=11 and h=768 for Wav2vec2 Base and WavLM Base. Made by us. </em>
 </p>
 
-## :books: Language that we can done with phonemes dictionaries available
+## :books: Languages for which phoneme dictionaries are available
 Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
 (sv), Turkish (tr), Tatar (tt) and Mandarin (zh). From https://github.com/facebookresearch/CPC_audio.
 
 ## :sound: Dataset
 
 The project is based on [Mozilla CommonVoice dataset](https://commonvoice.mozilla.org/fr) available on [HuggingFace](https://huggingface.co/datasets/common_voice). 
-When the script is launched, the program will automatically download the correct dataset and try to transform ground truth sentences to phonemes using [phonemizer](https://github.com/bootphon/phonemizer). You are free to chose any dataset available on HuggingFace with phonemes dictionaries previously cited to run your models. For our experiments we use:
+When the script is launched, the program will automatically download the correct dataset and transform ground truth sentences to phonemes using [phonemizer](https://github.com/bootphon/phonemizer). You are free to chose any dataset available on HuggingFace with phonemes dictionaries previously cited to run your models. For our experiments we use:
 ```
 it, nl, tr, ru, sv
 ```
