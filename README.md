@@ -200,23 +200,27 @@ Pretrained English models to other languages
 
 ### 🚀 Fine-tuning
 
+
+
+
+
 | Language | Training data (in hours) | Model| PER validation | PER test   | Runs|
 |-|-|-|-|-|-|
-| Italian :it: | 62\.34| Wav2Vec2 *Base* | 19\.05| 17\.95     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1y0wqakj?workspace=user-clementapa>) |
-| |    | Hubert *Large*  | **14\.05**     | **12\.67** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/22429a1f?workspace=user-clementapa>) |
-| |    | WavLM *Base*    | 19\.83   | 25\.60     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1tozo0p7?workspace=user-clementapa>) |
-| Russian :ru: | 15\.55    | Wav2Vec2 *Base* | 32\.16   | 31\.66     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3n11rfhy?workspace=user-clementapa>) |
-| |    | Hubert *Large*  | 25\.10   | 24\.09     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/109itv4h?workspace=user-clementapa>) |
-| |    | WavLM *Base*    | **20\.25**     | **18\.88** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1i0j5f2r?workspace=user-clementapa>) |
-| Dutch 🇳🇱   | 12\.78    | Wav2Vec2 *Base* | 16\.18   | 20\.83     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/22slhrhk?workspace=user-clementapa>) |
-| |    | Hubert *Large*  | **12\.77**     | **16\.49** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1d4o8yug?workspace=user-clementapa>) |
-| |    | WavLM *Base*    | 15\.96   | 19\.91     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/x9orkmct?workspace=user-clementapa>) |
-| Swedish 🇸🇪 | 3\.22     | Wav2Vec2 *Base* | 26\.50   | 24\.16     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1cm9q4ud?workspace=user-clementapa>) |
-| |    | Hubert *Large*  | **21\.77**     | **19\.38** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1ztn3i01?workspace=user-clementapa>) |
-| |    | WavLM *Base*    | 26\.86   | 24\.61     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2ofpwcgv?workspace=user-clementapa>) |
-| Turkish :tr: | 2\.52     | Wav2Vec2 *Base* | 19\.62   | 19\.03     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3ebdnaq9?workspace=user-clementapa>) |
-| |    | Hubert *Large*  | **15\.51**     | **14\.19** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3jp8et3b?workspace=user-clementapa>) |
-| |    | WavLM *Base*    | 19\.85   | 18\.95     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2ldnghcw?workspace=user-clementapa>) |
+| Italian :it: | 62\.34| Wav2Vec2 *Base* | 19\.05| 17\.95     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1y0wqakj?workspace=user-clementapa>) |
+| |    | Hubert *Large*  | **14\.05**     | **12\.67** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/22429a1f?workspace=user-clementapa>) |
+| |    | WavLM *Base*    | 19\.83   | 25\.60     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1tozo0p7?workspace=user-clementapa>) |
+| Russian :ru: | 15\.55    | Wav2Vec2 *Base* | 32\.16   | 31\.66     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/3n11rfhy?workspace=user-clementapa>) |
+| |    | Hubert *Large*  | 25\.10   | 24\.09     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/109itv4h?workspace=user-clementapa>) |
+| |    | WavLM *Base*    | **20\.25**     | **18\.88** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1i0j5f2r?workspace=user-clementapa>) |
+| Dutch 🇳🇱   | 12\.78    | Wav2Vec2 *Base* | 16\.18   | 20\.83     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/22slhrhk?workspace=user-clementapa>) |
+| |    | Hubert *Large*  | **12\.77**     | **16\.49** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1d4o8yug?workspace=user-clementapa>) |
+| |    | WavLM *Base*    | 15\.96   | 19\.91     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/x9orkmct?workspace=user-clementapa>) |
+| Swedish 🇸🇪 | 3\.22     | Wav2Vec2 *Base* | 26\.50   | 24\.16     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1cm9q4ud?workspace=user-clementapa>) |
+| |    | Hubert *Large*  | **21\.77**     | **19\.38** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1ztn3i01?workspace=user-clementapa>) |
+| |    | WavLM *Base*    | 26\.86   | 24\.61     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2ofpwcgv?workspace=user-clementapa>) |
+| Turkish :tr: | 2\.52     | Wav2Vec2 *Base* | 19\.62   | 19\.03     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/3ebdnaq9?workspace=user-clementapa>) |
+| |    | Hubert *Large*  | **15\.51**     | **14\.19** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/3jp8et3b?workspace=user-clementapa>) |
+| |    | WavLM *Base*    | 19\.85   | 18\.95     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2ldnghcw?workspace=user-clementapa>) |
 | Average      | \- | Wav2Vec2 *Base* | 22\.70   | 22\.73     |    |
 | |     | Hubert *Large*  | **17\.84**     | **17\.36** |    |
 | |     | WavLM *Base*    | 20\.55   | 21\.59     |    |
@@ -226,26 +230,26 @@ Pretrained English models to other languages
 
 | Language:tr: | Training data (in hours) | Model | PER validation | PER test | Runs |
 |-|-|-|-|-|-|
-| Italian :it: | 62\.34    | Wav2Vec2 *Base* | 38\.94   | 36\.84     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1wkydddw?workspace=user-clementapa>) |
-|   |     | WavLM *Base*    | **27\.29**     | **25\.98** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2771pb3w?workspace=user-clementapa>) |
-|   |     | Hubert *Large*  | 23\.85   | 21\.15     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2esx3e99?workspace=user-clementapa>) |
-|   |     | WavLM *Large*   | **21\.02**     | **18\.80** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1okkmndw?workspace=user-clementapa>) |
-| Russian :ru:  | 15\.55    | Wav2Vec2 *Base* | 50\.11   | 48\.69     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/tqxh9iho?workspace=user-clementapa>) |
-|   |     | WavLM *Base*    | **40\.66**     | **38\.76** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3em0h48e?workspace=user-clementapa>) |
-|   |     | Hubert *Large*  | 38\.36   | 36\.18     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1vcphgy6?workspace=user-clementapa>) |
-|   |     | WavLM *Large*   | **34\.48**     | **32\.26** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/zc0waf94?workspace=user-clementapa>) |
-| Dutch 🇳🇱| 12\.78    | Wav2Vec2 *Base* | 40\.15   | 39\.23     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3qiea6qt?workspace=user-clementapa>) |
-|   |     | WavLM *Base*    | **34\.94**     | **35\.67** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/204zyxrk?workspace=user-clementapa>) |
-|   |     | Hubert *Large*  | **27\.62**     | **26\.68** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/13nprcb5?workspace=user-clementapa>) |
-|   |     | WavLM *Large*   | 27\.71   | 27\.19     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/pz1cbrjs?workspace=user-clementapa>) |
-| Swedish 🇸🇪 | 3\.22     | Wav2Vec2 *Base* | 50\.30   | 45\.23     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa>) |
-|   |     | WavLM *Base*    | **43\.65**     | **40\.55** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/qt9ymhm1?workspace=user-clementapa>) |
-|   |     | Hubert *Large*  | 37\.34   | **32\.68** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa>) |
-|   |     | WavLM *Large*   | **37\.25**     | 33\.14     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1cgvgyi0?workspace=user-clementapa>) |
-| Turkish :tr:  | 2\.52     | Wav2Vec2 *Base* | 53\.92   | 52\.08     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1kyc217g?workspace=user-clementapa>) |
-|   |     | WavLM *Base*    | **47\.18**     | **45\.53** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/dsusk8l8?workspace=user-clementapa>) |
-|   |     | Hubert *Large*  | 39\.55   | 37\.08     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/9flufqqm?workspace=user-clementapa>) |
-|   |     | WavLM *Large*   | **30\.66**     | **30\.14** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2n2y94s8?workspace=user-clementapa>) |
+| Italian :it: | 62\.34    | Wav2Vec2 *Base* | 38\.94   | 36\.84     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1wkydddw?workspace=user-clementapa>) |
+|   |     | WavLM *Base*    | **27\.29**     | **25\.98** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2771pb3w?workspace=user-clementapa>) |
+|   |     | Hubert *Large*  | 23\.85   | 21\.15     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2esx3e99?workspace=user-clementapa>) |
+|   |     | WavLM *Large*   | **21\.02**     | **18\.80** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1okkmndw?workspace=user-clementapa>) |
+| Russian :ru:  | 15\.55    | Wav2Vec2 *Base* | 50\.11   | 48\.69     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/tqxh9iho?workspace=user-clementapa>) |
+|   |     | WavLM *Base*    | **40\.66**     | **38\.76** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/3em0h48e?workspace=user-clementapa>) |
+|   |     | Hubert *Large*  | 38\.36   | 36\.18     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1vcphgy6?workspace=user-clementapa>) |
+|   |     | WavLM *Large*   | **34\.48**     | **32\.26** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/zc0waf94?workspace=user-clementapa>) |
+| Dutch 🇳🇱| 12\.78    | Wav2Vec2 *Base* | 40\.15   | 39\.23     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/3qiea6qt?workspace=user-clementapa>) |
+|   |     | WavLM *Base*    | **34\.94**     | **35\.67** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/204zyxrk?workspace=user-clementapa>) |
+|   |     | Hubert *Large*  | **27\.62**     | **26\.68** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/13nprcb5?workspace=user-clementapa>) |
+|   |     | WavLM *Large*   | 27\.71   | 27\.19     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/pz1cbrjs?workspace=user-clementapa>) |
+| Swedish 🇸🇪 | 3\.22     | Wav2Vec2 *Base* | 50\.30   | 45\.23     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa>) |
+|   |     | WavLM *Base*    | **43\.65**     | **40\.55** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/qt9ymhm1?workspace=user-clementapa>) |
+|   |     | Hubert *Large*  | 37\.34   | **32\.68** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa>) |
+|   |     | WavLM *Large*   | **37\.25**     | 33\.14     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1cgvgyi0?workspace=user-clementapa>) |
+| Turkish :tr:  | 2\.52     | Wav2Vec2 *Base* | 53\.92   | 52\.08     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1kyc217g?workspace=user-clementapa>) |
+|   |     | WavLM *Base*    | **47\.18**     | **45\.53** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/dsusk8l8?workspace=user-clementapa>) |
+|   |     | Hubert *Large*  | 39\.55   | 37\.08     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/9flufqqm?workspace=user-clementapa>) |
+|   |     | WavLM *Large*   | **30\.66**     | **30\.14** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2n2y94s8?workspace=user-clementapa>) |
 | Average:tr: |     | Wav2Vec2 *Base* | 46\.68   | 44\.41     |    |
 |   |     | WavLM *Base*    | **38\.74**     | **37\.30** |    |
 |   |     | Hubert *Large*  | 33\.34   | 30\.75     |    |
@@ -255,18 +259,18 @@ Pretrained English models to other languages
 
 | Training set | Training data | Model     | PER validation | PER test | Runs     |
 |-|-|-|-|-|-|
-| 5%     | \~ 10 min     | Wav2Vec2 *Base* | 55\.35   | 50\.91   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3ti8zmeo?workspace=user-clementapa>) |
-| || Hubert *Large*  | 44\.96   | 39\.38   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/259nzpmx?workspace=user-clementapa>) |
-| || WavLM *Base*    | 56\.22   | 51\.25   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa>) |
-| 10%    | \~ 20 min     | Wav2Vec2 *Base* | 52\.97   | 49\.01   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1e0h39p9?workspace=user-clementapa>) |
-| || Hubert *Large*  | 42\.61   | 37\.50   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2a975lju?workspace=user-clementapa>) |
-| || WavLM *Base*    | 46\.54   | 43\.64   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/oh1g6apq?workspace=user-clementapa>) |
-| 50%    | \~ 2 h | Wav2Vec2 *Base* | 51\.23   | 46\.24   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/tq9rqz7g?workspace=user-clementapa>) |
-| || Hubert *Large*  | 39\.91   | 35\.27   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/32cckeib?workspace=user-clementapa>) |
-| || WavLM *Base*    | 44\.57   | 42\.33   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa>) |
-| 100%   | \~ 3 h | Wav2Vec2 *Base* | 50\.30   | 45\.23   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa>) |
-| || Hubert *Large*  | 37\.34   | 32\.68   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa>) |
-| || WavLM *Base*    | 43\.65   | 40\.55   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa>) |
+| 5%     | \~ 10 min     | Wav2Vec2 *Base* | 55\.35   | 50\.91   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/3ti8zmeo?workspace=user-clementapa>) |
+| || Hubert *Large*  | 44\.96   | 39\.38   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/259nzpmx?workspace=user-clementapa>) |
+| || WavLM *Base*    | 56\.22   | 51\.25   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa>) |
+| 10%    | \~ 20 min     | Wav2Vec2 *Base* | 52\.97   | 49\.01   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1e0h39p9?workspace=user-clementapa>) |
+| || Hubert *Large*  | 42\.61   | 37\.50   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2a975lju?workspace=user-clementapa>) |
+| || WavLM *Base*    | 46\.54   | 43\.64   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/oh1g6apq?workspace=user-clementapa>) |
+| 50%    | \~ 2 h | Wav2Vec2 *Base* | 51\.23   | 46\.24   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/tq9rqz7g?workspace=user-clementapa>) |
+| || Hubert *Large*  | 39\.91   | 35\.27   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/32cckeib?workspace=user-clementapa>) |
+| || WavLM *Base*    | 44\.57   | 42\.33   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa>) |
+| 100%   | \~ 3 h | Wav2Vec2 *Base* | 50\.30   | 45\.23   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa>) |
+| || Hubert *Large*  | 37\.34   | 32\.68   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa>) |
+| || WavLM *Base*    | 43\.65   | 40\.55   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa>) |
 
 
 <p align="center">
