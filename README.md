@@ -9,7 +9,7 @@ Implementation of the project ```Multi-lingual Phoneme Recognition using self-su
 ![PyTorch Lightning](https://img.shields.io/badge/PyTorch-Lightning-blueviolet.svg?style=plastic)
 
 <p align="center">
-  <img width="300" height="300" src="assets/img_readme/parrot.png">
+  <img width="25%" height="25%" src="assets/img_readme/parrot.png">
 </p>
 
 This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Weight & Biases.
@@ -33,7 +33,7 @@ In this project, we address these questions by drawing conclusions from our expe
 + Freedom to select any languages available on CommonVoice hosted at [HuggingFace](https://huggingface.co/datasets/common_voice). 
 + Nice visualization tool through wandb.
 
-## :pencil2: Schema  
+## :pencil2: Network Architecture for phoneme recognition  
 
 <p align="center">
   <img width="400" height="500" src="assets/img_readme/Network.drawio.png">
@@ -51,7 +51,7 @@ Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), 
 The project is based on [Mozilla CommonVoice dataset](https://commonvoice.mozilla.org/fr) available on [HuggingFace](https://huggingface.co/datasets/common_voice). 
 When the script is launched, the program will automatically download the correct dataset and transform ground truth sentences to phonemes using [phonemizer](https://github.com/bootphon/phonemizer). You are free to chose any dataset available on HuggingFace with phonemes dictionaries previously cited to run your models. For our experiments we use:
 ```
-it, nl, tr, ru, sv
+it, nl, tr, ru, sv-SE
 ```
 Feel free to try any other languages and submit a Pull Request :electric_plug:.
 
