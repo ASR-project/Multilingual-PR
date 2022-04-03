@@ -280,7 +280,7 @@ Pretrained English models to other languages
 | || WavLM *Base*    | 44\.57   | 42\.33   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa>) |
 | 100%   | \~ 3 h | Wav2Vec2 *Base* | 50\.30   | 45\.23   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2v7why5t?workspace=user-clementapa>) |
 | || Hubert *Large*  | 37\.34   | 32\.68   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/mgt5ofzn?workspace=user-clementapa>) |
-| || WavLM *Base*    | 43\.65   | 40\.55   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/x9gqzh3q?workspace=user-clementapa>) |
+| || WavLM *Base*    | 43\.65   | 40\.55   | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1cgvgyi0?workspace=user-clementapa>) |
 
 
 <p align="center">
