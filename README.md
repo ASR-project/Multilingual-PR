@@ -30,17 +30,17 @@ TODO (wait to do correctly in the report)
   <img width="400" height="500" src="assets/img_readme/Network.drawio.png">
 </p>
 <p align="center">
-  <em> Diagram of the models used for the experiments. N=22 and h=1024 for HuBERT, and N=11 and h=768 for Wav2vec2 and WavLM. Made by us. </em>
+  <em> Diagram of the models used for the experiments. N=22 and h=1024 for HuBERT Large and WavLM Large, and N=11 and h=768 for Wav2vec2 Base and WavLM Base. Made by us. </em>
 </p>
 
-## :books: Language that we can done with phonemes dictionaries available
+## :books: Languages for which phoneme dictionaries are available
 Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
 (sv), Turkish (tr), Tatar (tt) and Mandarin (zh). From https://github.com/facebookresearch/CPC_audio.
 
 ## :sound: Dataset
 
 The project is based on [Mozilla CommonVoice dataset](https://commonvoice.mozilla.org/fr) available on [HuggingFace](https://huggingface.co/datasets/common_voice). 
-When the script is launched, the program will automatically download the correct dataset and try to transform ground truth sentences to phonemes using [phonemizer](https://github.com/bootphon/phonemizer). You are free to chose any dataset available on HuggingFace with phonemes dictionaries previously cited to run your models. For our experiments we use:
+When the script is launched, the program will automatically download the correct dataset and transform ground truth sentences to phonemes using [phonemizer](https://github.com/bootphon/phonemizer). You are free to chose any dataset available on HuggingFace with phonemes dictionaries previously cited to run your models. For our experiments we use:
 ```
 it, nl, tr, ru, sv
 ```
@@ -58,9 +58,10 @@ Feel free to try any other languages and submit a Pull Request :electric_plug:.
 </p>
 
 For our experiments, we used models hosted on Hugging Face library, that are pre-trained on 960 hours of **English** audio data from Librispeech dataset on 16kHz sampled speech audio. The following pre-trained models were used:
-- Wav2vec2:  [facebook/wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
-- WavLM: [microsoft/wavlm-base](https://huggingface.co/microsoft/wavlm-base)
-- HuBERT: [facebook/hubert-large-ls960-ft](https://huggingface.co/facebook/hubert-large-ls960-ft)
+- Wav2vec2 Base:  [facebook/wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
+- WavLM Base: [microsoft/wavlm-base](https://huggingface.co/microsoft/wavlm-base)
+- WavLM Large: [microsoft/wavlm-large](https://huggingface.co/microsoft/wavlm-large)
+- HuBERT Large: [facebook/hubert-large-ls960-ft](https://huggingface.co/facebook/hubert-large-ls960-ft)
 
 ## :scroll: Data processing part
 
@@ -90,6 +91,12 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 
 <center>
 
+The language family tree can be found in the following figure. This gives insight on the genetic proximity of each language.
+
+<p align="center">
+  <img src="assets/img_readme/ASR_language%20family.png" width="400" height="200"/>
+</p>
+
 | Language | Family | Proximity with English |
 |----------|--------|------------------------|
 | Italian :it: | *Romance* | 47.8 |
@@ -97,6 +104,7 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 | Dutch 🇳🇱 | *West Germanic* | 27.2 |
 | Swedish 🇸🇪 | *North Germanic* | 26.7 |
 | Turkish :tr: | *Turkic* | 92.0 |
+
 
 </center>
 
