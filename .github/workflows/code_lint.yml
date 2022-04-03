@@ -6,11 +6,17 @@ on:
   push:
     branches:
       - main
+<<<<<<< HEAD
       - segmentation
   pull_request:
     branches:
       - main
       - segmentation
+=======
+  pull_request:
+    branches:
+      - main
+>>>>>>> 322ac4476aabd9fd840858cd74ba34fc870767b3
 
 jobs:
   run-linters:
