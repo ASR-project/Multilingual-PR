@@ -225,7 +225,7 @@ Pretrained English models to other languages
 ### 🧊 Frozen Features
 
 | Language:tr: | Training data (in hours) | Model | PER validation | PER test | Runs |
-|-|-|-|-|-|-|-|
+|-|-|-|-|-|-|-|-|
 | Italian :it: | 62\.34    | Wav2Vec2 *Base* | 38\.94   | 36\.84     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/1wkydddw?workspace=user-clementapa>) |
 |   |     | WavLM *Base*    | **27\.29**     | **25\.98** | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2771pb3w?workspace=user-clementapa>) |
 |   |     | Hubert *Large*  | 23\.85   | 21\.15     | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/2esx3e99?workspace=user-clementapa>) |
@@ -254,7 +254,7 @@ Pretrained English models to other languages
 ### ⌚ Training data  
 
 | Training set | Training data | Model     | PER validation | PER test | Runs     |
-|-|-|-|-|-|-|-|
+|-|-|-|-|-|-|-|-|-|
 | 5%     | \~ 10 min     | Wav2Vec2 *Base* | 55\.35   | 50\.91   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/3ti8zmeo?workspace=user-clementapa>) |
 | || Hubert *Large*  | 44\.96   | 39\.38   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/259nzpmx?workspace=user-clementapa>) |
 | || WavLM *Base*    | 56\.22   | 51\.25   | [![](<./test_files/wandb-github-badge-gradient.svg>)](<https://wandb.ai/asr-project/test-asr/runs/103hww9n?workspace=user-clementapa>) |
