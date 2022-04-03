@@ -154,6 +154,7 @@ class Parameters:
                 # self.network_param.pretrained_name = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
                 self.network_param.pretrained_name = "facebook/wav2vec2-base-960h"
             elif self.network_param.network_name == "WavLM":
+                # self.network_param.pretrained_name = "microsoft/wavlm-base"
                 self.network_param.pretrained_name = "microsoft/wavlm-large"
             elif self.network_param.network_name == "Hubert":
                 self.network_param.pretrained_name = "facebook/hubert-large-ls960-ft"
