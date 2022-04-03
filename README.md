@@ -91,6 +91,12 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 
 <center>
 
+The language family tree can be found in the following figure. This gives insight on the genetic proximity of each language.
+
+<p align="center">
+  <img src="assets/img_readme/ASR_language%20family.png" width="400" height="200"/>
+</p>
+
 | Language | Family | Proximity with English |
 |----------|--------|------------------------|
 | Italian :it: | *Romance* | 47.8 |
@@ -98,6 +104,7 @@ For our experiments, we used models hosted on Hugging Face library, that are pre
 | Dutch 🇳🇱 | *West Germanic* | 27.2 |
 | Swedish 🇸🇪 | *North Germanic* | 26.7 |
 | Turkish :tr: | *Turkic* | 92.0 |
+
 
 </center>
 
