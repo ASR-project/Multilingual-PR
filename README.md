@@ -37,6 +37,108 @@ TODO (wait to do correctly in the report)
 Dutch (du), Spanish (es), French (fr), Italian (it), Kyrgyz (ky), Russian (ru), Sweedish
 (sv), Turkish (tr), Tatar (tt) and Mandarin (zh). From https://github.com/facebookresearch/CPC_audio.
 
+## :star2: Usage
+
+Please refer to our [example notebook](https://github.com/ASR-project/Multilingual-PR/blob/main/train_notebook.ipynb) if you want to train or test a model. To understand the command line arguments that you can use, run:
+```
+Hparams ['parameters.hparams']:
+  Hyperparameters of for the run
+
+  --wandb_entity str    wandb (default: asr-project)
+  --debug bool          (default: False)
+  --test bool           test code before running, if testing, no checkpoints are written (default: True)
+  --wandb_project str   (default: test-asr)
+  --root_dir str        root_dir (default: /home/arthur/Work/MVA-S2/Speech/Multilingual-PR)
+  --seed_everything [int]
+                        basic params (default: None)
+  --gpu int             number or gpu (default: 1)
+  --hparams.max_epochs int
+                        maximum number of epochs (default: 100)
+  --weights_path str    (default: /home/arthur/Work/MVA-S2/Speech/Multilingual-PR/weights)
+  --tune_lr bool        modes (default: False)
+  --dev_run bool        (default: False)
+  --train bool          (default: True)
+  --best_model str      (default: )
+  --log_freq_audio int  (default: 10)
+  --log_nb_audio int    (default: 2)
+  --val_check_interval float
+                        trainer params (default: 1.0)
+  --limit_train_batches float
+                        1.0 (default: 1.0)
+  --limit_val_batches float
+                        1.0 (default: 1.0)
+  --enable_progress_bar bool
+                        (default: True)
+  --best_model_run str  testing params (default: WavLM_sv)
+  --early_stopping bool
+                        Early Stopping (default: True)
+  --early_stopping_params typing.Dict[str, typing.Any]
+                        (default: {'monitor': 'val/per', 'patience': 10, 'mode': 'min', 'verbose': True})
+
+DatasetParams ['parameters.data_param']:
+  Dataset Parameters
+      ! The batch_size and number of crops should be defined here
+      
+
+  --dataset_name str    Hugging Face datasets parameters (default: common_voice)
+  --use_auth_token bool
+                        True if use mozilla-foundation datasets (default: False)
+  --subset str          (default: sv-SE)
+  --download_mode str   chosen language (see https://huggingface.co/datasets/common_voice) (default: reuse_dataset_if_exists)
+  --cache_dir str       (default: /home/arthur/Work/MVA-S2/Speech/Multilingual-PR/assets)
+  --language str        to create vocabulary of phonemes (default: sv)
+  --root_path_annotation str
+                        (default: /home/arthur/Work/MVA-S2/Speech/Multilingual-PR/assets/common_voices_splits)
+  --phoible_csv_path str
+                        (default: /home/arthur/Work/MVA-S2/Speech/Multilingual-PR/assets)
+  --num_workers int     Dataloader parameters (default: 20)
+  --batch_size int      (default: 2)
+  --max_input_length_in_sec float
+                        Dataset processing parameters (default: 5)
+  --num_proc int        (default: 4)
+  --create_dataset bool
+                        (default: False)
+
+NetworkParams ['parameters.network_param']:
+  NetworkParams(network_name: str = 'WavLM', pretrained_name: Union[str, NoneType] = '', freeze: bool = True, freeze_transformer: bool = True, eos_token: str = '</s>', bos_token: str = '<s>', unk_token: str = '<unk>', pad_token: str = '<pad>', word_delimiter_token: str = '|')
+
+  --network_name str    Hubert, Wav2Vec2, WavLM (default: WavLM)
+  --pretrained_name [str]
+                        (default: )
+  --freeze bool         (default: True)
+  --freeze_transformer bool
+                        (default: True)
+  --eos_token str       Phoneme Tokenizer (default: </s>)
+  --bos_token str       (default: <s>)
+  --unk_token str       (default: <unk>)
+  --pad_token str       (default: <pad>)
+  --word_delimiter_token str
+                        (default: |)
+
+OptimizerParams ['parameters.optim_param']:
+  Optimization parameters
+
+  --optimizer str       (default: AdamW)
+  --lr float            (default: 0.02)
+  --weight_decay float  (default: 1e-08)
+  --accumulate_grad_batches int
+                        1 for no accumulation (default: 16)
+  --scheduler [str]     Scheduler parameters (default: None)
+  --optim_param.max_epochs int
+                        Cosine, ReduceLROnPlateau, MultiStepLR, StepLR or None Cosine scheduler (default: 10)
+  --warmup_epochs int   (default: 1)
+  --warmup_start_lr float
+                        (default: 0.0006)
+  --eta_min float       (default: 5e-06)
+  --step_size int       Step LR scheduler (default: 2)
+  --gamma float         also for multi step lr (default: 0.1)
+  --milestones str      MultiStepLR scheduler (default: [8, 10, 15])
+  --min_lr float        ReduceLROnPlateau scheduler (default: 5e-09)
+  --patience int        (default: 10)
+```
+
+
+
 ## :sound: Dataset
 
 The project is based on [Mozilla CommonVoice dataset](https://commonvoice.mozilla.org/fr) available on [HuggingFace](https://huggingface.co/datasets/common_voice). 
