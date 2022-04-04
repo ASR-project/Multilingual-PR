@@ -237,7 +237,7 @@ Pretrained English models to other languages
 
 ### 🧊 Frozen Features
 
-| Language:tr: | Training data (in hours) | Model | PER validation | PER test | Runs |
+| Language | Training data (in hours) | Model | PER validation | PER test | Runs |
 |-|-|-|-|-|-|
 | Italian :it: | 62\.34    | Wav2Vec2 *Base* | 38\.94   | 36\.84     | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/1wkydddw?workspace=user-clementapa>) |
 |   |     | WavLM *Base*    | **27\.29**     | **25\.98** | [![](https://github.com/wandb/assets/blob/main/wandb-github-badge-gradient.svg)](<https://wandb.ai/asr-project/test-asr/runs/2771pb3w?workspace=user-clementapa>) |
