@@ -22,9 +22,8 @@ Recently, the rise of self-supervised learning methods for textual modality has 
 
 Phoneme recognition is an exciting challenge that involves processing a raw audio recording and predict the corresponding sequence of phonemes that are pronounced by the speaker. Throughout this project, we will compare specifically three different self-supervised models, Wav2vec (2019, 2020), HuBERT (2021) and WavLM (2022) pretrained on a corpus of English speech that we will use in various ways to perform phoneme recognition for different languages with a network trained with Connectionist Temporal Classification (CTC) algorithm. Different questions will be addressed:
 
-+ *How well do they predict phonemes for each language?*
 + *What is the impact of choosing English as a pretrained language, especially for languages that are very different from English? Which method(s) works best for transferring knowledge from English to other languages?*
-+ *Which method extracts the best features for phoneme recognition?*
++ *Which method allows to extract the best features for phoneme recognition?*
 + *What is the influence of the abundance of training data on the performance of models?*
 
 In this project, we address these questions by drawing conclusions from our experiments.
