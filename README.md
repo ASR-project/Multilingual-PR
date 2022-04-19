@@ -234,6 +234,9 @@ Pretrained English models to other languages
 | |     | Hubert *Large*  | **17\.84**     | **17\.36** |    |
 | |     | WavLM *Base*    | 20\.55   | 21\.59     |    |
 
+<p align="center">
+  <em> Table of experiments when models are **fine tuned**. Here, we compare 3 different pretrained models. The models were fine tuned on the phoneme recognition task with different languages and a varying amount of training data. </em>
+</p>
 
 ### 🧊 Frozen Features
 
@@ -263,6 +266,10 @@ Pretrained English models to other languages
 |   |     | WavLM *Base*    | **38\.74**     | **37\.30** |    |
 |   |     | Hubert *Large*  | 33\.34   | 30\.75     |    |
 |   |     | WavLM *Large*   | **30\.22**     | **28\.31** |    |
+
+<p align="center">
+  <em> Table of experiments using **frozen features**. Here, we compare 4 different pretrained models. The objective was to train a linear layer, using pretrained models' frozen features, on the phoneme recognition task with different languages and a varying amount of training data. </em>
+</p>
 
 ### ⌚ Training data  
 
