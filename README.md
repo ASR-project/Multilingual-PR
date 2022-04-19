@@ -197,6 +197,9 @@ The language family tree can be found in the following figure. This gives insigh
 
 
 </center>
+<p align="center">
+  <em> Genetic proximity between languages studied and english computed  [here](http://www.elinguistics.net/Compare_Languages.aspx). [1, 30]: Highly related languages, [30, 50]: Related languages, [50, 70]: Remotely related languages, [70, 78]: Very remotely related languages, [78, 100]: No recognizable relationship. </em>
+</p>
 
 **English** is a part of the *West Germanic* family.\
 Source: https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md and http://www.elinguistics.net/Compare_Languages.aspx
