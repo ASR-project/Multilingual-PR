@@ -16,7 +16,7 @@ This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Weight 
 
 ## :bird: Introduction 
 
-The scarcity of annotated data, and the heavy cost of producing them, limits our ability to train deep neural network for audio processing tasks.Therefore, the speech community developed feature learning methods with a minimal need fo annotated data, which mostly fall under unsupervised and self-supervised techniques.
+The scarcity of annotated data, and the heavy cost of producing them, limits our ability to train deep neural network for audio processing tasks.Therefore, the speech community developed feature learning methods with a minimal need for annotated data, which mostly fall under unsupervised and self-supervised techniques.
 
 Recently, the rise of self-supervised learning methods for textual modality has outperformed state-of-the-art methods on downstream tasks, by fine-tuning the pretrained models on a relatively small amount of data. These approaches have recently been tested for other modalities such as images and audios.
 
