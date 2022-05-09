@@ -1,6 +1,6 @@
 # Multilingual-PR
 
-Implementation of the project ```Multi-lingual Phoneme Recognition using self-supervised methods on foreign languages```
+Implementation of the project ```Self-supervised pretraining for phoneme recognition, and generalization on foreign languages```
 
 > Authors: [Apavou Clément](https://github.com/clementapa) & [Belkada Younes](https://github.com/younesbelkada) & [Leo Tronchon](https://github.com/leot13) & [Arthur Zucker](https://github.com/ArthurZucker)
 
@@ -16,7 +16,7 @@ This repository is powered by HuggingFace :hugs:,  Pytorch-Lightning and Weight 
 
 ## :bird: Introduction 
 
-The scarcity of annotated data, and the heavy cost of producing them, limits our ability to train deep neural network for audio processing tasks.Therefore, the speech community developed feature learning methods with a minimal need fo annotated data, which mostly fall under unsupervised and self-supervised techniques.
+The scarcity of annotated data, and the heavy cost of producing them, limits our ability to train deep neural network for audio processing tasks.Therefore, the speech community developed feature learning methods with a minimal need for annotated data, which mostly fall under unsupervised and self-supervised techniques.
 
 Recently, the rise of self-supervised learning methods for textual modality has outperformed state-of-the-art methods on downstream tasks, by fine-tuning the pretrained models on a relatively small amount of data. These approaches have recently been tested for other modalities such as images and audios.
 
@@ -197,6 +197,9 @@ The language family tree can be found in the following figure. This gives insigh
 
 
 </center>
+<p align="center">
+  <em> Genetic proximity between languages studied and english computed  [here](http://www.elinguistics.net/Compare_Languages.aspx). [1, 30]: Highly related languages, [30, 50]: Related languages, [50, 70]: Remotely related languages, [70, 78]: Very remotely related languages, [78, 100]: No recognizable relationship. </em>
+</p>
 
 **English** is a part of the *West Germanic* family.\
 Source: https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md and http://www.elinguistics.net/Compare_Languages.aspx
@@ -234,6 +237,9 @@ Pretrained English models to other languages
 | |     | Hubert *Large*  | **17\.84**     | **17\.36** |    |
 | |     | WavLM *Base*    | 20\.55   | 21\.59     |    |
 
+<p align="center">
+  <em> Table of experiments when models are **fine tuned**. Here, we compare 3 different pretrained models. The models were fine tuned on the phoneme recognition task with different languages and a varying amount of training data. </em>
+</p>
 
 ### 🧊 Frozen Features
 
@@ -263,6 +269,10 @@ Pretrained English models to other languages
 |   |     | WavLM *Base*    | **38\.74**     | **37\.30** |    |
 |   |     | Hubert *Large*  | 33\.34   | 30\.75     |    |
 |   |     | WavLM *Large*   | **30\.22**     | **28\.31** |    |
+
+<p align="center">
+  <em> Table of experiments using **frozen features**. Here, we compare 4 different pretrained models. The objective was to train a linear layer, using pretrained models' frozen features, on the phoneme recognition task with different languages and a varying amount of training data. </em>
+</p>
 
 ### ⌚ Training data  
 
